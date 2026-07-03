@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>马克思主义基本原理 · 导论 习题集</title>
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text: #2c3e50;
+  --text-secondary: #555;
+  --border: #e0e4e8;
+  --primary: #c0392b;
+  --primary-light: #fce4e4;
+  --success: #27ae60;
+  --success-light: #e8f8ef;
+  --warning: #e67e22;
+  --warning-light: #fef5e7;
+  --correct: #27ae60;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+  --font-mono: 'SF Mono', 'Menlo', 'Monaco', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 20px;
+}
+.container { max-width: 800px; margin: 0 auto; }
+
+/* Header */
+header {
+  text-align: center;
+  padding: 40px 20px 30px;
+}
+header h1 { font-size: 28px; color: var(--primary); margin-bottom: 8px; }
+header p { color: var(--text-secondary); font-size: 15px; }
+
+/* Stats bar */
+.stats-bar {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 20px;
+  z-index: 10;
+}
+.stat-item .stat-num { font-size: 26px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.total { color: var(--text); }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+/* Section */
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  padding: 20px 0 12px;
+  border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title .icon { font-size: 24px; }
+.section-label {
+  display: inline-block;
+  font-size: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 16px;
+  border-left: 4px solid transparent;
+  transition: border-color 0.3s, background 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.card .q-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+.card .q-text {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+/* Options */
+.options { list-style: none; }
+.option {
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+}
+.option:hover { border-color: var(--primary); background: #fef9f9; }
+.option .opt-letter {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.option:hover .opt-letter { background: var(--primary-light); color: var(--primary); }
+
+.option.correct-answer {
+  border-color: var(--correct) !important;
+  background: var(--success-light) !important;
+}
+.option.correct-answer .opt-letter { background: var(--correct); color: #fff; }
+.option.wrong-answer {
+  border-color: var(--wrong) !important;
+  background: #fdedec !important;
+}
+.option.wrong-answer .opt-letter { background: var(--wrong); color: #fff; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+
+/* Result msg */
+.result-msg {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  display: none;
+}
+.result-msg.show { display: block; }
+.result-msg.correct { background: var(--success-light); color: var(--correct); }
+.result-msg.wrong { background: #fdedec; color: var(--wrong); }
+
+/* Explanation */
+.explanation {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #fefcf0;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #7d6608;
+  border: 1px solid #f9e79f;
+  display: none;
+}
+.explanation.show { display: block; }
+.explanation strong { color: var(--primary); }
+
+/* Mnemonic box */
+.mnemonic {
+  display: inline-block;
+  background: #eaf2f8;
+  color: #2c3e50;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border: 1px solid #aed6f1;
+  margin: 2px 0;
+}
+
+/* Fill-in-the-blank */
+.fill-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.fill-input:focus { border-color: var(--primary); }
+.fill-input.correct { border-color: var(--correct) !important; background: var(--success-light); }
+.fill-input.wrong { border-color: var(--wrong) !important; background: #fdedec; }
+.fill-btn {
+  margin-top: 10px;
+  padding: 8px 20px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.fill-btn:hover { background: #a93226; }
+
+/* Toggle answer */
+.toggle-btn {
+  padding: 6px 16px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.answer-reveal {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--primary-light);
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); }
+
+/* Reset */
+.reset-bar {
+  text-align: center;
+  padding: 30px 0;
+}
+.reset-btn {
+  padding: 10px 30px;
+  background: var(--text);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.reset-btn:hover { background: #1a252f; }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab {
+  padding: 8px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--card-bg);
+  transition: all 0.2s;
+  font-weight: 500;
+}
+.tab:hover { border-color: var(--primary); }
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Key points table */
+.key-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.key-table th, .key-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.key-table th {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+}
+.key-table td:first-child { font-weight: 600; }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 0 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .card { padding: 16px; }
+  .stats-bar { padding: 12px 16px; }
+  .section-title { font-size: 17px; }
+  .card .q-text { font-size: 15px; }
+  .option { font-size: 14px; padding: 10px 12px; }
+}
+
+/* Print */
+@media print {
+  body { background: #fff; }
+  .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+  .stats-bar, .reset-bar, .fill-btn, footer { display: none; }
+  .option.disabled { opacity: 1; }
+  .explanation, .answer-reveal { display: block !important; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>📖 马克思主义基本原理 · 导论</h1>
+  <p>配套习题集 — 帮助记忆 · 掌握知识点 · 检验成果</p>
+</header>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num total" id="statTotal">0</div><div class="stat-label">总题数</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确数</div></div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="scrollToSection('sec1')">一、科学内涵</button>
+  <button class="tab" onclick="scrollToSection('sec2')">二、创立发展</button>
+  <button class="tab" onclick="scrollToSection('sec3')">三、基本特征</button>
+  <button class="tab" onclick="scrollToSection('sec4')">四、当代价值</button>
+  <button class="tab" onclick="scrollToSection('sec5')">五、学习运用</button>
+  <button class="tab" onclick="scrollToSection('sec6')">六、综合检测</button>
+</div>
+
+<!-- ==================== SECTION 1 ==================== -->
+<div id="sec1">
+<div class="section-title"><span class="icon">📌</span> 一、什么是马克思主义 <span class="section-label">单选 × 6 | 填空 × 3 | 简答 × 2</span></div>
+
+<!-- 单选1 -->
+<div class="card" data-correct="C" data-id="1">
+  <span class="q-num">第1题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的创始人是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>马克思和列宁</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>马克思和毛泽东</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>马克思和恩格斯</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>恩格斯和列宁</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义是由<strong>马克思、恩格斯</strong>创立并为后继者不断发展的理论体系。</div>
+</div>
+
+<!-- 单选2 -->
+<div class="card" data-correct="B" data-id="2">
+  <span class="q-num">第2题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义是关于（　）的科学。</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>自然和社会发展</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>工人阶级和人类解放</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>社会主义革命</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>哲学和经济学</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义是关于<strong>工人阶级和人类解放</strong>的科学。口诀："马恩创立、三学说、指导思想、行动指南"。</div>
+</div>
+
+<!-- 单选3 -->
+<div class="card" data-correct="A" data-id="3">
+  <span class="q-num">第3题</span><span class="q-type">单选题</span>
+  <div class="q-text">在马克思主义理论体系中，处于核心地位的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学社会主义理论</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>马克思主义哲学</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>马克思主义政治经济学</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>辩证唯物主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">口诀："哲观、金鬼、核心科学"——马哲是科学的世界观和方法论；马政经（金鬼）揭示了资本主义的发展规律；<strong>科社处于核心地位</strong>。</div>
+</div>
+
+<!-- 单选4 -->
+<div class="card" data-correct="D" data-id="4">
+  <span class="q-num">第4题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义哲学是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>关于无产阶级解放的学说</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>揭示资本主义发展规律的理论</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>社会主义革命的理论</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>科学的世界观和方法论</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马哲是<strong>科学的世界观和方法论</strong>（哲观）。马政经揭示资本主义发展规律（金鬼），科社是核心。</div>
+</div>
+
+<!-- 单选5 -->
+<div class="card" data-correct="C" data-id="5">
+  <span class="q-num">第5题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的基本立场是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>辩证分析</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>实事求是</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>根本立足点和出发点</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>阶级分析方法</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">基本立场是<strong>根本立足点和出发点</strong>。实事求是、辩证分析、阶级分析等属于基本方法。注意区分立场、观点、方法。</div>
+</div>
+
+<!-- 单选6 -->
+<div class="card" data-correct="B" data-id="6">
+  <span class="q-num">第6题</span><span class="q-type">单选题</span>
+  <div class="q-text">下列哪一项属于马克思主义的基本方法？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>剩余价值理论</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>实事求是</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>唯物主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>阶级斗争学说</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">基本方法包括：<strong>实事求是</strong>、辩证分析、社会基本矛盾和主要矛盾分析、历史分析、阶级分析、群众路线等。</div>
+</div>
+
+<!-- 填空1 -->
+<div class="card" data-id="7">
+  <span class="q-num">第7题</span><span class="q-type">填空题</span>
+  <div class="q-text">马克思主义的科学内涵可概括为"马恩创立、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　</span>学说、指导思想、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　</span>"。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入答案（用顿号或空格分隔两个空）" data-answer="三、行动指南" data-id="7">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">口诀完整版：<strong>马恩创立、三学说、指导思想、行动指南</strong>。</div>
+</div>
+
+<!-- 填空2 -->
+<div class="card" data-id="8">
+  <span class="q-num">第8题</span><span class="q-type">填空题</span>
+  <div class="q-text">口诀 "哲观、金鬼、核心科学" 分别对应：马哲是科学的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>，马政经揭示了<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>，<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>处于核心地位。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入三个空的答案" data-answer="世界观和方法论、资本主义的发展规律、科学社会主义" data-id="8">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">"哲观"=哲学是世界观和方法论；"金鬼"=政治经济学揭示资本主义发展规律；"核心科学"=科学社会主义是核心。</div>
+</div>
+
+<!-- 填空3 -->
+<div class="card" data-id="9">
+  <span class="q-num">第9题</span><span class="q-type">填空题</span>
+  <div class="q-text">马克思主义理论体系的三个组成部分是：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入三个组成部分" data-answer="马克思主义哲学、马克思主义政治经济学、科学社会主义" data-id="9">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">即：<strong>马哲（世界观方法论）、马政经（资本主义规律）、科社（核心）</strong>。</div>
+</div>
+
+<!-- 简答1 -->
+<div class="card" data-id="10">
+  <span class="q-num">第10题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述马克思主义的科学内涵。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>马克思主义是由马克思、恩格斯创立并为他们的后继者所不断发展的理论体系，</p>
+    <p>① 是关于自然、社会和人类思维发展一般规律的学说。</p>
+    <p>② 是关于社会主义必然代替资本主义、最终实现共产主义的学说。</p>
+    <p>③ 是关于无产阶级解放和每个人自由而全面发展的学说。</p>
+    <p>④ 是无产阶级政党和社会主义国家的指导思想。</p>
+    <p>⑤ 是指引人民创造美好生活的行动指南。</p>
+    <p style="margin-top:8px;"><span class="mnemonic">口诀：马恩创立、三学说、指导思想、行动指南</span></p>
+  </div>
+</div>
+
+<!-- 简答2 -->
+<div class="card" data-id="11">
+  <span class="q-num">第11题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述马克思主义基本原理的含义。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>马克思主义基本原理是对马克思主义<strong>立场、观点、方法</strong>的集中概括，是马克思主义在其形成、发展和运用过程中经过<strong>实践反复检验</strong>而确立起来的具有<strong>普遍真理性</strong>的理论。</p>
+    <p>基本立场：根本立足点和出发点。</p>
+    <p>基本观点：关于自然、社会和人类思维发展一般规律的科学认识，对资本主义和社会主义社会发展规律的科学认识，对人类思想成果和社会实践经验的科学总结。</p>
+    <p>基本方法：实事求是、辩证分析、社会基本矛盾和主要矛盾分析、历史分析、阶级分析、群众路线等。</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SECTION 2 ==================== -->
+<div id="sec2">
+<div class="section-title"><span class="icon">📌</span> 二、马克思主义的创立和发展 <span class="section-label">单选 × 12 | 填空 × 4 | 简答 × 2</span></div>
+
+<!-- 单选7 -->
+<div class="card" data-correct="B" data-id="12">
+  <span class="q-num">第12题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义产生于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>18世纪40年代</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>19世纪40年代</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>19世纪60年代</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>20世纪初</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义产生于<strong>19世纪40年代</strong>，创始人是马克思和恩格斯。牢记"18→19"不要混淆。</div>
+</div>
+
+<!-- 单选8 -->
+<div class="card" data-correct="A" data-id="13">
+  <span class="q-num">第13题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义产生的客观条件是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>资本主义经济的发展</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>无产阶级登上历史舞台</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>马克思恩格斯的革命实践</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>自然科学的发展</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">客观条件 = <strong>资本主义经济的发展</strong>（提供了经济、社会历史条件）。B是阶级基础，C是主观条件。</div>
+</div>
+
+<!-- 单选9 -->
+<div class="card" data-correct="C" data-id="14">
+  <span class="q-num">第14题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义产生的阶级基础是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>资产阶级的壮大</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>农民阶级的反抗</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>无产阶级作为独立政治力量登上历史舞台</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>知识分子群体的形成</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三大工人运动标志着<strong>现代无产阶级作为独立的政治力量登上了历史舞台</strong>，这构成了马克思主义产生的阶级基础。</div>
+</div>
+
+<!-- 单选10 -->
+<div class="card" data-correct="D" data-id="15">
+  <span class="q-num">第15题</span><span class="q-type">单选题</span>
+  <div class="q-text">下列哪项不属于三大工人运动？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>法国里昂工人起义</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>英国宪章运动</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>德国西里西亚纺织工人起义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>俄国十月革命</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三大工人运动是：<strong>法国里昂工人起义、英国宪章运动、德国西里西亚纺织工人起义</strong>。十月革命是马克思主义发展阶段的重大事件，不是"产生"阶段的。</div>
+</div>
+
+<!-- 单选11 -->
+<div class="card" data-correct="B" data-id="16">
+  <span class="q-num">第16题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义哲学的直接理论来源是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>英国古典政治经济学</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>德国古典哲学</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>英法空想社会主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>古希腊哲学</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>马哲 → 德国古典哲学</strong>（黑格尔的辩证法、费尔巴哈的唯物主义）。口诀"嘿哈"。</div>
+</div>
+
+<!-- 单选12 -->
+<div class="card" data-correct="A" data-id="17">
+  <span class="q-num">第17题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义政治经济学的直接理论来源是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>英国古典政治经济学</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>德国古典哲学</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>法国空想社会主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>美国实用主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>马政经 → 英国古典政治经济学</strong>。代表人物：威廉·配第、亚当·斯密、大卫·李嘉图。口诀"陪思密达"。</div>
+</div>
+
+<!-- 单选13 -->
+<div class="card" data-correct="D" data-id="18">
+  <span class="q-num">第18题</span><span class="q-type">单选题</span>
+  <div class="q-text">科学社会主义的直接理论来源是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>德国古典哲学</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>英国古典政治经济学</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>法国唯物主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>英法空想社会主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>科社 → 英法空想社会主义</strong>。代表人物：圣西门、傅立叶、欧文。口诀"胜利哦"。</div>
+</div>
+
+<!-- 单选14 -->
+<div class="card" data-correct="C" data-id="19">
+  <span class="q-num">第19题</span><span class="q-type">单选题</span>
+  <div class="q-text">19世纪三大科学发现为马克思主义产生提供了自然科学前提，它们是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>万有引力、进化论、相对论</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>量子力学、细胞学说、能量守恒</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>细胞学说、生物进化论、能量守恒与转化定律</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>牛顿力学、电磁学、化学原子论</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">口诀"<strong>细能生</strong>"或"<strong>转学生</strong>"：<strong>细胞学说、能量守恒与转化定律、生物进化论</strong>。</div>
+</div>
+
+<!-- 单选15 -->
+<div class="card" data-correct="B" data-id="20">
+  <span class="q-num">第20题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思和恩格斯的哪部著作标志着马克思主义的公开问世？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《德意志意识形态》</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《共产党宣言》</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《资本论》</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《神圣家族》</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>《共产党宣言》</strong>标志着马克思主义的公开问世。<br>
+  《德法年鉴》→思想转变前提；《神圣家族》→第一部合著；《德意志意识形态》→首次系统阐述历史唯物主义。</div>
+</div>
+
+<!-- 单选16 -->
+<div class="card" data-correct="A" data-id="21">
+  <span class="q-num">第21题</span><span class="q-type">单选题</span>
+  <div class="q-text">首次系统阐述历史唯物主义基本观点的著作是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《德意志意识形态》</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《共产党宣言》</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《关于费尔巴哈的提纲》</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《反杜林论》</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>《德意志意识形态》</strong>首次系统阐述了历史唯物主义的基本观点。注意：《关于费尔巴哈的提纲》是马克思独立著作，也很重要但不要混淆。</div>
+</div>
+
+<!-- 单选17 -->
+<div class="card" data-correct="D" data-id="22">
+  <span class="q-num">第22题</span><span class="q-type">单选题</span>
+  <div class="q-text">恩格斯的哪部著作全面阐述了马克思主义理论体系？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《自然辩证法》</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《家庭、私有制和国家的起源》</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《路德维希·费尔巴哈和德国古典哲学的终结》</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《反杜林论》</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>《反杜林论》</strong>是恩格斯全面阐述马克思主义理论体系的著作。</div>
+</div>
+
+<!-- 单选18 -->
+<div class="card" data-correct="C" data-id="23">
+  <span class="q-num">第23题</span><span class="q-type">单选题</span>
+  <div class="q-text">列宁提出的著名论断是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>社会主义革命必须在所有国家同时胜利</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>社会主义革命只能在发达国家发生</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>社会主义革命可能在一国或数国首先发生并取得胜利</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>社会主义革命必然在东方国家首先胜利</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">列宁认为<strong>经济政治发展不平衡已成为资本主义发展的绝对规律</strong>，由此提出社会主义革命可能在一国或数国首先胜利的论断。</div>
+</div>
+
+<!-- 单选19 -->
+<div class="card" data-correct="B" data-id="24">
+  <span class="q-num">第24题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义创新发展的基本路径是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>理论创新和实践创新</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>本土化和时代化</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>国际化和现代化</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>革命化和科学化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>本土化和时代化</strong>是马克思主义创新发展的基本路径。对应马克思主义中国化时代化。</div>
+</div>
+
+<!-- 填空4 -->
+<div class="card" data-id="25">
+  <span class="q-num">第25题</span><span class="q-type">填空题 · 口诀连线</span>
+  <div class="q-text">将直接理论来源的口诀与内容配对（在横线处填入对应内容）：</div>
+  <table class="key-table">
+    <tr><th>口诀</th><th>对应内容</th></tr>
+    <tr><td>"嘿哈"（黑格尔+费尔巴哈）</td><td><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+    <tr><td>"陪思密达"（配第+斯密+李嘉图）</td><td><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+    <tr><td>"胜利哦"（圣西门+傅立叶+欧文）</td><td><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+  </table>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="按顺序填入：德国古典哲学、英国古典政治经济学、英法空想社会主义" data-answer="德国古典哲学、英国古典政治经济学、英法空想社会主义" data-id="25">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>嘿哈 → 德国古典哲学</strong>（黑格尔辩证法 + 费尔巴哈唯物主义）<br><strong>陪思密达 → 英国古典政治经济学</strong>（配第 + 斯密 + 李嘉图）<br><strong>胜利哦 → 英法空想社会主义</strong>（圣西门 + 傅立叶 + 欧文）</div>
+</div>
+
+<!-- 填空5 -->
+<div class="card" data-id="26">
+  <span class="q-num">第26题</span><span class="q-type">填空题 · 著作匹配</span>
+  <div class="q-text">请将以下著作与其历史地位对应：</div>
+  <table class="key-table">
+    <tr><th>著作</th><th>地位</th></tr>
+    <tr><td>《德意志意识形态》</td><td>首次系统阐述<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+    <tr><td>《共产党宣言》</td><td>标志着马克思主义的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+    <tr><td>《反杜林论》</td><td>全面阐述<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">　　　　</span></td></tr>
+  </table>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="按顺序填入三个空的答案" data-answer="历史唯物主义、公开问世、马克思主义理论体系" data-id="26">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">德→<strong>历史唯物主义</strong>；宣→<strong>公开问世</strong>；反→<strong>全面阐述理论体系</strong>。</div>
+</div>
+
+<!-- 填空6 -->
+<div class="card" data-id="27">
+  <span class="q-num">第27题</span><span class="q-type">填空题</span>
+  <div class="q-text">1917年列宁领导的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>使社会主义从理想开始变为现实，胜利后创立的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>把马克思主义发展到了一个新的历史阶段。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入两个空的答案" data-answer="十月革命、列宁主义" data-id="27">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">1917年<strong>十月革命</strong>胜利后，列宁创立<strong>列宁主义</strong>，开创世界历史新纪元。</div>
+</div>
+
+<!-- 填空7 -->
+<div class="card" data-id="28">
+  <span class="q-num">第28题</span><span class="q-type">填空题 · 著作速记</span>
+  <div class="q-text">将下列著作与其作者对应（填"马"或"恩"或"马恩"）：</div>
+  <table class="key-table">
+    <tr><th>著作</th><th>作者</th></tr>
+    <tr><td>《资本论》</td><td style="font-weight:700;">（　　）</td></tr>
+    <tr><td>《反杜林论》</td><td style="font-weight:700;">（　　）</td></tr>
+    <tr><td>《共产党宣言》</td><td style="font-weight:700;">（　　）</td></tr>
+    <tr><td>《关于费尔巴哈的提纲》</td><td style="font-weight:700;">（　　）</td></tr>
+  </table>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="按顺序填入答案" data-answer="马、恩、马恩、马" data-id="28">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">《资本论》=马克思；《反杜林论》=恩格斯；《共产党宣言》=马恩合著；《关于费尔巴哈的提纲》=马克思。</div>
+</div>
+
+<!-- 简答3 -->
+<div class="card" data-id="29">
+  <span class="q-num">第29题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述马克思主义的三个直接理论来源及其代表人物。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <table class="key-table">
+      <tr><th>组成部分</th><th>直接理论来源</th><th>代表人物</th><th>口诀</th></tr>
+      <tr><td>马克思主义哲学</td><td>德国古典哲学</td><td>黑格尔（辩证法）、费尔巴哈（唯物主义）</td><td>"嘿哈"</td></tr>
+      <tr><td>政治经济学</td><td>英国古典政治经济学</td><td>威廉·配第、亚当·斯密、大卫·李嘉图</td><td>"陪思密达"</td></tr>
+      <tr><td>科学社会主义</td><td>英法空想社会主义</td><td>圣西门、傅立叶、欧文</td><td>"胜利哦"</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- 简答4 -->
+<div class="card" data-id="30">
+  <span class="q-num">第30题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述马克思主义中国化时代化的基本内涵。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>十月革命后，马克思列宁主义传入中国。1921年中国共产党成立，从成立起就把马克思列宁主义确立为指导思想。</p>
+    <p>在不断探索中把马克思主义基本原理<strong>同中国具体实际相结合、同中华优秀传统文化相结合</strong>（"两个结合"），不断推进马克思主义中国化时代化，不断丰富发展了马克思主义。</p>
+    <p><strong>本土化和时代化</strong>是马克思主义创新发展的基本路径。</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SECTION 3 ==================== -->
+<div id="sec3">
+<div class="section-title"><span class="icon">📌</span> 三、马克思主义的基本特征 <span class="section-label">单选 × 8 | 填空 × 3 | 简答 × 1</span></div>
+
+<!-- 单选20 -->
+<div class="card" data-correct="D" data-id="31">
+  <span class="q-num">第31题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的基本特征，用一句话概括就是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>理论性与实践性的统一</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>阶级性与群众性的统一</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>继承性与创新性的统一</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>科学性与革命性的统一</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义基本特征用一句话概括：<strong>科学性与革命性的统一</strong>。四个具体特征：科学性、人民性、实践性、发展性。</div>
+</div>
+
+<!-- 单选21 -->
+<div class="card" data-correct="B" data-id="32">
+  <span class="q-num">第32题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的本质属性是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学性</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>人民性</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>实践性</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>发展性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民性是马克思主义的本质属性</strong>，人民至上是马克思主义的政治立场。注意：不要与"首要和基本的观点（实践观点）"混淆。</div>
+</div>
+
+<!-- 单选22 -->
+<div class="card" data-correct="C" data-id="33">
+  <span class="q-num">第33题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义首要的和基本的观点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>阶级观点</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>发展观点</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>实践观点</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>群众观点</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>实践观点</strong>是马克思主义首要的和基本的观点。实践性：从实践中来、到实践中去、在实践中接受检验并随实践不断发展。</div>
+</div>
+
+<!-- 单选23 -->
+<div class="card" data-correct="A" data-id="34">
+  <span class="q-num">第34题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的一个突出特征和理论优势是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>辩证唯物主义和历史唯物主义</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>剩余价值学说</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>科学社会主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>阶级斗争理论</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>辩证唯物主义和历史唯物主义</strong>是马克思主义的一个突出特征和理论优势，体现科学性——对本质和规律的正确反映。</div>
+</div>
+
+<!-- 单选24 -->
+<div class="card" data-correct="B" data-id="35">
+  <span class="q-num">第35题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的政治立场是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>实事求是</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>人民至上</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>阶级斗争</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>解放思想</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民至上</strong>是马克思主义的政治立场。人民性以阶级性为深刻基础，是无产阶级先进性的体现。</div>
+</div>
+
+<!-- 单选25 -->
+<div class="card" data-correct="D" data-id="36">
+  <span class="q-num">第36题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的内在品质是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学性</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>人民性</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>发展性</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>革命性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>革命性</strong>是马克思主义的内在品质，是人民性、实践性和发展性的应有之义和必然要求。具有彻底的批判精神和鲜明的政治立场。</div>
+</div>
+
+<!-- 单选26 -->
+<div class="card" data-correct="C" data-id="37">
+  <span class="q-num">第37题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义具有与时俱进的理论品质，这体现的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学性</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>实践性</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>发展性</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>人民性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>发展性</strong>——马克思主义是不断发展的开放的学说，具有与时俱进的理论品质，不断吸取人类最新文明成果充实发展自己。</div>
+</div>
+
+<!-- 单选27 -->
+<div class="card" data-correct="B" data-id="38">
+  <span class="q-num">第38题</span><span class="q-type">单选题</span>
+  <div class="q-text">人民性、实践性和发展性集中体现为（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学性</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>革命性</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>阶级性</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>开放性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民性、实践性和发展性集中的体现为革命性</strong>。革命性是马克思主义的内在品质。</div>
+</div>
+
+<!-- 填空8 -->
+<div class="card" data-id="39">
+  <span class="q-num">第39题</span><span class="q-type">填空题</span>
+  <div class="q-text">马克思主义的四个基本特征是：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>，用一句话概括是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入答案" data-answer="科学性、人民性、实践性、发展性、科学性与革命性的统一" data-id="39">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">四个特征：<strong>科学性、人民性、实践性、发展性</strong>。一句话概括：<strong>科学性与革命性的统一</strong>。</div>
+</div>
+
+<!-- 填空9 -->
+<div class="card" data-id="40">
+  <span class="q-num">第40题</span><span class="q-type">填空题 · 特征辨析</span>
+  <div class="q-text">将下列关键词与对应的特征连线：</div>
+  <table class="key-table">
+    <tr><th>关键词</th><th>对应特征</th></tr>
+    <tr><td>"本质属性""人民至上""政治立场"</td><td style="font-weight:700;">________</td></tr>
+    <tr><td>"首要的基本观点""从实践中来到实践中去"</td><td style="font-weight:700;">________</td></tr>
+    <tr><td>"与时俱进""不断发展的开放学说"</td><td style="font-weight:700;">________</td></tr>
+    <tr><td>"辩证唯物主义和历史唯物主义""突出特征"</td><td style="font-weight:700;">________</td></tr>
+  </table>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="按顺序填入四个特征" data-answer="人民性、实践性、发展性、科学性" data-id="40">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民性</strong>=本质属性+政治立场；<strong>实践性</strong>=首要基本观点+从实践中来；<strong>发展性</strong>=与时俱进+开放学说；<strong>科学性</strong>=辩证唯物+历史唯物+突出特征。</div>
+</div>
+
+<!-- 填空10 -->
+<div class="card" data-id="41">
+  <span class="q-num">第41题</span><span class="q-type">填空题</span>
+  <div class="q-text">马克思主义的革命性具有彻底的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>精神，又表现为它具有鲜明的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入两个空的答案" data-answer="批判、政治立场" data-id="41">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">革命性具有彻底的<strong>批判精神</strong>和鲜明的<strong>政治立场</strong>。</div>
+</div>
+
+<!-- 简答5 -->
+<div class="card" data-id="42">
+  <span class="q-num">第42题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述马克思主义的四个基本特征及其各自的核心内涵。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>科学性：</strong>辩证唯物主义和历史唯物主义，是对本质和规律的正确反映，是突出特征和理论优势。</p>
+    <p><strong>人民性：</strong>马克思主义的本质属性，人民至上是政治立场。以阶级性为深刻基础，是无产阶级先进性的体现。</p>
+    <p><strong>实践性：</strong>实践观点是首要和基本的观点。从实践中来、到实践中去、在实践中接受检验并随实践不断发展。</p>
+    <p><strong>发展性：</strong>不断发展的开放学说，具有与时俱进的理论品质，不断吸取最新文明成果充实发展自己。</p>
+    <p>四个特征用一句话概括为：<strong>科学性与革命性的统一</strong>。革命性是内在品质，是人民性、实践性和发展性的集中体现。</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SECTION 4 ==================== -->
+<div id="sec4">
+<div class="section-title"><span class="icon">📌</span> 四、马克思主义的当代价值 <span class="section-label">单选 × 2 | 填空 × 1 | 简答 × 1</span></div>
+
+<!-- 单选28 -->
+<div class="card" data-correct="A" data-id="43">
+  <span class="q-num">第43题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义对于观察当代世界变化的作用是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>认识工具</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>法律依据</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>政治纲领</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>道德准则</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">当代价值三大方面：<strong>①观察当代世界变化的认识工具</strong>；②指引当代中国发展的行动指南；③引领人类社会进步的科学真理。</div>
+</div>
+
+<!-- 单选29 -->
+<div class="card" data-correct="D" data-id="44">
+  <span class="q-num">第44题</span><span class="q-type">单选题</span>
+  <div class="q-text">关于马克思主义，以下说法正确的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>马克思主义提供对一切问题的现成答案</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>马克思主义是教条</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>马克思主义已过时</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>马克思主义不是教条，而是行动指南</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义<strong>不是教条</strong>，它并不提供对一切问题的现成答案，而是<strong>行动指南</strong>。要从客观存在的实际情况出发。</div>
+</div>
+
+<!-- 填空11 -->
+<div class="card" data-id="45">
+  <span class="q-num">第45题</span><span class="q-type">填空题</span>
+  <div class="q-text">马克思主义的三大当代价值是：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿＿＿</span>。</div>
+  <div style="margin-top:12px;">
+    <input class="fill-input" placeholder="请输入三个当代价值" data-answer="观察当代世界变化的认识工具、指引当代中国发展的行动指南、引领人类社会进步的科学真理" data-id="45">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">三大价值：认识工具（观世界）→行动指南（指中国）→科学真理（引人类）。</div>
+</div>
+
+<!-- 简答6 -->
+<div class="card" data-id="46">
+  <span class="q-num">第46题</span><span class="q-type">简答题</span>
+  <div class="q-text">为什么说马克思主义是行动指南而不是教条？</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>马克思主义不是教条，<strong>它并不提供对一切问题的现成答案</strong>。把它当作现成公式到处生搬硬套，就会使它走向反面。</p>
+    <p>必须从<strong>客观存在的实际情况</strong>出发，运用马克思主义的立场、观点、方法分析和解决实际问题。</p>
+    <p>解决我国改革开放和现代化建设中的实际问题，必须以马克思主义为行动指南。</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SECTION 5 ==================== -->
+<div id="sec5">
+<div class="section-title"><span class="icon">📌</span> 五、自觉学习和运用马克思主义 <span class="section-label">单选 × 2 | 简答 × 1</span></div>
+
+<!-- 单选30 -->
+<div class="card" data-correct="C" data-id="47">
+  <span class="q-num">第47题</span><span class="q-type">单选题</span>
+  <div class="q-text">学习马克思主义的根本方法是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>背诵经典著作</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>参加社会实践</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>理论联系实际</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>课堂学习</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">学习马克思主义的<strong>根本方法是理论联系实际</strong>。四个要求：①掌握立场观点方法；②掌握中国化时代化成果；③理论联系实际学风；④内化于心外化于行。</div>
+</div>
+
+<!-- 单选31 -->
+<div class="card" data-correct="A" data-id="48">
+  <span class="q-num">第48题</span><span class="q-type">单选题</span>
+  <div class="q-text">学习马克思主义的目的不包括（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>获取高薪工作</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>树立正确的世界观、人生观、价值观</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>掌握认识世界和改造世界的伟大工具</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>指导中国特色社会主义伟大实践</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">四点目的：①<strong>树立三观</strong>；②<strong>掌握认识改造世界的工具</strong>；③<strong>全面提高人的素质</strong>；④<strong>指导中国特色社会主义伟大实践</strong>。"获取高薪工作"不属于学习目的。</div>
+</div>
+
+<!-- 简答7 -->
+<div class="card" data-id="49">
+  <span class="q-num">第49题</span><span class="q-type">简答题</span>
+  <div class="q-text">简述自觉学习和运用马克思主义的基本要求。</div>
+  <button class="toggle-btn" onclick="toggleAnswer(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>第一，努力学习和掌握马克思主义的<strong>基本立场观点方法</strong>。</p>
+    <p>第二，努力学习和掌握马克思主义<strong>中国化时代化的理论成果</strong>。</p>
+    <p>第三，坚持<strong>理论联系实际</strong>的马克思主义学风。</p>
+    <p>第四，自觉将马克思主义<strong>内化于心、外化于行</strong>。</p>
+    <p style="margin-top:8px;">根本方法：<strong>理论联系实际</strong>。</p>
+  </div>
+</div>
+</div>
+
+<!-- ==================== SECTION 6: 综合检测 ==================== -->
+<div id="sec6">
+<div class="section-title"><span class="icon">📌</span> 六、综合检测 <span class="section-label">选择题 × 12 | 判断题 × 8</span></div>
+
+<p style="color:var(--text-secondary);margin-bottom:16px;">以下为综合检测题，覆盖全部知识点，用于检验整体掌握程度。</p>
+
+<!-- 综合单选 S1-S12 -->
+<div class="card" data-correct="B" data-id="50">
+  <span class="q-num">综合第1题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的三个组成部分中，揭示资本主义发展规律的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>马克思主义哲学</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>马克思主义政治经济学</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>科学社会主义</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>辩证唯物主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马政经（"金鬼"）= 揭示资本主义发展规律。口诀记忆："哲观、金鬼、核心科学"。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="51">
+  <span class="q-num">综合第2题</span><span class="q-type">单选题</span>
+  <div class="q-text">德国古典哲学的代表人物中，其辩证法被马克思批判继承的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>费尔巴哈</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>康德</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>黑格尔</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>谢林</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">口诀"嘿哈"：<strong>黑格尔=辩证法</strong>，费尔巴哈=唯物主义。康德、谢林不是直接理论来源的核心代表人物。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="52">
+  <span class="q-num">综合第3题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思恩格斯的哪部著作标志着他们完成了从唯心主义到唯物主义、从革命民主主义向共产主义的转变？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《德法年鉴》</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《神圣家族》</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《共产党宣言》</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《资本论》</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>《德法年鉴》</strong>完成了两个转变（唯→唯，民主→共产），为创立马克思主义奠定了思想前提。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="53">
+  <span class="q-num">综合第4题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思恩格斯的哪部著作进一步丰富了科学社会主义学说？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《共产党宣言》</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《资本论》</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《法兰西内战》</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《哥达纲领批判》</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>《哥达纲领批判》</strong>（马克思）进一步丰富了科学社会主义学说。注意：这不是合著，是马克思单独写作的。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="54">
+  <span class="q-num">综合第5题</span><span class="q-type">单选题</span>
+  <div class="q-text">十月革命的历史意义在于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>标志着马克思主义的诞生</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>使社会主义从理想开始变为现实</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>标志着无产阶级登上历史舞台</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>标志着马克思主义中国化的开端</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">1917年十月革命使<strong>社会主义从理想开始变为现实</strong>，开创了世界历史的新纪元。A是《共产党宣言》；C是三大工人运动。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="55">
+  <span class="q-num">综合第6题</span><span class="q-type">单选题</span>
+  <div class="q-text">"马克思主义给予我们观察当代世界的宏大视野"，这体现的是马克思主义作为（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>行动指南</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>科学真理</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>认识工具</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>精神旗帜</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"观察""视野""目光""眼光" → <strong>认识工具</strong>。"指南""指引""旗帜" → 行动指南。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="56">
+  <span class="q-num">综合第7题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义的人民性以什么为深刻基础？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>阶级性</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>科学性</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>民族性</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>时代性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">人民性以<strong>阶级性</strong>为深刻基础，是无产阶级先进性的体现，是关于无产阶级解放的学说。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="57">
+  <span class="q-num">综合第8题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思恩格斯的著作中，独立著作与合著搭配正确的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>《德意志意识形态》是马克思独立著作</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>《共产党宣言》是恩格斯独立著作</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>《关于费尔巴哈的提纲》是马恩合著</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>《反杜林论》是恩格斯独立著作</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">《反杜林论》是<strong>恩格斯</strong>独立著作。《德意志意识形态》和《共产党宣言》是马恩合著；《关于费尔巴哈的提纲》是马克思独立著作。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="58">
+  <span class="q-num">综合第9题</span><span class="q-type">单选题</span>
+  <div class="q-text">习近平指出，马克思主义中国化时代化中的"两个结合"是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>马克思主义与经济发展相结合、与文化教育相结合</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>马克思主义与中国具体实际相结合、与中华优秀传统文化相结合</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>马克思主义与科技创新相结合、与对外开放相结合</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>马克思主义与军事建设相结合、与外交政策相结合</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"两个结合"：马克思主义基本原理<strong>同中国具体实际相结合、同中华优秀传统文化相结合</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="59">
+  <span class="q-num">综合第10题</span><span class="q-type">单选题</span>
+  <div class="q-text">学习马克思主义，有助于青年树立科学的世界观、人生观和价值观，这属于学习马克思主义的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>单一目的</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>根本方法</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>目的之一</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>基本特征</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">树立正确的三观是学习马克思主义的<strong>第一个目的</strong>。四个目的都需记住。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="60">
+  <span class="q-num">综合第11题</span><span class="q-type">单选题</span>
+  <div class="q-text">英国古典政治经济学的代表人物中，"陪思密达"口诀中的"密"指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>亚当·斯密</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>大卫·李嘉图</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>威廉·配第</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>马尔萨斯</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">陪=配第，思=斯密，达=李嘉图。口诀"陪思密达"→ <strong>配第+斯密+李嘉图</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="61">
+  <span class="q-num">综合第12题</span><span class="q-type">单选题</span>
+  <div class="q-text">马克思主义提供的"长远眼光和战略定力"属于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickSingle(this, 'A')"><span class="opt-letter">A</span>科学性的体现</li>
+    <li class="option" onclick="pickSingle(this, 'B')"><span class="opt-letter">B</span>人民性的体现</li>
+    <li class="option" onclick="pickSingle(this, 'C')"><span class="opt-letter">C</span>实践性的体现</li>
+    <li class="option" onclick="pickSingle(this, 'D')"><span class="opt-letter">D</span>当代价值中认识工具的体现</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"长远眼光和战略定力"出自当代价值第一大点"<strong>观察当代世界变化的认识工具</strong>"的第三小点："展望未来世界的长远眼光和战略定力"。</div>
+</div>
+
+<!-- 判断 T1-T8 -->
+<div class="card" data-correct="false" data-id="62">
+  <span class="q-num">判断题第1题</span><span class="q-type">判断题</span>
+  <div class="q-text">马克思主义是马克思独立创立的理论体系。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>马克思主义是由马克思、恩格斯<strong>共同创立</strong>的，并为后继者不断发展的理论体系。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="63">
+  <span class="q-num">判断题第2题</span><span class="q-type">判断题</span>
+  <div class="q-text">科学性与革命性的统一是对马克思主义基本特征的高度概括。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>用一句话概括马克思主义的基本特征就是<strong>科学性与革命性的统一</strong>。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="64">
+  <span class="q-num">判断题第3题</span><span class="q-type">判断题</span>
+  <div class="q-text">马克思主义哲学的直接理论来源是英国古典政治经济学。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>马哲→<strong>德国古典哲学</strong>；马政经→英国古典政治经济学；科社→英法空想社会主义。勿混！</div>
+</div>
+
+<div class="card" data-correct="true" data-id="65">
+  <span class="q-num">判断题第4题</span><span class="q-type">判断题</span>
+  <div class="q-text">实践观点是马克思主义首要的和基本的观点。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>实践性是马克思主义的基本特征之一，实践观点是首要的和基本的观点。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="66">
+  <span class="q-num">判断题第5题</span><span class="q-type">判断题</span>
+  <div class="q-text">《德意志意识形态》首次系统阐述了历史唯物主义的基本观点。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>《德意志意识形态》（马恩合著）首次系统阐述了历史唯物主义的基本观点。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="67">
+  <span class="q-num">判断题第6题</span><span class="q-type">判断题</span>
+  <div class="q-text">马克思主义提供对一切问题的现成答案。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>马克思主义不是教条，<strong>并不提供对一切问题的现成答案</strong>。它是行动指南，要从实际情况出发。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="68">
+  <span class="q-num">判断题第7题</span><span class="q-type">判断题</span>
+  <div class="q-text">本土化和时代化是马克思主义创新发展的基本路径。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>本土化和时代化是马克思主义创新发展的基本路径。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="69">
+  <span class="q-num">判断题第8题</span><span class="q-type">判断题</span>
+  <div class="q-text">学习马克思主义的根本方法是背诵经典著作。</div>
+  <div style="margin-top:12px;display:flex;gap:12px;">
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, true)">✓ 正确</button>
+    <button class="toggle-btn" style="padding:8px 24px;font-size:14px;" onclick="checkTF(this, false)">✗ 错误</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>学习马克思主义的根本方法是<strong>理论联系实际</strong>，不是死记硬背。</div>
+</div>
+</div>
+
+<!-- Reset -->
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案，重新练习</button>
+</div>
+
+<footer>
+  马克思主义基本原理 · 导论 配套习题集 · 共 69 题<br>
+  单选题 33 题 | 填空题 11 题 | 判断题 8 题 | 简答题 7 题<br>
+  覆盖导论全部知识点，含口诀助记
+</footer>
+
+</div>
+
+<script>
+let totalCorrect = 0;
+let totalDone = 0;
+const TOTAL_QUESTIONS = 42; // cards with scoring (single + fill + tf)
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = TOTAL_QUESTIONS;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+// Single choice
+function pickSingle(optEl, letter) {
+  const card = optEl.closest('.card');
+  if (card.classList.contains('done')) return;
+
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  allOpts.forEach(o => o.classList.add('disabled'));
+
+  let isCorrect = (letter === correct);
+
+  if (isCorrect) {
+    optEl.classList.add('correct-answer');
+    resultMsg.textContent = '✅ 回答正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    optEl.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 回答错误';
+    resultMsg.className = 'result-msg wrong show';
+    // highlight correct
+    allOpts.forEach(o => {
+      if (o.dataset.letter || o.onclick.toString().includes("'" + correct + "'")) {
+        // Simple way: check text
+        const txt = o.textContent.trim().charAt(0);
+        if (txt === correct) o.classList.add('correct-answer');
+      }
+    });
+    // Better: find correct option
+    allOpts.forEach(o => {
+      const onclick = o.getAttribute('onclick') || '';
+      if (onclick.includes("'" + correct + "'")) o.classList.add('correct-answer');
+    });
+  }
+
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+
+  totalDone++;
+  if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+// Fill in the blank
+function checkFill(btn) {
+  const card = btn.closest('.card');
+  if (card.classList.contains('done')) return;
+  const input = card.querySelector('.fill-input');
+  const expectedRaw = input.dataset.answer;
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  // Normalize: remove all spaces, punctuation, convert to lowercase
+  function normalize(s) {
+    return s.replace(/[\s，,、。．\.:：;；""]/g, '').toLowerCase();
+  }
+
+  const userNorm = normalize(input.value);
+  const expectedNorm = normalize(expectedRaw);
+
+  // Also try splitting by delimiters
+  const userParts = userNorm.split(/[、，,]/).filter(Boolean);
+  const expectedParts = expectedNorm.split(/[、，,]/).filter(Boolean);
+
+  let isCorrect = false;
+  if (userParts.length > 0 && expectedParts.length > 0) {
+    // Check if all expected parts appear in user answer
+    isCorrect = expectedParts.every(ep => userParts.some(up => up.includes(ep) || ep.includes(up)));
+  }
+  if (!isCorrect) {
+    isCorrect = userNorm === expectedNorm;
+  }
+  // Fallback: check contains
+  if (!isCorrect && expectedNorm.length > 6) {
+    isCorrect = userNorm.includes(expectedNorm) || expectedNorm.includes(userNorm);
+  }
+
+  if (isCorrect) {
+    input.classList.add('correct');
+    resultMsg.textContent = '✅ 回答正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    input.classList.add('wrong');
+    resultMsg.textContent = '❌ 参考答案：' + expectedRaw;
+    resultMsg.className = 'result-msg wrong show';
+  }
+
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+
+  totalDone++;
+  if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+// True/False
+function checkTF(btn, userAnswer) {
+  const card = btn.closest('.card');
+  if (card.classList.contains('done')) return;
+
+  const correct = card.dataset.correct === 'true';
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+  const allBtns = card.querySelectorAll('button');
+
+  allBtns.forEach(b => b.disabled = true);
+
+  let isCorrect = (userAnswer === correct);
+
+  if (isCorrect) {
+    btn.style.borderColor = '#27ae60';
+    btn.style.background = '#e8f8ef';
+    btn.style.color = '#27ae60';
+    resultMsg.textContent = '✅ 回答正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    btn.style.borderColor = '#e74c3c';
+    btn.style.background = '#fdedec';
+    btn.style.color = '#e74c3c';
+    resultMsg.textContent = '❌ 回答错误';
+    resultMsg.className = 'result-msg wrong show';
+  }
+
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+
+  totalDone++;
+  if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+// Toggle answer (for 简答)
+function toggleAnswer(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+// Scroll to section
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Update active tab
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Reset all
+function resetAll() {
+  if (!confirm('确定要重置全部答案吗？此操作不可撤销。')) return;
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.remove('done', 'wrong-card');
+  });
+  document.querySelectorAll('.option').forEach(o => {
+    o.classList.remove('disabled', 'correct-answer', 'wrong-answer');
+  });
+  document.querySelectorAll('.result-msg').forEach(m => {
+    m.classList.remove('show', 'correct', 'wrong');
+    m.textContent = '';
+  });
+  document.querySelectorAll('.explanation').forEach(e => {
+    e.classList.remove('show');
+  });
+  document.querySelectorAll('.fill-input').forEach(i => {
+    i.value = '';
+    i.classList.remove('correct', 'wrong');
+  });
+  document.querySelectorAll('.answer-reveal').forEach(r => {
+    r.classList.remove('show');
+  });
+  document.querySelectorAll('.card button').forEach(b => {
+    b.disabled = false;
+    b.style.borderColor = '';
+    b.style.background = '';
+    b.style.color = '';
+  });
+  document.querySelectorAll('.toggle-btn').forEach(b => {
+    if (b.textContent.includes('隐藏')) b.textContent = '📝 点击查看答案';
+  });
+
+  totalCorrect = 0;
+  totalDone = 0;
+  updateStats();
+}
+
+// Init
+updateStats();
+
+// Track scroll for tab highlight
+window.addEventListener('scroll', () => {
+  const sections = ['sec1','sec2','sec3','sec4','sec5','sec6'];
+  let current = 'sec1';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= 200) current = id;
+    }
+  });
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.remove('active');
+    if (t.textContent.includes(current.replace('sec',''))) t.classList.add('active');
+    // Match by index
+  });
+  // Better matching
+  const idxMap = {'sec1':0,'sec2':1,'sec3':2,'sec4':3,'sec5':4,'sec6':5};
+  const idx = idxMap[current] || 0;
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach((t,i) => t.classList.toggle('active', i === idx));
+});
+</script>
+</body>
+</html>
