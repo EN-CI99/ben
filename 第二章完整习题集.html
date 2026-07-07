@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>马克思主义基本原理 · 第二章 实践和认识及其发展规律 完整习题集</title>
+<style>
+:root {
+  --bg: #f8f9fa; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #1a6b5a; --primary-light: #e6f3ef;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px;
+}
+.container { max-width: 840px; margin: 0 auto; }
+
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 24px;
+  display: flex; justify-content: space-around; text-align: center;
+  margin-bottom: 20px; position: sticky; top: 20px; z-index: 10;
+}
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn {
+  padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px;
+  font-size: 12px; cursor: pointer; background: var(--card-bg);
+  transition: all 0.2s; font-weight: 500; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.section-title {
+  font-size: 19px; font-weight: 700; color: var(--primary);
+  padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px; display: flex; align-items: center; gap: 8px;
+}
+.section-label {
+  font-size: 11px; background: var(--primary-light); color: var(--primary);
+  padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px;
+  border-left: 4px solid transparent; transition: border-color 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block; background: var(--primary-light);
+  color: var(--primary); font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px; margin-bottom: 8px;
+}
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+
+.options { list-style: none; }
+.option {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px;
+}
+.option:hover { border-color: var(--primary); background: #f0faf5; }
+.option .opt-letter {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--bg); display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: var(--text-secondary);
+}
+.option.correct-answer { border-color: var(--success) !important; background: var(--success-light) !important; }
+.option.correct-answer .opt-letter { background: var(--success); color: #fff; }
+.option.wrong-answer { border-color: var(--wrong) !important; background: #fdedec !important; }
+.option.wrong-answer .opt-letter { background: var(--wrong); color: #fff; }
+.option.disabled { pointer-events: none; opacity: 0.88; }
+
+.result-msg { margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { background: var(--success-light); color: var(--success); }
+.result-msg.wrong { background: #fdedec; color: var(--wrong); }
+
+.explanation {
+  margin-top: 8px; padding: 10px 12px; background: #fefcf0;
+  border-radius: 8px; font-size: 13px; color: #7d6608;
+  border: 1px solid #f9e79f; display: none;
+}
+.explanation.show { display: block; }
+.explanation strong { color: var(--primary); }
+
+.mnemonic {
+  display: inline-block; background: #eaf2f8; color: #2c3e50;
+  padding: 2px 8px; border-radius: 4px; font-size: 13px;
+  border: 1px solid #aed6f1; margin: 2px 0;
+}
+
+.fill-input {
+  width: 100%; padding: 8px 12px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 14px; font-family: inherit; outline: none;
+}
+.fill-input:focus { border-color: var(--primary); }
+.fill-input.correct { border-color: var(--success) !important; background: var(--success-light); }
+.fill-input.wrong { border-color: var(--wrong) !important; background: #fdedec; }
+.fill-btn {
+  margin-top: 8px; padding: 7px 18px; background: var(--primary);
+  color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 600;
+}
+.fill-btn:hover { background: #155949; }
+
+.toggle-btn {
+  padding: 6px 14px; background: transparent; border: 1.5px solid var(--border);
+  border-radius: 6px; cursor: pointer; font-size: 12px; color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.toggle-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+.answer-reveal {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+
+.key-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  margin: 10px 0; font-size: 13px;
+}
+.key-table th, .key-table td {
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.key-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+
+.tf-btns { display: flex; gap: 10px; margin-top: 10px; }
+
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn {
+  padding: 10px 28px; background: var(--text); color: #fff;
+  border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600;
+}
+.reset-btn:hover { background: #1a1a2e; }
+
+footer {
+  text-align: center; padding: 40px 0 20px;
+  color: var(--text-secondary); font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .card { padding: 14px; }
+  .stats-bar { padding: 10px 14px; }
+  .section-title { font-size: 16px; }
+  .card .q-text { font-size: 14px; }
+  .option { font-size: 13px; padding: 8px 10px; }
+}
+
+.highlight { color: var(--primary); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+<h1>📖 马克思主义基本原理</h1>
+<p>第二章 · 实践和认识及其发展规律 · 完整习题集</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1-1.科学实践观</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">1-2.实践本质与结构</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">1-3.认识的本质与过程</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">1-4.辩证运动</button>
+  <button class="nav-btn" onclick="scrollToSec('sec5')">2-1.真理的本质</button>
+  <button class="nav-btn" onclick="scrollToSec('sec6')">2-2.真理的检验</button>
+  <button class="nav-btn" onclick="scrollToSec('sec7')">2-3.真理与价值</button>
+  <button class="nav-btn" onclick="scrollToSec('sec8')">3.认识世界改造世界</button>
+  <button class="nav-btn" onclick="scrollToSec('sec9')">综合检测</button>
+</div>
+
+<!-- ============ 1-1. 科学的实践观及其意义 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 1-1 科学的实践观及其意义 <span class="section-label">选4 | 填2 | 判2 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">马克思主义认识论的首要的和基本的观点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展的观点</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实践的观点</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>历史的观点</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>辩证的观点</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">列宁指出"生活、实践的观点，应该是认识论的<strong>首要的和基本的观点</strong>"。实践是马克思主义认识论的基础。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">科学实践观的意义中，"第一次揭示了社会生活的实践本质"对应的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>克服了旧唯物主义的根本缺陷</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>揭示了实践对认识的决定作用</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>为人们提供了思想方法和工作方法</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>为唯物史观的创立奠定了科学的理论基础</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">第三点意义：在人类思想史上<strong>第一次揭示社会生活的实践本质</strong>，为<strong>唯物史观</strong>的创立奠定基础。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="3">
+  <span class="q-num">3</span><span class="q-type">单选</span>
+  <div class="q-text">马克思科学实践观认为检验真理的标准是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>逻辑</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>权威</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>多数人意见</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思提出："人的思维是否具有客观的真理性，这不是一个理论的问题，而是<strong>一个实践的问题</strong>。"</div>
+</div>
+
+<div class="card" data-correct="A" data-id="4">
+  <span class="q-num">4</span><span class="q-type">单选</span>
+  <div class="q-text">毛泽东把实践进一步表述为（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"主观见之于客观的东西"</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"客观见之于主观的东西"</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>"理论和实际相结合"</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>"知行合一"</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">毛泽东在《实践论》中把实践表述为"<strong>主观见之于客观</strong>的东西"，强调实践是连接主观和客观的桥梁。</div>
+</div>
+
+<div class="card" data-id="10">
+  <span class="q-num">5</span><span class="q-type">填空</span>
+  <div class="q-text">科学实践观的四点意义：①克服了<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>的根本缺陷；②揭示了<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>对<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的决定作用；③揭示了<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的实践本质，为<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>创立奠基；④为认识世界改造世界提供了<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="旧唯物主义、实践、认识、社会生活、唯物史观、思想方法和工作方法" data-id="10">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="11">
+  <span class="q-num">6</span><span class="q-type">填空</span>
+  <div class="q-text">马克思说："哲学家们只是用不同的方式<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>，而问题在于<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>。"</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="填入两个答案" data-answer="解释世界、改变世界" data-id="11">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">这句名言凸显了马克思科学实践观的核心——<strong>实践</strong>，强调改造世界比解释世界更重要。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="12">
+  <span class="q-num">7</span><span class="q-type">判断</span>
+  <div class="q-text">实践的观点是辩证唯物论的认识论之第一的和基本的观点。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>这是毛泽东的经典论断，体现了实践在马克思主义认识论中的核心地位。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="13">
+  <span class="q-num">8</span><span class="q-type">判断</span>
+  <div class="q-text">科学实践观为历史唯物主义（唯物史观）的创立奠定了科学的理论基础。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation">这题容易判断错——实际上这是<strong>正确的</strong>。科学实践观四点意义的第三点："第一次揭示了社会生活的实践本质，为唯物史观的创立奠定了科学的理论基础。"</div>
+</div>
+
+<div class="card" data-id="14">
+  <span class="q-num">9</span><span class="q-type">简答</span>
+  <div class="q-text">简述科学实践观的意义（四点）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>克服了旧唯物主义的根本缺陷，为辩证唯物主义奠定了科学的理论基础。</p>
+    <p><strong>②</strong>揭示了实践对认识的决定作用，为能动的、革命的反映论奠定了科学的理论基础。</p>
+    <p><strong>③</strong>在人类思想史上第一次揭示了社会生活的实践本质，为唯物史观的创立奠定了科学的理论基础。</p>
+    <p><strong>④</strong>为人们能动地认识世界和改造世界提供了基本的思想方法和工作方法。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 1-2. 实践的本质与基本结构 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 1-2 实践的本质与基本结构 <span class="section-label">选8 | 填4 | 判3 | 简2</span></div>
+
+<div class="card" data-correct="C" data-id="20">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">实践的本质是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人类被动的适应环境的活动</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>纯粹精神性活动</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人类能动地改造世界的社会性的物质活动</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>生物适应环境的本能</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">实践的本质定义的关键词：<strong>能动地、改造世界、社会性的、物质活动</strong>。区别于消极适应和纯粹精神活动。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="21">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">实践的三个基本特征不包括（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>客观实在性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>主观随意性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>自觉能动性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>社会历史性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三个基本特征：<strong>客观实在性、自觉能动性、社会历史性</strong>。没有"主观随意性"。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="22">
+  <span class="q-num">12</span><span class="q-type">单选</span>
+  <div class="q-text">实践活动的三项基本要素是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>目的、手段、结果</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>感性、理性、实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>自然人、社会、意识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实践主体、实践中介、实践客体</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">实践的<strong>三项基本要素</strong>：主体、中介（工具/手段/程序）、客体。三者有机统一构成实践的基本结构。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="23">
+  <span class="q-num">13</span><span class="q-type">单选</span>
+  <div class="q-text">实践主体和客体相互作用的关系中，最根本的关系是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践关系</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>认识关系</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>价值关系</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>审美关系</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三种关系：<strong>实践关系（最根本）、认识关系、价值关系</strong>。仙人掌例子：摸=实践，认知=认识，观赏=价值。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="24">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">实践主体能力中首要的能力因素是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>情感因素</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>意志因素</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>知识性因素</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>自然能力</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">主体能力=自然能力+精神能力。精神能力又分：<strong>知识性因素（首要）</strong>和非知识性因素（情感和意志）。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="25">
+  <span class="q-num">15</span><span class="q-type">单选</span>
+  <div class="q-text">实践中介系统的两个子系统是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主体系统和客体系统</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>物质性工具系统和语言符号工具系统</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>感性系统和理性系统</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>自然系统和社会系统</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">实践中介=工具/手段/程序。两个子系统：<strong>①物质性工具系统</strong>（机器、能源）和<strong>②语言符号工具系统</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="26">
+  <span class="q-num">16</span><span class="q-type">单选</span>
+  <div class="q-text">人类最基本的实践活动是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>物质生产实践</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>社会政治实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科学文化实践</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>虚拟实践</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三大基本类型中，<strong>物质生产实践</strong>是<strong>最基本</strong>的，解决人与自然的矛盾，决定社会的基本性质和面貌。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="27">
+  <span class="q-num">17</span><span class="q-type">单选</span>
+  <div class="q-text">新产生的实践形式是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>物质生产实践</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>社会政治实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科学文化实践</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>虚拟实践</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>虚拟实践</strong>是随信息化网络化产生的<strong>新形式</strong>，通过数字化中介在虚拟空间进行，具有交互性、开放性、间接性。</div>
+</div>
+
+<div class="card" data-id="28">
+  <span class="q-num">18</span><span class="q-type">填空</span>
+  <div class="q-text">实践的三个基本特征：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入三个答案" data-answer="客观实在、自觉能动、社会历史" data-id="28">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="29">
+  <span class="q-num">19</span><span class="q-type">填空·配对</span>
+  <div class="q-text">实践主体与客体的三种关系：摸仙人掌→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>关系；认知仙人掌→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>关系；观赏仙人掌→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>关系。其中<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>关系是最根本的。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="实践、认识、价值、实践" data-id="29">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="30">
+  <span class="q-num">20</span><span class="q-type">填空</span>
+  <div class="q-text">实践主体能力=自然能力+精神能力。精神能力分为<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>因素（<strong>首要能力</strong>）和<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>因素（情感和意志）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="填入两个答案" data-answer="知识性、非知识性" data-id="30">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="31">
+  <span class="q-num">21</span><span class="q-type">填空</span>
+  <div class="q-text">实践四种基本类型：<span class="highlight">①</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>实践（最基本）；<span class="highlight">②</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>实践；<span class="highlight">③</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>实践；<span class="highlight">④</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（新产生）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="物质生产、社会政治、科学文化、虚拟实践" data-id="31">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="32">
+  <span class="q-num">22</span><span class="q-type">判断</span>
+  <div class="q-text">实践的主体和客体与认识的主体和客体在本质上是一致的。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>认识的主体和客体首先是改造和被改造的关系，然后才是认识和被认识的关系。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="33">
+  <span class="q-num">23</span><span class="q-type">判断</span>
+  <div class="q-text">实践客体等同于一切客观存在的事物。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>实践客体与客观存在事物<strong>不完全等同</strong>，只有被纳入主体实践范围并与主体相互作用的客观事物才成为实践客体。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="34">
+  <span class="q-num">24</span><span class="q-type">判断</span>
+  <div class="q-text">虚拟实践的实质是纯粹的意识活动。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>虚拟实践是主体和客体通过数字化中介在虚拟空间进行的<strong>双向对象化活动</strong>，不是纯粹意识活动，它改变了对象。</div>
+</div>
+
+<div class="card" data-id="35">
+  <span class="q-num">25</span><span class="q-type">简答</span>
+  <div class="q-text">简述实践对认识的决定作用（四个"是"）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案（四个"是"）：</div>
+    <p><strong>①</strong>实践是认识的<strong>来源</strong>。</p>
+    <p><strong>②</strong>实践是认识发展的<strong>动力</strong>。</p>
+    <p><strong>③</strong>实践是认识的<strong>目的</strong>。</p>
+    <p><strong>④</strong>实践是检验认识真理性的<strong>唯一标准</strong>。</p>
+    <p><span class="mnemonic">口诀：来源、动力、目的、唯一标准</span></p>
+  </div>
+</div>
+
+<div class="card" data-id="36">
+  <span class="q-num">26</span><span class="q-type">简答</span>
+  <div class="q-text">简述实践的基本结构（三项要素及其关系）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>三项要素：</strong>实践主体、实践中介（工具/手段/程序）、实践客体。三者有机统一。</p>
+    <p><strong>实践主体：</strong>具备主体能力、从事现实社会实践的人。能力包括自然能力和精神能力（知识性因素+非知识性因素）。</p>
+    <p><strong>实践中介：</strong>物质性工具系统+语言符号工具系统。</p>
+    <p><strong>实践客体：</strong>实践活动所指向的对象。</p>
+    <p><strong>三者关系：</strong>实践关系（最根本）、认识关系、价值关系。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 1-3. 认识的本质与过程 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 1-3 认识的本质与过程 <span class="section-label">选12 | 填5 | 判4 | 简3 | 论1</span></div>
+
+<div class="card" data-correct="C" data-id="40">
+  <span class="q-num">27</span><span class="q-type">单选</span>
+  <div class="q-text">认识的本质是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主观自生的观念</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>被动的、照镜子式的反映</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>主体在实践基础上对客体的能动反映</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>客观事物在人脑中的简单映像</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">辩证唯物主义认识论：<strong>认识的本质=主体在实践基础上对客体的能动反映</strong>。关键词：实践基础、能动反映。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="41">
+  <span class="q-num">28</span><span class="q-type">单选</span>
+  <div class="q-text">辩证唯物主义认识论的两个突出特点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>把实践观点引入认识论；把辩证法应用于反映论</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>把物质观点引入认识论；把历史观应用于认识论</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>把矛盾观点引入认识论；把价值论应用于反映论</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>把感性认识引入认识论；把理性认识应用于实践</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">两大突出特点：<strong>①把实践观点引入认识论</strong>（作为基础）；<strong>②把辩证法应用于反映论</strong>（考察认识发展过程）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="42">
+  <span class="q-num">29</span><span class="q-type">单选</span>
+  <div class="q-text">认识的初级阶段是（　），高级阶段是（　）。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>理性认识、感性认识</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>直接认识、间接认识</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>感性认识、理性认识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实践认识、理论认识</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>感性认识=初级阶段</strong>（感觉、知觉、表象）；<strong>理性认识=高级阶段</strong>（概念、判断、推理）。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="43">
+  <span class="q-num">30</span><span class="q-type">单选</span>
+  <div class="q-text">理性认识的三种形式是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>感觉、知觉、表象</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>概念、判断、推理</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>联想、想象、猜测</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>直觉、顿悟、灵感</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>感性认识三形式</strong>=感觉、知觉、表象。<strong>理性认识三形式</strong>=概念、判断、推理。两者常互换考！</div>
+</div>
+
+<div class="card" data-correct="A" data-id="44">
+  <span class="q-num">31</span><span class="q-type">单选</span>
+  <div class="q-text">感性认识的三种形式是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>感觉、知觉、表象</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>概念、判断、推理</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践、理论、应用</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>分析、综合、归纳</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>感性认识</strong>三形式=感觉（个别属性）→知觉（整体反映）→表象（回忆再现）。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="45">
+  <span class="q-num">32</span><span class="q-type">单选</span>
+  <div class="q-text">认识的第一次飞跃是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>从认识到实践</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>从实践到实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>从认识到认识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>感性认识能动地飞跃到理性认识</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>第一次飞跃</strong>=感性认识→理性认识（实践到认识）。<strong>第二次飞跃</strong>=理性认识→实践（认识到实践），是<strong>更重要</strong>的飞跃。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="46">
+  <span class="q-num">33</span><span class="q-type">单选</span>
+  <div class="q-text">认识的第二次飞跃是指（　），且是（　）的飞跃。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>感性到理性、次要</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>理性认识到实践、更为重要</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践到感性、同等重要</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>感觉到知觉、更为重要</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">第二次飞跃=<strong>理性认识→实践</strong>，是<strong>更为重要</strong>的飞跃。原因：①认识目的在改造世界；②认识真理性只能在实践中检验。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="47">
+  <span class="q-num">34</span><span class="q-type">单选</span>
+  <div class="q-text">关于感性认识和理性认识的关系，正确的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>感性认识依赖于理性认识</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>两者互不相干</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>理性认识依赖于感性认识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>感性认识不需要发展到理性认识</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三大关系：①理性认识<strong>依赖于</strong>感性认识（认识起点）；②感性认识<strong>有待于</strong>发展到理性认识；③二者<strong>相互渗透包含</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="48">
+  <span class="q-num">35</span><span class="q-type">单选</span>
+  <div class="q-text">只重视感性认识而轻视理性认识，会导致（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>教条主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>唯理论</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>主观唯心主义</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>经验主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">割裂二者关系：轻视感性、夸大理性→<strong>唯理论（教条主义）</strong>；轻视理性、夸大感性→<strong>经验论（经验主义）</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="49">
+  <span class="q-num">36</span><span class="q-type">单选</span>
+  <div class="q-text">只重视理性认识而轻视感性认识，在实际工作中会犯（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>教条主义的错误</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经验主义的错误</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>修正主义的错误</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>折中主义的错误</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>唯理论→教条主义</strong>（死搬理论）；<strong>经验论→经验主义</strong>（只信经验）。两对必考点。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="50">
+  <span class="q-num">37</span><span class="q-type">单选</span>
+  <div class="q-text">旧唯物主义认识论的主要缺陷不包括（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>离开实践考察认识问题</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>不了解认识的辩证本性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>把认识看成消极被动的反映</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>把主体创造性纳入认识过程</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">旧唯物主义两大缺陷：①离开实践考察认识；②不了解认识辩证本性（即把认识当消极被动反映）。D是辩证唯物主义才有的。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="51">
+  <span class="q-num">38</span><span class="q-type">单选</span>
+  <div class="q-text">认识具有反映性和创造性两个特性。反映的摹写性表明了认识的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主观性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>客观性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>相对性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>任意性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">反映的<strong>摹写性</strong>表明反映的<strong>客观性</strong>——认识必须以客观事物为原型，在思维中再现客观事物的状态和本质。</div>
+</div>
+
+<div class="card" data-id="52">
+  <span class="q-num">39</span><span class="q-type">填空</span>
+  <div class="q-text">感性认识三形式：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（个别属性）→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（整体反映）→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（回忆再现，高级形式）。理性认识三形式：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入六个答案" data-answer="感觉、知觉、表象、概念、判断、推理" data-id="52">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="53">
+  <span class="q-num">40</span><span class="q-type">填空</span>
+  <div class="q-text">感性认识和理性认识的关系：①理性认识<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>感性认识；②感性认识<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>发展到理性认识；③二者相互<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、相互<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="依赖于、有待于、渗透、包含" data-id="53">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="54">
+  <span class="q-num">41</span><span class="q-type">填空</span>
+  <div class="q-text">从感性认识上升到理性认识的两个基本条件：①<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>，获取十分丰富和合乎实际的感性材料；②<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>，将材料<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿、＿＿＿＿、＿＿＿＿、＿＿＿＿</span>处理加工。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="投身实践深入调查、经过思考的作用、去粗取精、去伪存真、由此及彼、由表及里" data-id="54">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation"><span class="mnemonic">两条件：材料丰富合实际、思维抽象处理加工。四步=去粗取精、去伪存真、由此及彼、由表及里。</span></div>
+</div>
+
+<div class="card" data-id="55">
+  <span class="q-num">42</span><span class="q-type">填空·对比</span>
+  <div class="q-text">填入两种认识论的根本区别：旧唯物主义=直观的、消极被动的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>论；辩证唯物主义=能动的、革命的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>论。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="填入两个答案" data-answer="反映、反映" data-id="55">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+  <div class="explanation">两者都叫"反映论"，但旧唯物主义是<strong>消极被动</strong>的反映，辩证唯物主义是<strong>能动革命</strong>的反映。区别在于是否引入实践和辩证法。</div>
+</div>
+
+<div class="card" data-id="56">
+  <span class="q-num">43</span><span class="q-type">填空</span>
+  <div class="q-text">认识的本质包括两个特性：反映特性（<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性→客观性）和<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>特性（能动性和创造性）。两者<strong>不可分割</strong>，是<strong>同一本质的两个方面</strong>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="填入两个答案" data-answer="摹写、创造" data-id="56">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="57">
+  <span class="q-num">44</span><span class="q-type">判断</span>
+  <div class="q-text">认识的本质是主体在实践基础上对客体的能动反映。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>这是辩证唯物主义认识论对认识本质的科学回答。核心：实践基础+能动反映。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="58">
+  <span class="q-num">45</span><span class="q-type">判断</span>
+  <div class="q-text">感性认识能直接达到对事物的本质和规律的认识。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>感性认识只反映事物的<strong>现象和外部联系</strong>，不能达到本质和规律。需要上升到理性认识。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="59">
+  <span class="q-num">46</span><span class="q-type">判断</span>
+  <div class="q-text">从认识到实践的飞跃（第二次飞跃）是更为重要的飞跃。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>原因：①认识世界的目的在改造世界；②认识的真理性只能在实践中检验和发展。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="60">
+  <span class="q-num">47</span><span class="q-type">判断</span>
+  <div class="q-text">表象是感性认识中最低级的形式。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>感觉是最低级的（个别属性），知觉是中间（整体），<strong>表象是感性认识的最高形式</strong>（回忆再现）。</div>
+</div>
+
+<div class="card" data-id="61">
+  <span class="q-num">48</span><span class="q-type">简答</span>
+  <div class="q-text">简述感性认识和理性认识的辩证关系（三点）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>第一，</strong>理性认识依赖于感性认识。感性认识是认识过程的起点，没有感性认识就没有理性认识。</p>
+    <p><strong>第二，</strong>感性认识有待于发展和深化为理性认识。感性认识只是对事物外部联系的认识，还不是完全的认识。</p>
+    <p><strong>第三，</strong>感性认识和理性认识相互渗透、相互包含。感性中有理性，理性中有感性。</p>
+  </div>
+</div>
+
+<div class="card" data-id="62">
+  <span class="q-num">49</span><span class="q-type">简答</span>
+  <div class="q-text">简述从认识到实践（第二次飞跃）的必要性和重要性（两点）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>第一，</strong>认识世界的目的是改造世界。从感性到理性只是形成了观念，要把观念变为现实，必须经过实践。</p>
+    <p><strong>第二，</strong>认识的真理性只有在实践中才能得到检验和发展。理论是否正确，只有通过实践的检验才能证实或纠正。</p>
+  </div>
+</div>
+
+<div class="card" data-id="63">
+  <span class="q-num">50</span><span class="q-type">简答</span>
+  <div class="q-text">简述从感性认识上升到理性认识的两个基本条件。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>第一，</strong>投身实践，深入调查，获取十分丰富和合乎实际的感性材料。</p>
+    <p><strong>第二，</strong>经过思考的作用，运用理论思维和科学抽象，将丰富的感性材料加以去粗取精、去伪存真、由此及彼、由表及里的处理加工，形成概念和理论的系统。</p>
+    <p><span class="mnemonic">两条件：材料丰富合实际、思维抽象处理加工</span></p>
+  </div>
+</div>
+
+<div class="card" data-id="64">
+  <span class="q-num">51</span><span class="q-type">论述</span>
+  <div class="q-text">论述感性认识和理性认识的辩证关系。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考要点（含义+关系+警示）：</div>
+    <p><strong>一、含义：</strong>感性认识（初级阶段）=感觉、知觉、表象；理性认识（高级阶段）=概念、判断、推理。</p>
+    <p><strong>二、关系：</strong>①理性认识依赖于感性认识；②感性认识有待于发展到理性认识；③二者相互渗透包含。关系在实践基础上形成发展。</p>
+    <p><strong>三、警示：</strong>割裂二者→唯理论（教条主义，轻视感性夸大理性）或经验论（经验主义，轻视理性夸大感性）。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 1-4. 实践与认识的辩证运动 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 1-4 实践与认识的辩证运动及其规律 <span class="section-label">选3 | 填2 | 判2 | 简1</span></div>
+
+<div class="card" data-correct="A" data-id="70">
+  <span class="q-num">52</span><span class="q-type">单选</span>
+  <div class="q-text">认识运动的总规律可以概括为（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践、认识、再实践、再认识，循环往复以至无穷</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>从感觉到知觉再到表象</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>从概念到判断再到推理</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>从真理到谬误再到真理</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">毛泽东强调的认识运动总规律：<strong>实践→认识→再实践→再认识，循环往复以至无穷</strong>，每一循环都进到更高程度。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="71">
+  <span class="q-num">53</span><span class="q-type">单选</span>
+  <div class="q-text">一个正确的认识往往需要经过（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一次实践、一次认识就能完成</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>不需要实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>由实践到认识，由认识到实践的多次反复</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>一次飞跃即可完成</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">毛泽东："一个正确的认识，往往需要经过<strong>由物质到精神，由精神到物质</strong>，即由实践到认识，由认识到实践<strong>这样多次的反复</strong>，才能够完成。"</div>
+</div>
+
+<div class="card" data-correct="D" data-id="72">
+  <span class="q-num">54</span><span class="q-type">单选</span>
+  <div class="q-text">认识过程是一个（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>直线式前进的过程</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>一次完成的过程</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>封闭循环的过程</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>波浪式前进和螺旋式上升的过程</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">认识过程不是直线式的，而是<strong>波浪式前进和螺旋式上升</strong>的过程，每一循环都进到高一级的程度。</div>
+</div>
+
+<div class="card" data-id="73">
+  <span class="q-num">55</span><span class="q-type">填空</span>
+  <div class="q-text">从实践到认识，再从认识到实践，实现了人们<strong>认识具体事物的</strong><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>过程。这个过程是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿、＿＿、＿＿、＿＿</span>，循环往复以至无穷。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="辩证运动、实践、认识、再实践、再认识" data-id="73">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="74">
+  <span class="q-num">56</span><span class="q-type">填空</span>
+  <div class="q-text">认识过程的两次飞跃：第一次飞跃=由<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>认识到<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>认识；第二次飞跃=由<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>认识到<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（更重要的飞跃）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="感性、理性、理性、实践" data-id="74">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="75">
+  <span class="q-num">57</span><span class="q-type">判断</span>
+  <div class="q-text">认识是一个反复循环和无限发展的过程。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>实践、认识、再实践、再认识，循环往复以至无穷，每一循环都进到高一级程度。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="76">
+  <span class="q-num">58</span><span class="q-type">判断</span>
+  <div class="q-text">从认识到实践的飞跃与从实践到认识的飞跃同等重要。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>第二次飞跃（认识→实践）是<strong>更为重要</strong>的飞跃。因为认识目的在于改造世界，且真理性需要实践检验。</div>
+</div>
+
+<div class="card" data-id="77">
+  <span class="q-num">59</span><span class="q-type">简答</span>
+  <div class="q-text">简述实践与认识的辩证运动及其规律。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>实践与认识的辩证运动是一个由感性认识到理性认识，又由理性认识到实践的飞跃，是<strong>实践、认识、再实践、再认识，循环往复以至无穷</strong>的辩证发展过程。</p>
+    <p>一个正确的认识往往需要经过由实践到认识、由认识到实践这样<strong>多次的反复杂</strong>才能完成。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 2-1. 真理的客观性、绝对性和相对性 ============ -->
+<div id="sec5">
+<div class="section-title"><span>📌</span> 2-1 真理的客观性、绝对性和相对性 <span class="section-label">选8 | 填3 | 判3 | 论1</span></div>
+
+<div class="card" data-correct="C" data-id="80">
+  <span class="q-num">60</span><span class="q-type">单选</span>
+  <div class="q-text">真理是标志（　）的哲学范畴。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主体与客体统一</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>思维与存在同一</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>主观与客观相符合</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>理论与实践一致</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>真理=主观与客观相符合</strong>，是对客观事物及其规律的正确反映。真理观中的首要问题：真理是不是客观的。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="81">
+  <span class="q-num">61</span><span class="q-type">单选</span>
+  <div class="q-text">真理的本质属性是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主观性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>客观性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>相对性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>绝对性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>客观性是真理的本质属性</strong>，但真理的形式是主观的（通过概念、判断、推理表达）。内容客观、形式主观。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="82">
+  <span class="q-num">62</span><span class="q-type">单选</span>
+  <div class="q-text">真理的一元性是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>真理只有一个</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>真理包含一个方面</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>真理形式单一</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>同一条件下对特定客体的真理性认识只有一个</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>真理一元性</strong>：同一条件下，对同一客体的多种不同认识中只有一种是真理。这是由真理的<strong>客观性</strong>决定的。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="83">
+  <span class="q-num">63</span><span class="q-type">单选</span>
+  <div class="q-text">真理既具有绝对性又具有相对性，这是真理问题上的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>辩证法</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>唯物论</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>唯心论</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>经验论</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">真理客观性（唯物论）+真理绝对性和相对性的统一（<strong>辩证法</strong>）。凡真理都是客观真理=唯物论；真理即绝对又相对=辩证法。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="84">
+  <span class="q-num">64</span><span class="q-type">单选</span>
+  <div class="q-text">马克思主义是发展的、与时俱进的，这是因为真理具有（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>绝对性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>相对性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>能动性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>普遍性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义<strong>正确反映了规律→绝对性</strong>（必须坚持为指导思想）；<strong>没有穷尽一切认识→相对性</strong>（必须丰富发展，与时俱进）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="85">
+  <span class="q-num">65</span><span class="q-type">单选</span>
+  <div class="q-text">真理的发展是一个（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>由主观真理走向客观真理的过程</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>由具体真理走向抽象真理的过程</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>由相对真理走向绝对真理的过程</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>由特殊真理走向终极真理的过程</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">人类认识永远处在<strong>由真理的相对性走向绝对性</strong>、接近绝对性的转化和发展过程中。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="86">
+  <span class="q-num">66</span><span class="q-type">单选</span>
+  <div class="q-text">关于真理与谬误，正确的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>真理与谬误绝对对立，不能转化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>真理与谬误完全等同</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>真理与谬误互不相关</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>真理和谬误对立又统一，在一定条件下相互转化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>真理与谬误对立统一</strong>：确定范围内对立绝对；超出范围可<strong>相互转化</strong>。真理超越条件→谬误；纠正错误→真理。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="87">
+  <span class="q-num">67</span><span class="q-type">单选</span>
+  <div class="q-text">片面夸大真理绝对性、否认真理相对性，会走向（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>相对主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>绝对主义（独断论）</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经验主义</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>怀疑主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>绝对主义/独断论</strong>：夸大绝对性、否认真理发展，把"里程碑"当"终点站"。<strong>相对主义</strong>：夸大相对性、否定客观内容。</div>
+</div>
+
+<div class="card" data-id="88">
+  <span class="q-num">68</span><span class="q-type">填空</span>
+  <div class="q-text">真理的客观性=内容<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的，形式<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的。客观性是真理的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>属性。凡真理都是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>真理，这是真理问题上的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入五个答案" data-answer="客观、主观、本质、客观、唯物论" data-id="88">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="89">
+  <span class="q-num">69</span><span class="q-type">填空</span>
+  <div class="q-text">真理的绝对性指主客观统一的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性和发展的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性；真理的相对性指认识总是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="确定、无限、有限度、不完善" data-id="89">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="90">
+  <span class="q-num">70</span><span class="q-type">填空</span>
+  <div class="q-text">马克思主义真理的<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性要求坚持以马克思主义为指导思想，<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性要求在实践中丰富和发展马克思主义。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="填入两个答案" data-answer="绝对、相对" data-id="90">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="91">
+  <span class="q-num">71</span><span class="q-type">判断</span>
+  <div class="q-text">真理的客观性决定了真理的一元性。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>因为真理的内容客观，所以同一条件下真理性认识只有一个。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="92">
+  <span class="q-num">72</span><span class="q-type">判断</span>
+  <div class="q-text">真理和谬误是人类认识中互不相干的两类认识。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>真理和谬误<strong>相比较而存在、相斗争而发展</strong>。它们对立统一，在一定条件下可以相互转化。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="93">
+  <span class="q-num">73</span><span class="q-type">判断</span>
+  <div class="q-text">割裂真理绝对性与相对性的辩证关系，会走向绝对主义或相对主义。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>夸大绝对性→绝对主义/独断论；夸大相对性→相对主义，借口发展否认真理客观内容。</div>
+</div>
+
+<div class="card" data-id="94">
+  <span class="q-num">74</span><span class="q-type">论述</span>
+  <div class="q-text">论述真理的绝对性和相对性及其辩证关系，并说明对坚持和发展马克思主义的指导意义。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考要点：</div>
+    <p><strong>一、含义：</strong>绝对性=主客观统一的确定性和发展的无限性。相对性=认识总是有限度的、不完善的。</p>
+    <p><strong>二、关系：</strong>①相互依存，任何真理都是绝对和相对的统一；②相互包含。</p>
+    <p><strong>三、对马克思主义的意义：</strong>马克思主义正确反映规律（绝对性）→必须坚持以马克思主义为指导；马克思主义没有穷尽一切认识（相对性）→必须在实践中丰富发展马克思主义。</p>
+    <p><span class="mnemonic">正确反映规律（绝对、指导），没有穷尽一切（相对、发展）</span></p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 2-2. 真理的检验标准 ============ -->
+<div id="sec6">
+<div class="section-title"><span>📌</span> 2-2 真理的检验标准 <span class="section-label">选5 | 填2 | 判2 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="100">
+  <span class="q-num">75</span><span class="q-type">单选</span>
+  <div class="q-text">检验真理的唯一标准是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>逻辑证明</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>权威意见</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>多数人同意</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>实践是检验真理的唯一标准</strong>。从真理本性看需要主客观对照；从实践特点看实践具有<strong>直接现实性</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="101">
+  <span class="q-num">76</span><span class="q-type">单选</span>
+  <div class="q-text">实践能够充当检验真理标准的关键在于实践具有（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>自觉能动性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>社会历史性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>直接现实性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>主观性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>实践的直接现实性</strong>使其能把主观认识变为客观现实，从而能对认识进行检验。这是实践标准的根本依据。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="102">
+  <span class="q-num">77</span><span class="q-type">单选</span>
+  <div class="q-text">实践标准的确定性即绝对性，是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践标准是相对的</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实践作为检验真理标准的唯一性、归根到底性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践受主客观条件制约</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>当前的实践不能检验任何真理</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>确定性=唯一性、归根到底性、最终性</strong>。不确定性=条件性（受主客观条件制约，不能完全证实或驳倒一切认识）。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="103">
+  <span class="q-num">78</span><span class="q-type">单选</span>
+  <div class="q-text">实践标准的不确定性即相对性，是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践根本不能检验真理</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实践是唯一标准</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践绝对可靠</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实践受主客观条件制约，具有局限性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>不确定性=条件性</strong>：①实践受主客观条件制约；②实践是历史的具体的，不可能一劳永逸确证认识。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="104">
+  <span class="q-num">79</span><span class="q-type">单选</span>
+  <div class="q-text">坚持实践标准的确定性，主要防止和反对（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>唯心主义、怀疑主义和相对主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>教条主义和独断论</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经验主义和唯理论</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>绝对主义和形而上学</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">坚持确定性→防唯心/怀疑/相对主义（否认真理标准的）。坚持不确定性→防教条主义/独断论（把认识绝对化）。</div>
+</div>
+
+<div class="card" data-id="105">
+  <span class="q-num">80</span><span class="q-type">填空</span>
+  <div class="q-text">从真理的本性看，真理是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>与<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>相符合。从实践的特点看，实践具有<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿</span>性。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入三个答案" data-answer="主观、客观、直接现实" data-id="105">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="106">
+  <span class="q-num">81</span><span class="q-type">填空</span>
+  <div class="q-text">实践标准的确定性=绝对性（<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性）；不确定性=相对性（<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性，受主客观条件制约）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入三个答案" data-answer="唯一、归根到底、条件" data-id="106">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="107">
+  <span class="q-num">82</span><span class="q-type">判断</span>
+  <div class="q-text">实践标准的确定性是由实践标准的客观性和唯一性决定的。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>实践标准的客观性和唯一性决定了它的确定性/绝对性。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="108">
+  <span class="q-num">83</span><span class="q-type">判断</span>
+  <div class="q-text">"有用即真理"是正确的真理标准观。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>"有用即真理"是实用主义的主观真理标准论，在主观范围绕圈子，无法区分真理与谬误。唯一标准是实践。</div>
+</div>
+
+<div class="card" data-id="109">
+  <span class="q-num">84</span><span class="q-type">简答</span>
+  <div class="q-text">为什么说实践是检验真理的唯一标准？</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>从真理的本性看：</strong>真理是主观与客观相符合。只有能把主客观联系沟通的东西才能充当标准。</p>
+    <p><strong>从实践的特点看：</strong>实践具有<strong>直接现实性</strong>，能把主观认识变为客观现实。结果与预期相符=真理，不符=谬误。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 2-3. 真理与价值的辩证统一 ============ -->
+<div id="sec7">
+<div class="section-title"><span>📌</span> 2-3 真理与价值的辩证统一 <span class="section-label">选7 | 填3 | 判2 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="110">
+  <span class="q-num">85</span><span class="q-type">单选</span>
+  <div class="q-text">作为哲学范畴，价值是指（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>物品的价格</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>在实践基础上形成的主体和客体之间的意义关系</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>客体本身的属性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>主体的欲望和情感</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">价值=客体对主体所具有的<strong>积极意义</strong>。非客观主义（与主体无关）也非主观主义（与客体无关），而是主客体关系。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="111">
+  <span class="q-num">86</span><span class="q-type">单选</span>
+  <div class="q-text">价值的四个基本特性不包括（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>主体性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>客观性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>绝对性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>多维性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">四项特性：<strong>主体性、客观性、多维性、社会历史性</strong>。<span class="mnemonic">口诀：主客多史</span></div>
+</div>
+
+<div class="card" data-correct="D" data-id="112">
+  <span class="q-num">87</span><span class="q-type">单选</span>
+  <div class="q-text">价值评价以（　）为认识对象。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>客体本身的属性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>主体的需要</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>社会关系</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>主客体的价值关系</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">知识性认识以客体属性规律为对象求"真"；<strong>价值评价以价值关系为对象</strong>求"善"和"美"。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="113">
+  <span class="q-num">88</span><span class="q-type">单选</span>
+  <div class="q-text">评价结果与（　）直接相关，这是价值评价的重要特点。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>评价主体</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>评价客体</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>他人意见</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>权威观点</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">价值评价结果与<strong>评价主体直接相关</strong>，主体的需要、情感、兴趣直接影响评价结果。这是评价与知识认识的区别。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="114">
+  <span class="q-num">89</span><span class="q-type">单选</span>
+  <div class="q-text">社会主义核心价值观中，社会层面的内容是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>富强、民主、文明、和谐</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>自由、平等、公正、法治</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>爱国、敬业、诚信、友善</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>创新、包容、开放、进取</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三层对应：<strong>国家=富强民主文明和谐；社会=自由平等公正法治；公民=爱国敬业诚信友善</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="115">
+  <span class="q-num">90</span><span class="q-type">单选</span>
+  <div class="q-text">马克思主义价值观的评价标准归根结底是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>个人的利益</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>少数人的利益</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>以社会的进步和人类的彻底解放为标准</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>以经济效益为标准</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义价值观以<strong>绝大多数人的利益</strong>为是非标准，归根结底以<strong>社会进步和人类彻底解放</strong>为标准。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="116">
+  <span class="q-num">91</span><span class="q-type">单选</span>
+  <div class="q-text">实践的真理尺度和价值尺度的关系是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>紧密联系、不可分割的辩证统一关系</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>完全对立、不可调和</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>互不相干、各行其是</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>价值尺度决定真理尺度</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">真理尺度和价值尺度<strong>辩证统一</strong>：价值尺度以真理为前提；脱离真理则价值偏离正确轨道。人的需要推动发现真理。</div>
+</div>
+
+<div class="card" data-id="117">
+  <span class="q-num">92</span><span class="q-type">填空</span>
+  <div class="q-text">价值的基本特性：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>性。<span class="mnemonic">口诀：主客多史</span></div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="主体、客观、多维、社会历史" data-id="117">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="118">
+  <span class="q-num">93</span><span class="q-type">填空</span>
+  <div class="q-text">价值评价的四个特点：①以<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>为认识对象；②结果与<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>直接相关；③正确与否依赖于对<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>和<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的认识；④有<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>之别。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="价值关系、评价主体、客体状况、主体需要、科学非科学" data-id="118">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="119">
+  <span class="q-num">94</span><span class="q-type">填空</span>
+  <div class="q-text">社会主义核心价值观三层：国家层面=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿、＿＿、＿＿、＿＿</span>；社会层面=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿、＿＿、＿＿、＿＿</span>；公民层面=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿、＿＿、＿＿、＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="按顺序填入12个词" data-answer="富强、民主、文明、和谐、自由、平等、公正、法治、爱国、敬业、诚信、友善" data-id="119">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="120">
+  <span class="q-num">95</span><span class="q-type">判断</span>
+  <div class="q-text">价值评价具有主观性，因此是主观随意的认识活动。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>价值评价虽具主观性，但<strong>不是主观随意的</strong>。只有正确反映价值关系的评价才是正确的。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="121">
+  <span class="q-num">96</span><span class="q-type">判断</span>
+  <div class="q-text">价值尺度必须以真理为前提。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>真理尺度（遵循客观规律）是价值尺度（满足需要）的前提。脱离真理，价值就偏离正确轨道。</div>
+</div>
+
+<div class="card" data-id="122">
+  <span class="q-num">97</span><span class="q-type">简答</span>
+  <div class="q-text">简述价值评价及其特点。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>价值评价</strong>是对客观价值关系的主观反映。</p>
+    <p><strong>四特点：</strong></p>
+    <p>①评价以主客体的价值关系为认识对象（不是客观事物本身）。</p>
+    <p>②评价结果与评价主体直接相关。</p>
+    <p>③评价结果正确与否依赖于对客体状况和主体需要的认识。</p>
+    <p>④价值评价有科学与非科学之别。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 三、认识世界和改造世界 ============ -->
+<div id="sec8">
+<div class="section-title"><span>📌</span> 三、认识世界和改造世界 <span class="section-label">选8 | 填4 | 判3 | 简2 | 论1</span></div>
+
+<div class="card" data-correct="B" data-id="130">
+  <span class="q-num">98</span><span class="q-type">单选</span>
+  <div class="q-text">认识世界的根本目的在于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>满足猎奇心理</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改造世界</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现自我价值</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>创造客观规律</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>认识世界的目的在于改造世界。</strong>认识世界和改造世界是人类创造历史的两种基本活动。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="131">
+  <span class="q-num">99</span><span class="q-type">单选</span>
+  <div class="q-text">马克思主义认为，自由是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>对必然的认识和对客观世界的改造</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>不受任何限制的为所欲为</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>消极顺应自然</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>完全摆脱规律的束缚</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>自由=对必然的认识和对客观世界的改造</strong>。自由不是摆脱必然性，而是在认识必然性基础上的自觉自主状态。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="132">
+  <span class="q-num">100</span><span class="q-type">单选</span>
+  <div class="q-text">自由的两个条件是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>物质条件和精神条件</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>主观条件和客观条件</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>认识条件和实践条件</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>理论条件和经验条件</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">自由是有条件的：<strong>①认识条件</strong>——对客观规律的正确认识；<strong>②实践条件</strong>——将规律认识运用于指导实践改造世界。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="133">
+  <span class="q-num">101</span><span class="q-type">单选</span>
+  <div class="q-text">人类认识世界和改造世界的根本目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>征服自然</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>消灭矛盾</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>穷尽真理</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>认识必然和争取自由</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>根本目标=认识必然和争取自由</strong>，是一个历史性过程。自由是具体的、历史的。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="134">
+  <span class="q-num">102</span><span class="q-type">单选</span>
+  <div class="q-text">党的思想路线的核心是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一切从实际出发</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实事求是</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>理论联系实际</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>在实践中检验和发展真理</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">思想路线=一切从实际出发+理论联系实际+<strong>实事求是（核心）</strong>+在实践中检验和发展真理。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="135">
+  <span class="q-num">103</span><span class="q-type">单选</span>
+  <div class="q-text">一切从实际出发是马克思主义（　）的根本要求。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>认识论</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>辩证法</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>唯物论</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>历史观</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">一切从实际出发是<strong>马克思主义认识论</strong>的根本要求和具体体现。要把客观存在的事物作为根本出发点。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="136">
+  <span class="q-num">104</span><span class="q-type">单选</span>
+  <div class="q-text">守正创新的关系中，"守正"是创新的（　），"创新"是守正的（　）。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>目的、前提</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>补充、基础</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>前提和基础、目的和路径</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>结果、原因</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>守正</strong>是创新的<strong>前提和基础</strong>，<strong>创新</strong>是守正的<strong>目的和路径</strong>。守正创新揭示"变"与"不变"、继承与发展的统一。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="137">
+  <span class="q-num">105</span><span class="q-type">单选</span>
+  <div class="q-text">关于理论创新和实践创新的关系，正确的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>理论创新高于实践创新</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>二者没有关系</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>理论创新可以脱离实践创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>二者相互促进、辩证统一，实践创新具有基础性意义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>实践创新为理论创新提供动力源泉</strong>（实践创新是基础），<strong>理论创新为实践创新提供行动指南</strong>。二者良性互动。</div>
+</div>
+
+<div class="card" data-id="138">
+  <span class="q-num">106</span><span class="q-type">填空</span>
+  <div class="q-text">自由=对<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的认识和对<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的改造。两个条件：<span class="highlight">①</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>条件；<span class="highlight">②</span><span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>条件。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="必然、客观世界、认识、实践" data-id="138">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="139">
+  <span class="q-num">107</span><span class="q-type">填空</span>
+  <div class="q-text">党的思想路线四句话：<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>、在实践中检验和发展真理。其核心是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="一切从实际出发、理论联系实际、实事求是、实事求是" data-id="139">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="140">
+  <span class="q-num">108</span><span class="q-type">填空</span>
+  <div class="q-text">改造客观世界与改造主观世界：客观世界=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>存在+<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>存在；主观世界=认知+<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>+意志即<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>的统一体。二者<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿＿＿</span>、缺一不可。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="自然、社会、情感、知情意、相辅相成" data-id="140">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="141">
+  <span class="q-num">109</span><span class="q-type">填空</span>
+  <div class="q-text">毛泽东对"实事求是"的解释："'实事'就是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>，'是'就是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>即规律性，'求'就是<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。"</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入三个答案" data-answer="客观存在着的一切事物、客观事物的内部联系、我们去研究" data-id="141">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-correct="true" data-id="142">
+  <span class="q-num">110</span><span class="q-type">判断</span>
+  <div class="q-text">认识世界和改造世界的过程是从必然走向自由的过程。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>认识必然和争取自由是人类认识世界和改造世界的根本目标，是一个历史性过程。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="143">
+  <span class="q-num">111</span><span class="q-type">判断</span>
+  <div class="q-text">改造客观世界主要指经济活动，不包括改造主观世界。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>改造世界包括改造<strong>客观世界</strong>和改造<strong>主观世界</strong>。二者相辅相成、缺一不可。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="144">
+  <span class="q-num">112</span><span class="q-type">判断</span>
+  <div class="q-text">实践创新为理论创新提供不竭的动力源泉。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>在理论创新与实践创新的相互关系中，实践创新具有基础性意义。时代变化和实践发展是理论创新的源头活水。</div>
+</div>
+
+<div class="card" data-id="145">
+  <span class="q-num">113</span><span class="q-type">简答</span>
+  <div class="q-text">简述马克思主义关于在改造客观世界的同时改造主观世界的观点的重要意义。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案（三点）：</div>
+    <p><strong>①</strong>有助于提高认识世界的能力，做到主观符合客观，更好处理主客观世界关系。</p>
+    <p><strong>②</strong>有助于提高自身的思想修养和精神境界。</p>
+    <p><strong>③</strong>有助于在改造外部世界的同时，把目光转向自身，高度重视并努力实现人自身的改造。</p>
+  </div>
+</div>
+
+<div class="card" data-id="146">
+  <span class="q-num">114</span><span class="q-type">简答</span>
+  <div class="q-text">什么是"实事求是"？为什么说它是党的思想路线的核心？</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>基本内涵：</strong>一切从实际出发，理论联系实际，实事求是，在实践中检验和发展真理。</p>
+    <p><strong>实事求是的含义：</strong>"实事"=客观存在着的一切事物；"是"=客观事物的内部联系即规律性；"求"=我们去研究。</p>
+    <p><strong>核心地位：</strong>实事求是是中国共产党人的根本思想方法、工作方法和领导方法，是党领导人民取得胜利的重要法宝。</p>
+  </div>
+</div>
+
+<div class="card" data-id="147">
+  <span class="q-num">115</span><span class="q-type">论述</span>
+  <div class="q-text">论述改造客观世界和改造主观世界及其辩证关系。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考要点（含义+关系+意义）：</div>
+    <p><strong>一、含义：</strong>客观世界=自然存在+社会存在；主观世界=认知+情感+意志（知情意统一体）。</p>
+    <p><strong>二、关系：</strong>①改造客观世界与改造主观世界是<strong>对立统一、相互转化</strong>的关系。②只有认真改造主观世界，才能更好改造客观世界；③只有在改造客观世界的实践中，才能深入改造主观世界。<strong>二者相辅相成、相互促进、缺一不可。</strong></p>
+    <p><strong>三、意义：</strong>有助于提高认识能力、提高思想修养、实现自我改造。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 综合检测 ============ -->
+<div id="sec9">
+<div class="section-title"><span>📌</span> 综合检测 <span class="section-label">选8 | 判4 | 填3</span></div>
+
+<div class="card" data-correct="B" data-id="150">
+  <span class="q-num">116</span><span class="q-type">单选</span>
+  <div class="q-text">下列不属于实践对认识决定作用的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践是认识的来源和目的</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实践是检验认识能动性的标准</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践是认识发展的动力</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实践是检验认识真理性的标准</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">四个"是"：来源、动力、目的、<strong>检验真理性的唯一标准</strong>。B的"检验能动性"不是标准说法。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="151">
+  <span class="q-num">117</span><span class="q-type">单选</span>
+  <div class="q-text">概念、判断、推理属于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>感性认识</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>直觉认识</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>理性认识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>表象认识</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>感性：感觉、知觉、表象</strong>；<strong>理性：概念、判断、推理</strong>。经常互换考，注意区分！</div>
+</div>
+
+<div class="card" data-correct="D" data-id="152">
+  <span class="q-num">118</span><span class="q-type">单选</span>
+  <div class="q-text">"真理是对客观事物及其规律的正确反映"体现了真理的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>绝对性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>相对性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>主观性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>客观性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>真理的客观性</strong>指真理的内容是对客观事物及其规律的正确反映，包含不依赖于人和人的意识的客观内容。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="153">
+  <span class="q-num">119</span><span class="q-type">单选</span>
+  <div class="q-text">屠呦呦用科学方法探寻疟疾新疗法发现青蒿素，体现了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>只有真理尺度没有价值尺度</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>真理尺度和价值尺度的统一</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>只有价值尺度没有真理尺度</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>两个尺度互不相干</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">科学实验方法=真理尺度（遵循规律）；拯救患者生命=价值尺度（满足需要）。<strong>真理尺度与价值尺度辩证统一。</strong></div>
+</div>
+
+<div class="card" data-correct="C" data-id="154">
+  <span class="q-num">120</span><span class="q-type">单选</span>
+  <div class="q-text">中国共产党坚持把马克思主义基本原理同中国具体实际相结合，体现了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>矛盾的同一性和斗争性原理</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>内因和外因原理</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>真理的绝对性和相对性相统一的原理</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>否定之否定原理</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">马克思主义真理的绝对性→必须坚持；相对性→必须结合实际发展。<strong>理论联系实际</strong>，在实践中丰富发展马克思主义。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="155">
+  <span class="q-num">121</span><span class="q-type">单选</span>
+  <div class="q-text">"盲人骑瞎马，夜半临深池"说明什么道理？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实践不要理论指导</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>理论可以脱离实践</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实践不需要认识</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实践如果没有正确理论的指导会迷失方向</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">习近平引用的这句话说明：<strong>理论对实践有指导作用</strong>。没有正确理论的指导，实践容易盲目甚至危险。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="156">
+  <span class="q-num">122</span><span class="q-type">单选</span>
+  <div class="q-text">坚持马克思主义哲学的认识路线，就必须在工作中坚持（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一切从实际出发</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>一切从主观愿望出发</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>一切从理论出发</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>一切从经验出发</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>一切从实际出发</strong>是马克思主义认识论的根本要求。从客观事物存在和发展的规律出发，在实践中按规律办事。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="157">
+  <span class="q-num">123</span><span class="q-type">单选</span>
+  <div class="q-text">人类的创新活动归结起来主要是（　）两个基本方面。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>知识创新和制度创新</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>理论创新和实践创新</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技创新和文化创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>思想创新和行动创新</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">创新活动包含多方面，但归结起来主要是<strong>理论创新</strong>和<strong>实践创新</strong>两个基本方面。二者良性互动。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="158">
+  <span class="q-num">124</span><span class="q-type">判断</span>
+  <div class="q-text">认识世界和改造世界是统一的，理论与实践必须相结合。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>没有理论指导的实践是盲目的，不与实践结合的理论是空洞的。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="159">
+  <span class="q-num">125</span><span class="q-type">判断</span>
+  <div class="q-text">真理是主观自生的，不需要实践的检验。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>这是主观唯心主义真理观。辩证唯物主义认为真理是对客观事物及其规律的正确反映，必须由实践检验。</div>
+</div>
+
+<div class="card" data-correct="true" data-id="160">
+  <span class="q-num">126</span><span class="q-type">判断</span>
+  <div class="q-text">虚拟实践是现代信息技术发展产生的新的实践形式。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>正确。</strong>虚拟实践是伴随信息化网络化产生的，通过数字化中介在虚拟空间进行，具有交互性、开放性、间接性。</div>
+</div>
+
+<div class="card" data-correct="false" data-id="161">
+  <span class="q-num">127</span><span class="q-type">判断</span>
+  <div class="q-text">真理的客观性指真理的内容和形式都是客观的。</div>
+  <div class="tf-btns"><button class="toggle-btn" onclick="checkTF(this,true)">✓ 正确</button><button class="toggle-btn" onclick="checkTF(this,false)">✗ 错误</button></div>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>错误。</strong>真理的<strong>内容是客观的</strong>，但<strong>形式是主观的</strong>（通过概念、判断、推理等主观形式表达）。</div>
+</div>
+
+<div class="card" data-id="162">
+  <span class="q-num">128</span><span class="q-type">填空</span>
+  <div class="q-text">回顾全章核心概念：实践的三个基本特征=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿、＿＿、＿＿</span>；认识的两次飞跃=<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（第一次）→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（第二次、更重要的飞跃）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="客观实在性、自觉能动性、社会历史性、感性认识、理性认识、理性认识、实践" data-id="162">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="163">
+  <span class="q-num">129</span><span class="q-type">填空</span>
+  <div class="q-text">科学实践观四点意义的记忆主线：<span class="highlight">①</span>克服<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span class="highlight">②</span>揭示<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>决定<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>→<span class="highlight">③</span>揭示<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>实践本质→<span class="highlight">④</span>提供<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入" data-answer="旧唯物主义、实践、认识、社会生活、思想方法和工作方法" data-id="163">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+
+<div class="card" data-id="164">
+  <span class="q-num">130</span><span class="q-type">填空</span>
+  <div class="q-text">三大谬误倾向（匹配）：轻视感性认识、夸大理性认识→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（实际工作中走向<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>）；轻视理性认识、夸大感性认识→<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>（实际工作中走向<span style="border-bottom:2px dashed var(--primary);padding:0 4px;">＿＿</span>）。</div>
+  <div style="margin-top:8px;">
+    <input class="fill-input" placeholder="依次填入四个答案" data-answer="唯理论、教条主义、经验论、经验主义" data-id="164">
+    <button class="fill-btn" onclick="checkFill(this)">提交</button>
+  </div>
+  <div class="result-msg"></div>
+</div>
+</div>
+
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案，重新练习</button>
+</div>
+
+<footer>
+  马克思主义基本原理 · 第二章 实践和认识及其发展规律 · 完整习题集<br>
+  共计 <strong>130 题</strong>：单选 62 · 填空 28 · 判断 24 · 简答 11 · 论述 5 | 覆盖全章三节九大板块
+</footer>
+
+</div>
+
+<script>
+let totalCorrect = 0, totalDone = 0;
+const TOTAL_QUESTIONS = 114; // cards with scoring (not 简答/论述)
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = TOTAL_QUESTIONS;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+function pickMC(optEl, letter) {
+  const card = optEl.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+  allOpts.forEach(o => o.classList.add('disabled'));
+  let isCorrect = (letter === correct);
+  if (isCorrect) {
+    optEl.classList.add('correct-answer');
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    optEl.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 错误';
+    resultMsg.className = 'result-msg wrong show';
+    allOpts.forEach(o => {
+      const onclick = o.getAttribute('onclick') || '';
+      if (onclick.includes("'" + correct + "'") || onclick.includes('"' + correct + '"')) o.classList.add('correct-answer');
+    });
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function checkFill(btn) {
+  const card = btn.closest('.card');
+  if (card.classList.contains('done')) return;
+  const input = card.querySelector('.fill-input');
+  const expectedRaw = input.dataset.answer;
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  function normalize(s) {
+    return s.replace(/[\s，,、。．\.:：;；""''、（）\(\)\n\r]/g, '').toLowerCase();
+  }
+  const userNorm = normalize(input.value);
+  const expectedNorm = normalize(expectedRaw);
+  const userParts = userNorm.split(/[、，,]/).filter(Boolean);
+  const expectedParts = expectedNorm.split(/[、，,]/).filter(Boolean);
+
+  let isCorrect = false;
+  if (userParts.length > 0 && expectedParts.length > 0 && userParts.length >= expectedParts.length) {
+    isCorrect = expectedParts.every(ep => userParts.some(up => up.includes(ep) || ep.includes(up)));
+  }
+  if (!isCorrect) isCorrect = userNorm === expectedNorm;
+  if (!isCorrect && expectedNorm.length > 8) isCorrect = userNorm.includes(expectedNorm) || expectedNorm.includes(userNorm);
+
+  if (isCorrect) {
+    input.classList.add('correct');
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    input.classList.add('wrong');
+    resultMsg.textContent = '❌ 参考答案：' + expectedRaw;
+    resultMsg.className = 'result-msg wrong show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function checkTF(btn, userAnswer) {
+  const card = btn.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct === 'true';
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+  const allBtns = card.querySelectorAll('.tf-btns button');
+  allBtns.forEach(b => b.disabled = true);
+  let isCorrect = (userAnswer === correct);
+  if (isCorrect) {
+    btn.style.borderColor = '#27ae60'; btn.style.background = '#e8f8ef'; btn.style.color = '#27ae60';
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  } else {
+    btn.style.borderColor = '#e74c3c'; btn.style.background = '#fdedec'; btn.style.color = '#e74c3c';
+    resultMsg.textContent = '❌ 错误';
+    resultMsg.className = 'result-msg wrong show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function toggleA(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('确定重置全部答案？此操作不可撤销。')) return;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('done', 'wrong-card'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('disabled', 'correct-answer', 'wrong-answer'));
+  document.querySelectorAll('.result-msg').forEach(m => { m.classList.remove('show','correct','wrong'); m.textContent=''; });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.fill-input').forEach(i => { i.value=''; i.classList.remove('correct','wrong'); });
+  document.querySelectorAll('.answer-reveal').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('.card button').forEach(b => { b.disabled=false; b.style.borderColor=''; b.style.background=''; b.style.color=''; });
+  document.querySelectorAll('.toggle-btn').forEach(b => { if(b.textContent.includes('隐藏')) b.textContent='📝 点击查看答案'; });
+  totalCorrect = 0; totalDone = 0;
+  updateStats();
+}
+
+updateStats();
+
+window.addEventListener('scroll', () => {
+  const secs = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7','sec8','sec9'];
+  let current = 'sec1';
+  secs.forEach(id => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top <= 250) current = id; });
+  const idx = secs.indexOf(current);
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i === idx));
+});
+</script>
+</body>
+</html>
