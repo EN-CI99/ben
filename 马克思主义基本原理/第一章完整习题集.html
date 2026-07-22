@@ -178,9 +178,29 @@ footer {
 }
 
 .highlight { color: var(--primary); font-weight: 700; }
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--primary);
+  border-radius: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.back-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
 </style>
 </head>
 <body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
 <div class="container">
 
 <header>

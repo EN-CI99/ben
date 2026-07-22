@@ -58,9 +58,29 @@ header p{color:var(--text-secondary);font-size:14px}
 footer{text-align:center;padding:40px 0 20px;color:var(--text-secondary);font-size:12px}
 .highlight{color:var(--primary);font-weight:700}
 @media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--primary);
+  border-radius: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.back-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
 </style>
 </head>
 <body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
 <div class="container">
 <header><h1>📖 马克思主义基本原理</h1><p>第五章 · 资本主义的发展及其趋势 · 完整习题集</p></header>
 <div class="stats-bar">
