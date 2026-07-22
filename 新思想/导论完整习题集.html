@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 导论 完整习题集</title>
+<style>
+:root {
+  --bg: #faf8f6; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #b71c1c; --primary-light: #ffebee;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px;
+}
+.container { max-width: 840px; margin: 0 auto; }
+
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 24px;
+  display: flex; justify-content: space-around; text-align: center;
+  margin-bottom: 20px; position: sticky; top: 20px; z-index: 10;
+}
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn {
+  padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px;
+  font-size: 12px; cursor: pointer; background: var(--card-bg);
+  transition: all 0.2s; font-weight: 500; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.section-title {
+  font-size: 19px; font-weight: 700; color: var(--primary);
+  padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px; display: flex; align-items: center; gap: 8px;
+}
+.section-label {
+  font-size: 11px; background: var(--primary-light); color: var(--primary);
+  padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px;
+  border-left: 4px solid transparent; transition: border-color 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block; background: var(--primary-light);
+  color: var(--primary); font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px; margin-bottom: 8px;
+}
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+
+.options { list-style: none; }
+.option {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px;
+}
+.option:hover { border-color: var(--primary); background: #fef8f8; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+.option.correct-answer { border-color: var(--success); background: var(--success-light); color: var(--success); font-weight: 600; }
+.option.wrong-answer { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+.opt-letter { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+
+.result-msg { margin-top: 8px; font-weight: 600; font-size: 14px; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { color: var(--success); }
+.result-msg.wrong { color: var(--wrong); }
+
+.explanation {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.explanation.show { display: block; }
+
+.toggle-btn {
+  padding: 8px 18px; background: #fff; border: 1.5px solid var(--primary);
+  border-radius: 20px; color: var(--primary); cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: all 0.2s;
+}
+.toggle-btn:hover { background: var(--primary); color: #fff; }
+
+.answer-reveal {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+
+.mnemonic {
+  display: inline-block; background: var(--primary); color: #fff;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px;
+}
+
+.key-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  margin: 10px 0; font-size: 13px;
+}
+.key-table th, .key-table td {
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.key-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+
+.highlight { color: var(--primary); font-weight: 700; }
+
+.fill-input {
+  padding: 8px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 14px; width: 100%; max-width: 500px;
+  transition: border-color 0.2s; font-family: inherit;
+}
+.fill-input:focus { border-color: var(--primary); outline: none; }
+.fill-input.correct { border-color: var(--success); background: var(--success-light); color: var(--success); }
+.fill-input.wrong { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+
+.fill-btn {
+  padding: 8px 16px; background: var(--primary); color: #fff;
+  border: none; border-radius: 8px; cursor: pointer; font-size: 13px;
+  font-weight: 500; margin-left: 8px;
+}
+.fill-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn {
+  padding: 10px 28px; background: var(--text); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.reset-btn:hover { opacity: 0.85; }
+
+footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 13px; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--primary);
+  border-radius: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.back-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+@media print {
+  .stats-bar, .reset-bar, .fill-btn, footer, .nav { display: none; }
+  .explanation, .answer-reveal { display: block !important; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .card { padding: 14px; }
+  .stats-bar { padding: 10px 14px; }
+  .section-title { font-size: 16px; }
+  .card .q-text { font-size: 14px; }
+  .option { font-size: 13px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
+<div class="container">
+
+<header>
+<h1>习近平新时代中国特色社会主义思想概论</h1>
+<p>导论 · 完整习题集</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1.时代背景</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">2.两个结合</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">3.科学体系</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">4.十个明确</button>
+  <button class="nav-btn" onclick="scrollToSec('sec5')">5.六个必须坚持</button>
+  <button class="nav-btn" onclick="scrollToSec('sec6')">6.历史地位·两个确立</button>
+</div>
+
+<!-- ============ 一、时代背景 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、习近平新时代中国特色社会主义思想创立的时代背景 <span class="section-label">选6 | 简1</span></div>
+
+<div class="card" data-correct="D" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">习近平新时代中国特色社会主义思想创立的时代背景包含几个方面？</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>三个</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>四个</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>六个</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>五个</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>五个时代背景：</strong>①世界百年未有之大变局加速演进；②中华民族伟大复兴进入关键时期；③中国式现代化全面推进拓展；④科学社会主义在21世纪的中国焕发新的蓬勃生机；⑤中国共产党自我革命开辟新的境界。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">"世界百年未有之大变局加速演进"主要体现在（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>世界经济持续繁荣，各国合作日益紧密</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国际秩序更加稳定，地区冲突减少</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>新一轮科技革命深入发展，发展中国家群体性崛起，局部战争扩大、贸易摩擦剧增</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>发达国家主导的国际体系更加巩固</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>科技革命-发展中国家-冲击国际秩序。</strong>局部战争扩大、贸易摩擦剧增，世界进入新的动荡变革期。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="3">
+  <span class="q-num">3</span><span class="q-type">单选</span>
+  <div class="q-text">"中华民族伟大复兴进入关键时期"的核心目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全面建成小康社会</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实现中国梦，建成社会主义现代化强国</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现祖国完全统一</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>加入世界贸易组织</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中华民族伟大复兴进入关键时期，目标就是实现<strong>中国梦</strong>、建成<strong>社会主义现代化强国</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="4">
+  <span class="q-num">4</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化的重要特征是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>独立自主的和平发展道路，不走殖民掠夺的老路</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>照搬西方现代化模式</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>通过对外扩张实现发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>依靠外资主导的工业化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国式现代化是<strong>独立自主的和平发展</strong>道路，完全不同于西方<strong>殖民掠夺</strong>的老路，为人类实现现代化提供了新的选择。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="5">
+  <span class="q-num">5</span><span class="q-type">单选</span>
+  <div class="q-text">"科学社会主义在21世纪的中国焕发新的蓬勃生机"的历史背景是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>苏联依然强盛</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>苏联解体、东欧剧变后，社会主义运动陷入低潮，而中国不断发展</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>资本主义在全球范围内衰退</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>第三世界国家纷纷走上社会主义道路</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>前苏联解体</strong>后世界社会主义运动陷入低潮，但中国坚持社会主义道路<strong>不断发展</strong>，形成了一系列重要思想，使科学社会主义焕发蓬勃生机。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="6">
+  <span class="q-num">6</span><span class="q-type">单选</span>
+  <div class="q-text">"中国共产党自我革命开辟新的境界"在实践中最突出的表现是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济体制改革</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>对外开放政策</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技自主创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>反腐败斗争</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国共产党自我革命开辟新的境界，最突出的实践就是<strong>反腐败斗争</strong>，找到了跳出历史周期率的第二个答案。</div>
+</div>
+
+<div class="card" data-id="7">
+  <span class="q-num">7</span><span class="q-type">简答</span>
+  <div class="q-text">简述习近平新时代中国特色社会主义思想创立的时代背景。（五个方面）</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>世界百年未有之大变局加速演进。（科技革命-发展中国家群体性崛起-冲击国际秩序，局部战争扩大、贸易摩擦剧增）</p>
+    <p><strong>②</strong>中华民族伟大复兴进入关键时期。（中国梦，建设现代化强国）</p>
+    <p><strong>③</strong>中国式现代化全面推进拓展。（独立自主的和平发展道路，不走殖民掠夺的老路）</p>
+    <p><strong>④</strong>科学社会主义在21世纪的中国焕发新的蓬勃生机。（前苏联解体后社会主义低潮，中国不断发展，形成一系列思想）</p>
+    <p><strong>⑤</strong>中国共产党自我革命开辟新的境界。（反腐败斗争）</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 二、两个结合 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、"两个结合"的重大成果 <span class="section-label">选4 | 简1</span></div>
+
+<div class="card" data-correct="C" data-id="8">
+  <span class="q-num">8</span><span class="q-type">单选</span>
+  <div class="q-text">习近平新时代中国特色社会主义思想是"两个结合"的重大成果。"两个结合"指的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>理论与实际相结合、领导与群众相结合</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国内与国际相结合、经济与政治相结合</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>改革与开放相结合、发展与稳定相结合</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"两个结合"= <strong>马克思主义基本原理同中国具体实际相结合</strong>（解决中国问题）+ <strong>同中华优秀传统文化相结合</strong>（接地气-中国特色），是坚持"两个结合"的光辉典范。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="9">
+  <span class="q-num">9</span><span class="q-type">单选</span>
+  <div class="q-text">"两个结合"是我们党在探索中国特色社会主义道路中得出的（　），是我们取得成功的最大法宝。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>规律性认识</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>偶然性发现</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>外部经验借鉴</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>阶段性策略</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"两个结合"是我们党在探索中国特色社会主义道路中得出的<strong>规律性认识</strong>，是我们取得成功的<strong>最大法宝</strong>。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="10">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">"用马克思主义之'矢'去射新时代中国之'的'"形象说明了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>马克思主义已经过时</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>用马克思主义基本原理来解决新时代中国的实际问题</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>完全照搬马克思主义经典论述</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>抛弃马克思主义基本原理</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"矢"是马克思主义，"的"是新时代中国。就是坚持<strong>理论联系实际</strong>，用马克思主义立场观点方法分析和解决中国问题。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="11">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">同中华优秀传统文化相结合，使新思想具有了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>纯粹西方化的特征</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全盘复古的特征</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>排斥传统的特征</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>接地气的中国特色</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">同中华优秀传统文化相结合，让新思想更<strong>接地气</strong>，具有鲜明的<strong>中国特色</strong>，最适合当下时代发展。</div>
+</div>
+
+<div class="card" data-id="12">
+  <span class="q-num">12</span><span class="q-type">简答</span>
+  <div class="q-text">简述"两个结合"的含义及其重要意义。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>含义：</strong>"两个结合"即①马克思主义基本原理同中国具体实际相结合（解决中国问题）；②同中华优秀传统文化相结合（接地气-中国特色）。</p>
+    <p><strong>意义：</strong>①是坚持"两个结合"的光辉典范，最适合当下时代发展；②是我们党在探索中国特色社会主义道路中得出的规律性认识，是我们取得成功的最大法宝；③用马克思主义之"矢"去射新时代中国之"的"，使马克思主义在中国焕发强大生命力。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 三、完整的科学体系（理论体系+重大课题） ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、完整的科学体系 — 理论体系与重大时代课题 <span class="section-label">选8 | 简1</span></div>
+
+<div class="card" data-correct="A" data-id="13">
+  <span class="q-num">13</span><span class="q-type">单选</span>
+  <div class="q-text">邓小平理论主要回答了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>什么是社会主义、怎样建设社会主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设什么样的党、怎样建设党</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现什么样的发展、怎样发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>新时代坚持和发展什么样的中国特色社会主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>邓小平理论 → 什么是社会主义、怎样建设社会主义</strong>（什么社会主义）。中国特色社会主义理论体系的第一个重大成果。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="14">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">"三个代表"重要思想主要回答了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>什么是社会主义、怎样建设社会主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设什么样的党、怎样建设党</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现什么样的发展、怎样发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>怎样坚持和发展中国特色社会主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"三个代表"重要思想 → 建设什么样的党、怎样建设党</strong>（党的问题）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="15">
+  <span class="q-num">15</span><span class="q-type">单选</span>
+  <div class="q-text">科学发展观主要回答了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>什么是社会主义、怎样建设社会主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设什么样的党、怎样建设党</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现什么样的发展、怎样发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>怎样坚持全面深化改革</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>科学发展观 → 实现什么样的发展、怎样发展</strong>（发展的问题）。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="16">
+  <span class="q-num">16</span><span class="q-type">单选</span>
+  <div class="q-text">习近平新时代中国特色社会主义思想主要回答了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>什么是社会主义、怎样建设社会主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设什么样的党、怎样建设党</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现什么样的发展、怎样发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>新思想 → 中国特色社会主义</strong>。记忆口诀：邓-什么社会主义，三-党，科-发展，新-中国特色社会主义。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="17">
+  <span class="q-num">17</span><span class="q-type">单选</span>
+  <div class="q-text">习近平新时代中国特色社会主义思想科学回答的重大时代课题有几个？</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>两个</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>三个</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>四个</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>五个</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三个重大时代课题：①新时代坚持和发展什么样的<strong>中国特色社会主义</strong>、怎样坚持和发展中国特色社会主义；②建设什么样的<strong>社会主义现代化强国</strong>、怎样建设社会主义现代化强国；③建设什么样的<strong>长期执政的马克思主义政党</strong>、怎样建设长期执政的马克思主义政党。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="18">
+  <span class="q-num">18</span><span class="q-type">单选</span>
+  <div class="q-text">以下哪项不属于新思想科学回答的重大时代课题？</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设什么样的社会主义现代化强国、怎样建设社会主义现代化强国</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>怎样实现全球经济一体化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设什么样的长期执政的马克思主义政党、怎样建设长期执政的马克思主义政党</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">三个课题简称：<strong>①中国特色社会主义 ②社会主义现代化强国 ③长期执政的马克思主义政党</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="19">
+  <span class="q-num">19</span><span class="q-type">单选</span>
+  <div class="q-text">在"十个明确""十四个坚持""十三个方面成就"中，发挥着统摄作用的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"十个明确"</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"十四个坚持"</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>"十三个方面成就"</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>"六个必须坚持"</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"十个明确"是主体内容</strong>，集中体现了这一思想体系的主要观点和基本精神，构成了四梁八柱，<strong>发挥着统摄作用</strong>。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="20">
+  <span class="q-num">20</span><span class="q-type">单选</span>
+  <div class="q-text">新时代坚持和发展中国特色社会主义的基本方略是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"十个明确"</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"十四个坚持"</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>"十三个方面成就"</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>"六个必须坚持"</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"十四个坚持"</strong>是重要组成部分，构成了新时代坚持和发展中国特色社会主义的<strong>基本方略</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="21">
+  <span class="q-num">21</span><span class="q-type">单选</span>
+  <div class="q-text">对新时代伟大实践进行科学总结，全景式展示理论与实践成果的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"十个明确"</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"十四个坚持"</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>"十三个方面成就"</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>"六个必须坚持"</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"十三个方面成就"</strong>对新时代伟大实践进行了科学总结，<strong>全景式展示</strong>了习近平新时代中国特色社会主义思想的理论与实践成果。</div>
+</div>
+
+<div class="card" data-id="22">
+  <span class="q-num">22</span><span class="q-type">简答</span>
+  <div class="q-text">简述中国特色社会主义理论体系的构成及各自回答的核心问题。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①邓小平理论</strong>——什么是社会主义、怎样建设社会主义</p>
+    <p><strong>②"三个代表"重要思想</strong>——建设什么样的党、怎样建设党</p>
+    <p><strong>③科学发展观</strong>——实现什么样的发展、怎样发展</p>
+    <p><strong>④习近平新时代中国特色社会主义思想</strong>——新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义</p>
+    <p><span class="mnemonic">口诀：邓-什么社会主义，三-党，科-发展，新-中国特色社会主义</span></p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 四、十个明确 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 四、"十个明确"核心内容 <span class="section-label">选10 | 连1 | 简1</span></div>
+
+<div class="card" data-correct="D" data-id="23">
+  <span class="q-num">23</span><span class="q-type">单选</span>
+  <div class="q-text">"明确中国特色社会主义的总任务是（　）"</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全面建成小康社会</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全面深化改革</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>全面依法治国</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实现社会主义现代化和中华民族伟大复兴</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🌟 梦——总任务：</strong>实现社会主义现代化和中华民族伟大复兴（中国梦）。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="24">
+  <span class="q-num">24</span><span class="q-type">单选</span>
+  <div class="q-text">"明确新时代我国社会主要矛盾是（　）"</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人民日益增长的物质文化需要同落后的社会生产之间的矛盾</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>无产阶级与资产阶级之间的矛盾</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>生产力与生产关系的矛盾</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>⚖️ 矛——主要矛盾：</strong>从"基本需求"（物质文化需要 vs 落后社会生产）升级为"更高的追求"（美好生活需要 vs 不平衡不充分发展）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="25">
+  <span class="q-num">25</span><span class="q-type">单选</span>
+  <div class="q-text">"五位一体"总体布局和"四个全面"战略布局中，"五位一体"包含（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济、政治、文化、科技、外交</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>政治、经济、军事、文化、生态</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>政治建设、经济建设、文化建设、社会建设、生态文明建设</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>经济建设、政治建设、国防建设、文化建设、党的建设</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🏙️ 布局：</strong>总体布局"五位一体"= 政治建设 + 经济建设 + 文化建设 + 社会建设 + 生态文明建设（<strong>全方位</strong>）。战略布局"四个全面"= 全面建设社会主义现代化国家 + 全面深化改革 + 全面依法治国 + 全面从严治党（<strong>如何做</strong>）。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="26">
+  <span class="q-num">26</span><span class="q-type">单选</span>
+  <div class="q-text">明确全面深化改革的总目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设社会主义法治国家</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>完善和发展中国特色社会主义制度，推进国家治理体系和治理能力现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>全面建成小康社会</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设世界一流军队</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🔧 改革：</strong>完善和发展中国特色社会主义制度（<strong>解决弊端</strong>），推进国家治理体系和治理能力现代化（<strong>治国能力和体系</strong>）。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="27">
+  <span class="q-num">27</span><span class="q-type">单选</span>
+  <div class="q-text">明确全面推进依法治国总目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设中国特色社会主义法治体系、建设社会主义法治国家</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>完善社会主义市场经济体制</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>推进国家治理体系和治理能力现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设世界科技强国</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>⚖️ 法治：</strong>建设中国特色社会主义法治体系（<strong>完善的体系</strong>）、建设社会主义法治国家（<strong>法治国家和社会</strong>）。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="28">
+  <span class="q-num">28</span><span class="q-type">单选</span>
+  <div class="q-text">明确党在新时代的强军目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设世界一流海军</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设信息化军队</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>建设现代化国防体系</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设一支听党指挥、能打胜仗、作风优良的人民军队</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🪖 强军：</strong>听党指挥（<strong>人民</strong>军队的本质）、能打胜仗（不搞<strong>花架子</strong>）、作风优良（杜绝<strong>兵痞</strong>）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="29">
+  <span class="q-num">29</span><span class="q-type">单选</span>
+  <div class="q-text">明确中国特色大国外交的"主线"和"总目标"分别是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>服务经济发展；构建人类命运共同体</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>维护世界和平；推动经济全球化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>服务民族复兴、促进人类进步（主线）；推动构建人类命运共同体（总目标）</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>推动一带一路；构建新型国际关系</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🌍 外交——两服务、两推动：</strong>主线=服务民族复兴+促进人类进步（推动民族+推动人类）；总目标=推动构建新型国际关系+推动构建人类命运共同体（<strong>和平发展-以谈促和</strong>）。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="30">
+  <span class="q-num">30</span><span class="q-type">单选</span>
+  <div class="q-text">明确中国特色社会主义最本质的特征是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>以人民为中心</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国共产党的领导</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>社会主义市场经济</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>全面依法治国</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🌳 党建领导：</strong>中国特色社会主义最本质的特征=中国共产党领导。全党必须增强<strong>"四个意识"</strong>（政治意识、大局意识、核心意识、看齐意识），坚定<strong>"四个自信"</strong>（道路自信、理论自信、制度自信、文化自信），做到<strong>"两个维护"</strong>（坚决维护习近平总书记党中央的核心、全党的核心地位，坚决维护以习近平同志为核心的党中央权威和集中统一领导）。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="31">
+  <span class="q-num">31</span><span class="q-type">单选</span>
+  <div class="q-text">明确必须坚持和完善社会主义基本经济制度，其核心作用是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>提升综合国力，激发市场活力</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>扩大对外投资</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>增加外汇储备</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>发展互联网经济</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>💰 经济制度：</strong>综合国力的提升离不开基本经济制度，使市场在资源配置中起决定性作用，更好发挥政府作用，激发<strong>市场活力</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="32">
+  <span class="q-num">32</span><span class="q-type">单选</span>
+  <div class="q-text">明确全面从严治党的战略方针，核心是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>扩大党员数量</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革党的组织结构</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>加强党的经济工作</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>党的自我革命，反对贪污腐败</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>🛡️ 从严治党：</strong>党自我不断与时俱进，<strong>反贪污</strong>。把制度建设贯穿其中，深入推进反腐败斗争。</div>
+</div>
+
+<div class="card" data-id="33">
+  <span class="q-num">33</span><span class="q-type">连线</span>
+  <div class="q-text">将"十个明确"与其核心内容连线：</div>
+  <table class="key-table">
+    <tr><th>明确编号</th><th>核心内容</th></tr>
+    <tr><td>1. 总任务</td><td style="font-weight:700;color:var(--primary);">实现社会主义现代化和中华民族伟大复兴</td></tr>
+    <tr><td>2. 主要矛盾</td><td style="font-weight:700;color:var(--primary);">人民日益增长的美好生活需要和不平衡不充分发展之间的矛盾</td></tr>
+    <tr><td>3. 总体布局/战略布局</td><td style="font-weight:700;color:var(--primary);">"五位一体" / "四个全面"</td></tr>
+    <tr><td>4. 深化改革总目标</td><td style="font-weight:700;color:var(--primary);">完善和发展中国特色社会主义制度，推进国家治理现代化</td></tr>
+    <tr><td>5. 依法治国总目标</td><td style="font-weight:700;color:var(--primary);">建设中国特色社会主义法治体系，建设社会主义法治国家</td></tr>
+    <tr><td>6. 强军目标</td><td style="font-weight:700;color:var(--primary);">听党指挥、能打胜仗、作风优良</td></tr>
+    <tr><td>7. 大国外交</td><td style="font-weight:700;color:var(--primary);">服务民族复兴促进人类进步；构建人类命运共同体</td></tr>
+    <tr><td>8. 最本质特征</td><td style="font-weight:700;color:var(--primary);">中国共产党的领导；四个意识+四个自信+两个维护</td></tr>
+    <tr><td>9. 基本经济制度</td><td style="font-weight:700;color:var(--primary);">坚持和完善社会主义基本经济制度</td></tr>
+    <tr><td>10. 从严治党</td><td style="font-weight:700;color:var(--primary);">全面从严治党，自我革命，反腐败</td></tr>
+  </table>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看记忆口诀</button>
+  <div class="answer-reveal">
+    <div class="answer-label">口诀助记：</div>
+    <p>🌟梦 → ⚖️矛 → 🏙️布局 → 🔧改革 → ⚖️法治 → 🪖强军 → 🌍外交 → 🌳党建领导 → 💰经济制度 → 🛡️从严治党</p>
+  </div>
+</div>
+
+<div class="card" data-id="34">
+  <span class="q-num">34</span><span class="q-type">简答</span>
+  <div class="q-text">简述"十个明确""十四个坚持""十三个方面成就"各自的地位和作用。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①"十个明确"是主体内容，</strong>集中体现了这一思想体系的主要观点和基本精神，构成了四梁八柱，<strong>发挥着统摄作用</strong>。</p>
+    <p><strong>②"十四个坚持"是重要组成部分，</strong>构成了新时代坚持和发展中国特色社会主义的<strong>基本方略</strong>。</p>
+    <p><strong>③"十三个方面成就"</strong>对新时代伟大实践进行了科学总结，<strong>全景式展示</strong>了习近平新时代中国特色社会主义思想的理论与实践成果。</p>
+    <p>方法论：<strong>"六个必须坚持"</strong></p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 五、六个必须坚持 ============ -->
+<div id="sec5">
+<div class="section-title"><span>📌</span> 五、"六个必须坚持" <span class="section-label">选6 | 简1</span></div>
+
+<div class="card" data-correct="A" data-id="35">
+  <span class="q-num">35</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现根本价值立场的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持人民至上</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持自信自立</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持守正创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持问题导向</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持人民至上——根本价值立场</strong>，体现了历史唯物主义群众史观。人民是历史的创造者。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="36">
+  <span class="q-num">36</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现了客观规律性和主观能动性有机结合的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持人民至上</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持自信自立</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持问题导向</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持胸怀天下</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持自信自立——内在精神特质</strong>，体现了客观规律性和主观能动性的有机结合。既尊重规律，又发挥主动性。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="37">
+  <span class="q-num">37</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现鲜明理论品格的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持自信自立</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持人民至上</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持守正创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持系统观念</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持守正创新——鲜明理论品格</strong>，体现了变与不变、<strong>继承与发展</strong>的内在联系。守正=坚持正确方向，创新=与时俱进。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="38">
+  <span class="q-num">38</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现重要实践要求的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持守正创新</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持系统观念</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持胸怀天下</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持问题导向</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持问题导向——重要实践要求</strong>，体现了矛盾的普遍性和客观性。要聚焦<strong>最关键、最迫切的问题</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="39">
+  <span class="q-num">39</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现基本思想和工作方法的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持系统观念</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持自信自立</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持人民至上</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持问题导向</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持系统观念——基本思想和工作方法</strong>，体现了辩证唯物主义普遍联系的原理。改革开放要有<strong>系统</strong>思维。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="40">
+  <span class="q-num">40</span><span class="q-type">单选</span>
+  <div class="q-text">"六个必须坚持"中，体现中国共产党人境界格局的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持守正创新</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持胸怀天下</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持系统观念</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持自信自立</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持胸怀天下——中国共产党人的境界格局</strong>，体现了马克思主义追求人类进步和解放的崇高理想。<strong>人类命运共同体</strong>。</div>
+</div>
+
+<div class="card" data-id="41">
+  <span class="q-num">41</span><span class="q-type">简答</span>
+  <div class="q-text">简述"六个必须坚持"及其各自体现的哲学内涵。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案（口诀：人、自、守、问、系、胸）：</div>
+    <p><strong>①坚持人民至上</strong>——根本价值立场，体现历史唯物主义群众史观</p>
+    <p><strong>②坚持自信自立</strong>——内在精神特质，体现客观规律性和主观能动性的有机结合</p>
+    <p><strong>③坚持守正创新</strong>——鲜明理论品格，体现变与不变、继承与发展的内在联系</p>
+    <p><strong>④坚持问题导向</strong>——重要实践要求，体现矛盾的普遍性和客观性</p>
+    <p><strong>⑤坚持系统观念</strong>——基本思想和工作方法，体现辩证唯物主义普遍联系的原理</p>
+    <p><strong>⑥坚持胸怀天下</strong>——中国共产党人的境界格局，体现马克思主义追求人类进步和解放的崇高理想</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 六、历史地位 + 两个确立 ============ -->
+<div id="sec6">
+<div class="section-title"><span>📌</span> 六、历史地位与"两个确立" <span class="section-label">选4 | 简2</span></div>
+
+<div class="card" data-correct="C" data-id="42">
+  <span class="q-num">42</span><span class="q-type">单选</span>
+  <div class="q-text">习近平新时代中国特色社会主义思想的历史地位之一是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>是西方政治理论的最新成果</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>是传统的儒家思想的延续</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>是马克思主义在当代中国发展的最新理论成果，开辟了马克思主义中国化时代化新境界</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>是对苏联社会主义模式的继承</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">新思想是<strong>马克思主义在当代中国发展的最新理论成果</strong>，开辟了马克思主义中国化时代化新境界——<strong>最符合中国发展的思想</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="43">
+  <span class="q-num">43</span><span class="q-type">单选</span>
+  <div class="q-text">新思想是中华文化和中国精神的时代精华，这体现了其（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>符合中国国情，带有鲜明的中国特色</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>照搬西方文化传统</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>全盘否定中华传统文化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>完全独立于中华文化之外</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">新思想是中华民族的文化主体性最有力的体现，是中华文化和中国精神的时代精华——<strong>符合中国国情，带有中国特色</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="44">
+  <span class="q-num">44</span><span class="q-type">单选</span>
+  <div class="q-text">"两个确立"的内容是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>确立社会主义市场经济体制，确立改革开放方针</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>确立党的领导地位，确立依法治国方略</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>确立全面建设小康社会目标，确立全面深化改革目标</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"两个确立"：</strong>①确立习近平同志党中央的核心、全党的核心地位；②确立习近平新时代中国特色社会主义思想的指导地位。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="45">
+  <span class="q-num">45</span><span class="q-type">单选</span>
+  <div class="q-text">"两个确立"是党和人民应对一切不确定性的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一般性保障</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>最大确定性、最大底气、最大保证</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>阶段性成果</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>辅助性措施</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>未来发展-两个确立：</strong>"两个确立"是党和人民应对一切不确定性的<strong>最大确定性、最大底气、最大保证</strong>。</div>
+</div>
+
+<div class="card" data-id="46">
+  <span class="q-num">46</span><span class="q-type">简答</span>
+  <div class="q-text">简述习近平新时代中国特色社会主义思想的历史地位。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>是<strong>马克思主义在当代中国发展的最新理论成果</strong>，开辟了马克思主义中国化时代化新境界。（最符合中国发展的思想）</p>
+    <p><strong>②</strong>是<strong>中华民族的文化主体性最有力的体现</strong>，是中华文化和中国精神的时代精华。（符合中国国情，带有中国特色）</p>
+    <p><strong>③</strong>是全党全国各族人民为实现中华民族伟大复兴而奋斗的<strong>行动指南</strong>，是新时代党和国家事业发展的<strong>根本遵循</strong>。（中国梦要实现——新思想）</p>
+  </div>
+</div>
+
+<div class="card" data-id="47">
+  <span class="q-num">47</span><span class="q-type">简答</span>
+  <div class="q-text">简述"两个确立"的内容及其决定性意义。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>内容：</strong>①确立习近平同志党中央的核心、全党的核心地位；②确立习近平新时代中国特色社会主义思想的指导地位。</p>
+    <p><strong>意义：</strong>新时代的伟大实践充分证明，"两个确立"是<strong>新时代党和国家事业取得历史性成就、发生历史性变革的决定性因素</strong>（成就——两个确立）；是<strong>党和人民应对一切不确定性的最大确定性、最大底气、最大保证</strong>（未来发展——两个确立）。</p>
+  </div>
+</div>
+</div>
+
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button>
+</div>
+
+<footer>习近平新时代中国特色社会主义思想概论 · 导论习题集 · 共47题</footer>
+</div>
+
+<script>
+let totalCorrect = 0, totalDone = 0;
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = 35;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+function pickMC(opt, letter) {
+  const card = opt.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  allOpts.forEach(o => o.classList.add('disabled'));
+  allOpts.forEach(o => {
+    if (o.onclick && o.onclick.toString().includes("'" + correct + "'")) {
+      o.classList.add('correct-answer');
+    }
+  });
+
+  const isCorrect = (letter === correct);
+  if (!isCorrect) {
+    opt.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 错误，正确答案是 ' + correct;
+    resultMsg.className = 'result-msg wrong show';
+  } else {
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function toggleA(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('确定重置全部答案？此操作不可撤销。')) return;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('done', 'wrong-card'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('disabled', 'correct-answer', 'wrong-answer'));
+  document.querySelectorAll('.result-msg').forEach(m => { m.classList.remove('show','correct','wrong'); m.textContent=''; });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.answer-reveal').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('.toggle-btn').forEach(b => { if(b.textContent.includes('隐藏')) b.textContent='📝 点击查看答案'; });
+  totalCorrect = 0; totalDone = 0;
+  updateStats();
+}
+
+updateStats();
+
+window.addEventListener('scroll', () => {
+  const secs = ['sec1','sec2','sec3','sec4','sec5','sec6'];
+  let current = 'sec1';
+  secs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 200) current = id;
+  });
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', secs[i] === current);
+  });
+});
+</script>
+</body>
+</html>

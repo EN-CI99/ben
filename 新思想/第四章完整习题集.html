@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第四章 坚持以人民为中心 完整习题集</title>
+<style>
+:root {
+  --bg: #faf8f6; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #b71c1c; --primary-light: #ffebee;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px;
+}
+.container { max-width: 840px; margin: 0 auto; }
+
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 24px;
+  display: flex; justify-content: space-around; text-align: center;
+  margin-bottom: 20px; position: sticky; top: 20px; z-index: 10;
+}
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn {
+  padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px;
+  font-size: 12px; cursor: pointer; background: var(--card-bg);
+  transition: all 0.2s; font-weight: 500; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.section-title {
+  font-size: 19px; font-weight: 700; color: var(--primary);
+  padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px; display: flex; align-items: center; gap: 8px;
+}
+.section-label {
+  font-size: 11px; background: var(--primary-light); color: var(--primary);
+  padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px;
+  border-left: 4px solid transparent; transition: border-color 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block; background: var(--primary-light);
+  color: var(--primary); font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px; margin-bottom: 8px;
+}
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+
+.options { list-style: none; }
+.option {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px;
+}
+.option:hover { border-color: var(--primary); background: #fef8f8; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+.option.correct-answer { border-color: var(--success); background: var(--success-light); color: var(--success); font-weight: 600; }
+.option.wrong-answer { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+.opt-letter { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+
+.result-msg { margin-top: 8px; font-weight: 600; font-size: 14px; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { color: var(--success); }
+.result-msg.wrong { color: var(--wrong); }
+
+.explanation {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.explanation.show { display: block; }
+
+.toggle-btn {
+  padding: 8px 18px; background: #fff; border: 1.5px solid var(--primary);
+  border-radius: 20px; color: var(--primary); cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: all 0.2s;
+}
+.toggle-btn:hover { background: var(--primary); color: #fff; }
+
+.answer-reveal {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+
+.mnemonic {
+  display: inline-block; background: var(--primary); color: #fff;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px;
+}
+
+.key-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  margin: 10px 0; font-size: 13px;
+}
+.key-table th, .key-table td {
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.key-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+
+.highlight { color: var(--primary); font-weight: 700; }
+
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn {
+  padding: 10px 28px; background: var(--text); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.reset-btn:hover { opacity: 0.85; }
+
+footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 13px; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--primary);
+  border-radius: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.back-btn:hover { background: var(--primary); color: #fff; }
+
+@media print {
+  .stats-bar, .reset-bar, footer, .nav { display: none; }
+  .explanation, .answer-reveal { display: block !important; }
+}
+@media (max-width: 600px) {
+  body { padding: 8px; } .card { padding: 14px; } .stats-bar { padding: 10px 14px; }
+  .section-title { font-size: 16px; } .card .q-text { font-size: 14px; }
+  .option { font-size: 13px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
+<div class="container">
+
+<header>
+<h1>习近平新时代中国特色社会主义思想概论</h1>
+<p>第四章 · 坚持以人民为中心 · 完整习题集</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1.江山就是人民</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">2.人民立场</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">3.奋斗目标·裁决者</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">4.群众路线</button>
+  <button class="nav-btn" onclick="scrollToSec('sec5')">5.共同富裕</button>
+</div>
+
+<!-- ============ 一、江山就是人民，人民就是江山 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、江山就是人民，人民就是江山 <span class="section-label">选5 | 简1</span></div>
+
+<div class="card" data-correct="C" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">创造历史的真正动力，是历史发展和社会进步的主体力量是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>工人</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>学者</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>党派</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民</strong>是创造历史的真正动力，是历史发展和社会进步的主体力量。党的百年奋斗历史证明了这一点【井冈山，抗战，淮海，渡江】。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">习近平指出，从建党到十八大以来取得历史性成就的"根本原因"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持武装斗争</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>始终坚守为中国人民谋幸福、为中华民族谋复兴的初心和使命</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持独立自主的外交政策</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持经济体制改革</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">从建党的开天辟地，到新中国成立的改天换地，到改革开放的翻天覆地，再到十八大以来取得历史性成就、发生历史性变革，<strong>根本原因就在于我们党始终坚守了为中国人民谋幸福、为中华民族谋复兴的初心和使命</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="3">
+  <span class="q-num">3</span><span class="q-type">单选</span>
+  <div class="q-text">"江山就是人民，人民就是江山"是由（　）决定的。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>我们党的性质和宗旨</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济制度</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国际形势</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>文化传统</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">江山就是人民，人民就是江山，这是由我们党的<strong>性质和宗旨</strong>决定的。【根基是人民】【相互依存】民心是最大的政治，决定事业兴衰成败【党-人民】。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="4">
+  <span class="q-num">4</span><span class="q-type">单选</span>
+  <div class="q-text">人民在一个国家的地位是由这个国家的（　）决定的。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政权性质</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>基础制度</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经济制度</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>社会制度</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">人民在一个国家的地位是由这个国家的<strong>政权性质</strong>决定的。我国是人民民主专政的社会主义国家，人民是国家的主人。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="5">
+  <span class="q-num">5</span><span class="q-type">单选</span>
+  <div class="q-text">"最大的政治"，决定事业兴衰成败的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>军事力量</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>民心</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技水平</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>民心是最大的政治</strong>，决定事业兴衰成败【党-人民】。打江山、守江山，守的是人民的心。</div>
+</div>
+
+<div class="card" data-id="6">
+  <span class="q-num">6</span><span class="q-type">简答</span>
+  <div class="q-text">简述"江山就是人民，人民就是江山"的深刻内涵。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>人民是创造历史的真正动力，是历史发展和社会进步的主体力量。</p>
+    <p><strong>②</strong>民心是最大的政治，决定事业兴衰成败【党-人民】。</p>
+    <p><strong>③</strong>人民在一个国家的地位是由这个国家的政权性质决定的。</p>
+    <p><strong>④</strong>江山就是人民，人民就是江山，这是由我们党的性质、宗旨决定的。【根基是人民】【相互依存】</p>
+    <p><strong>⑤</strong>党的百年奋斗历史证明：从井冈山、抗战、淮海战役、渡江战役，始终依靠人民。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 人民立场 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 一、江山就是人民 — 人民立场 + 二、坚持人民至上 <span class="section-label">选5 | 简2</span></div>
+
+<div class="card" data-correct="C" data-id="7">
+  <span class="q-num">7</span><span class="q-type">单选</span>
+  <div class="q-text">中国共产党的根本政治立场，区别于其他政党的显著标志是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济制度</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>思想制度</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民立场</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>政治制度</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民立场</strong>是中国共产党的根本政治立场，是我们党区别于其他政党的<strong>显著标志</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="8">
+  <span class="q-num">8</span><span class="q-type">单选</span>
+  <div class="q-text">我们党的最大政治优势是（　），党执政后的最大危险是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>组织严密；组织涣散</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>理论先进；理论落后</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经济发展；经济停滞</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>密切联系群众；脱离群众</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">我们党的<strong>最大</strong>政治优势是<strong>密切联系群众</strong>，党执政后的<strong>最大</strong>危险是<strong>脱离群众</strong>【根基】。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="9">
+  <span class="q-num">9</span><span class="q-type">单选</span>
+  <div class="q-text">坚持人民至上，必须始终把（　）放在心中最高的位置。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>思想</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>制度</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">坚持人民至上，必须始终把<strong>人民</strong>放在心中最高的位置，想人民之所想，行人民之所嘱。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="10">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">我们党做好一切工作的价值取向和根本标准是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>合乎法规</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>群众满意</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经济增长</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>制度标准</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>让群众满意</strong>是我们党做好一切工作的价值取向和根本标准【政绩】。时代是出卷人，我们是答卷人，人民是阅卷人。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="11">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">"时代是出卷人，我们是答卷人，人民是阅卷人"中"我们"指的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>政府</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>知识分子</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>军队</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">时代是出卷人，我们（<strong>党</strong>）是答卷人，<strong>人民是阅卷人</strong>。人民是我们党的生命之根、执政之基、力量之源。</div>
+</div>
+
+<div class="card" data-id="12">
+  <span class="q-num">12</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何坚持人民立场。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>就要始终牢记党的<strong>初心和使命</strong>【人民，民族】。</p>
+    <p><strong>②</strong>就要始终保持党同人民群众的<strong>血肉联系</strong>。最大政治优势是密切联系群众，最大危险是脱离群众【根基】。</p>
+    <p><strong>③</strong>就要<strong>热爱人民、尊重人民、敬畏人民</strong>。</p>
+  </div>
+</div>
+
+<div class="card" data-id="13">
+  <span class="q-num">13</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何依靠人民创造历史伟业。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>必须尊重<strong>人民主体地位</strong>【为了人民，依靠人民】。</p>
+    <p><strong>②</strong>必须尊重<strong>人民首创精神</strong>【智慧源泉】：</p>
+    <p>&emsp;——首先，要<strong>尊重实践、尊重创造</strong>【调动敢想敢做】</p>
+    <p>&emsp;——其次，要<strong>激发人民群众的创新创造活力</strong></p>
+    <p>&emsp;——最后，要及时<strong>发现、总结、概括</strong>人民群众实践中形成的新鲜经验，使之上升为理论和政策，更好指导中国特色社会主义实践【利国利民】</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 奋斗目标 + 最高裁决者 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 二、坚持人民至上 — 奋斗目标与最高裁决者 <span class="section-label">选3</span></div>
+
+<div class="card" data-correct="B" data-id="14">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">坚持人民至上，是我们党百年奋斗的宝贵历史经验，也是新时代党治国理政的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一般原则</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>根本价值取向</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>次要方针</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>阶段性策略</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">坚持人民至上，是我们党百年奋斗的宝贵历史经验，也是新时代党治国理政的<strong>根本价值取向</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="15">
+  <span class="q-num">15</span><span class="q-type">单选</span>
+  <div class="q-text">党的工作的最高裁决者和最终评判者是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党中央</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>纪检监察机关</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人民代表大会</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民</strong>是党的工作的最高裁决者和最终评判者。人民对美好生活的向往就是党的奋斗目标。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="16">
+  <span class="q-num">16</span><span class="q-type">单选</span>
+  <div class="q-text">"为人民谋幸福是党始终坚守的初心，让人民过上好日子是党一贯的追求"，这两个标志性节点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>1921和1978</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>1978和2012</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>1921和2012</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>1949和2021</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">为人民谋幸福是党始终坚守的初心，让人民过上好日子是党一贯的追求。<strong>1949年新中国成立</strong>（站起来了）、<strong>2021年全面建成小康社会</strong>（富起来了），是两大标志性节点。</div>
+</div>
+</div>
+
+<!-- ============ 群众路线 + 为民造福 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 三、全面落实以人民为中心的发展思想 — 群众路线 · 为民造福 <span class="section-label">选3 | 简1</span></div>
+
+<div class="card" data-correct="A" data-id="17">
+  <span class="q-num">17</span><span class="q-type">单选</span>
+  <div class="q-text">我们党的生命线和根本工作路线，永葆青春活力和战斗力的重要传家宝是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>群众路线</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>武装斗争</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>统一战线</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实事求是</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>群众路线</strong>是我们党的生命线和根本工作路线【党的根基】，是我们党永葆青春活力和战斗力的重要<strong>传家宝</strong>。群众路线：一切为了群众、一切依靠群众，从群众中来，到群众中去。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="18">
+  <span class="q-num">18</span><span class="q-type">单选</span>
+  <div class="q-text">习近平指出："没有调查就没有发言权，就没有决策权"。这说明（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>调查研究和决策是分开的</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>只需要坐在办公室做决策</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>开展调查研究就是走群众路线</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>决策权高于一切</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>"开展调查研究就是走群众路线"</strong>，没有调查就没有发言权，就没有决策权。调查研究是获得真知灼见的源头活水，是贯彻群众路线的有效途径【下基层和群众接触】。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="19">
+  <span class="q-num">19</span><span class="q-type">单选</span>
+  <div class="q-text">群众路线的完整表述是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一切为了国家、一切依靠国家</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>一切为了群众、一切依靠群众，从群众中来，到群众中去</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>一切为了发展、一切依靠发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>为了人民、依靠人民、服务人民</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">群众路线：<strong>一切为了群众、一切依靠群众，从群众中来，到群众中去</strong>。</div>
+</div>
+
+<div class="card" data-id="20">
+  <span class="q-num">20</span><span class="q-type">简答</span>
+  <div class="q-text">简述"把为人民造福的事情真正办好办实"的要求。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>要落实到新时代中国特色社会主义的<strong>各项事业、全部工作</strong>之中【政治，文化】。</p>
+    <p><strong>②</strong>要着力解决好人民群众<strong>最关心最直接最现实</strong>的利益问题【就业，教育】。</p>
+    <p><strong>③</strong>要<strong>一件事情接着一件事情办，一年接着一年干</strong>。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 共同富裕 ============ -->
+<div id="sec5">
+<div class="section-title"><span>📌</span> 三、全面落实以人民为中心的发展思想 — 推动共同富裕 <span class="section-label">选3 | 简2</span></div>
+
+<div class="card" data-correct="D" data-id="21">
+  <span class="q-num">21</span><span class="q-type">单选</span>
+  <div class="q-text">中国特色社会主义的本质要求，中国式现代化的重要特征是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>群众路线</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>为人民服务</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经济发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>共同富裕</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>共同富裕</strong>是中国特色社会主义的<strong>本质要求</strong>，是中国式现代化的<strong>重要特征</strong>。共同富裕是全体人民共同富裕，不是少数人的富裕。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="22">
+  <span class="q-num">22</span><span class="q-type">单选</span>
+  <div class="q-text">实现共同富裕是关系党的执政基础的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>重大政治问题</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>次要经济问题</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>一般社会问题</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>纯理论问题</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">实现共同富裕是关系党的执政基础的<strong>重大政治问题</strong>。【蛋糕-分配-真实】不仅要做大蛋糕，还要分好蛋糕。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="23">
+  <span class="q-num">23</span><span class="q-type">单选</span>
+  <div class="q-text">推动全体人民共同富裕与促进人的全面发展是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>互相对立的</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>没有关系的</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>高度统一的</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>先后实现的关系</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">推动全体人民共同富裕与促进人的全面发展是<strong>高度统一</strong>的【物质，精神】。不仅要实现物质生活富裕，也要促进人的精神发展。</div>
+</div>
+
+<div class="card" data-id="24">
+  <span class="q-num">24</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何推动全体人民共同富裕取得更为明显的实质性进展。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>首先要认识到共同富裕是中国特色社会主义的<strong>本质要求</strong>，是中国式现代化的<strong>重要特征</strong>，共同富裕是<strong>全体人民共同富裕</strong>（不是少数人的富裕）。</p>
+    <p><strong>②</strong>实现共同富裕是关系党的执政基础的<strong>重大政治问题</strong>【蛋糕-分配-真实】。</p>
+    <p><strong>③</strong>扎实推进共同富裕，必须坚持<strong>正确的原则和科学的思路</strong>【按部就班、循序渐进】。</p>
+    <p><strong>④</strong>推动全体人民共同富裕与促进人的全面发展是<strong>高度统一</strong>的【物质，精神】。</p>
+  </div>
+</div>
+
+<div class="card" data-id="25">
+  <span class="q-num">25</span><span class="q-type">简答</span>
+  <div class="q-text">结合本章内容，简述"坚持以人民为中心"的核心要义。（综合题）</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>一、江山就是人民，人民就是江山：</strong>人民是历史的创造者；民心是最大的政治；党的性质和宗旨决定江山就是人民。</p>
+    <p><strong>二、坚持人民至上：</strong>人民立场是根本政治立场；人民对美好生活的向往是奋斗目标；人民是最高裁决者和最终评判者。</p>
+    <p><strong>三、全面落实：</strong>坚持群众路线（生命线和根本工作路线）；把为人民造福的事情办好办实；推动全体人民共同富裕取得实质性进展。</p>
+  </div>
+</div>
+</div>
+
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button>
+</div>
+
+<footer>习近平新时代中国特色社会主义思想概论 · 第四章完整习题集 · 共25题</footer>
+</div>
+
+<script>
+let totalCorrect = 0, totalDone = 0;
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = 18;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+function pickMC(opt, letter) {
+  const card = opt.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  allOpts.forEach(o => o.classList.add('disabled'));
+  allOpts.forEach(o => {
+    if (o.onclick && o.onclick.toString().includes("'" + correct + "'")) {
+      o.classList.add('correct-answer');
+    }
+  });
+
+  const isCorrect = (letter === correct);
+  if (!isCorrect) {
+    opt.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 错误，正确答案是 ' + correct;
+    resultMsg.className = 'result-msg wrong show';
+  } else {
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function toggleA(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('确定重置全部答案？此操作不可撤销。')) return;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('done', 'wrong-card'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('disabled', 'correct-answer', 'wrong-answer'));
+  document.querySelectorAll('.result-msg').forEach(m => { m.classList.remove('show','correct','wrong'); m.textContent=''; });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.answer-reveal').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('.toggle-btn').forEach(b => { if(b.textContent.includes('隐藏')) b.textContent='📝 点击查看答案'; });
+  totalCorrect = 0; totalDone = 0;
+  updateStats();
+}
+
+updateStats();
+
+window.addEventListener('scroll', () => {
+  const secs = ['sec1','sec2','sec3','sec4','sec5'];
+  let current = 'sec1';
+  secs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 200) current = id;
+  });
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', secs[i] === current);
+  });
+});
+</script>
+</body>
+</html>

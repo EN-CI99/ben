@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第二章 以中国式现代化全面推进中华民族伟大复兴 完整习题集</title>
+<style>
+:root {
+  --bg: #faf8f6; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #b71c1c; --primary-light: #ffebee;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px;
+}
+.container { max-width: 840px; margin: 0 auto; }
+
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 24px;
+  display: flex; justify-content: space-around; text-align: center;
+  margin-bottom: 20px; position: sticky; top: 20px; z-index: 10;
+}
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn {
+  padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px;
+  font-size: 12px; cursor: pointer; background: var(--card-bg);
+  transition: all 0.2s; font-weight: 500; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.section-title {
+  font-size: 19px; font-weight: 700; color: var(--primary);
+  padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px; display: flex; align-items: center; gap: 8px;
+}
+.section-label {
+  font-size: 11px; background: var(--primary-light); color: var(--primary);
+  padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px;
+  border-left: 4px solid transparent; transition: border-color 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block; background: var(--primary-light);
+  color: var(--primary); font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px; margin-bottom: 8px;
+}
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+
+.options { list-style: none; }
+.option {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px;
+}
+.option:hover { border-color: var(--primary); background: #fef8f8; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+.option.correct-answer { border-color: var(--success); background: var(--success-light); color: var(--success); font-weight: 600; }
+.option.wrong-answer { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+.opt-letter { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+
+.result-msg { margin-top: 8px; font-weight: 600; font-size: 14px; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { color: var(--success); }
+.result-msg.wrong { color: var(--wrong); }
+
+.explanation {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.explanation.show { display: block; }
+
+.toggle-btn {
+  padding: 8px 18px; background: #fff; border: 1.5px solid var(--primary);
+  border-radius: 20px; color: var(--primary); cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: all 0.2s;
+}
+.toggle-btn:hover { background: var(--primary); color: #fff; }
+
+.answer-reveal {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+
+.mnemonic {
+  display: inline-block; background: var(--primary); color: #fff;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px;
+}
+
+.key-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  margin: 10px 0; font-size: 13px;
+}
+.key-table th, .key-table td {
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.key-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+
+.highlight { color: var(--primary); font-weight: 700; }
+
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn {
+  padding: 10px 28px; background: var(--text); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.reset-btn:hover { opacity: 0.85; }
+
+footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 13px; }
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--primary);
+  border-radius: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.back-btn:hover { background: var(--primary); color: #fff; }
+
+@media print {
+  .stats-bar, .reset-bar, footer, .nav { display: none; }
+  .explanation, .answer-reveal { display: block !important; }
+}
+@media (max-width: 600px) {
+  body { padding: 8px; } .card { padding: 14px; } .stats-bar { padding: 10px 14px; }
+  .section-title { font-size: 16px; } .card .q-text { font-size: 14px; }
+  .option { font-size: 13px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
+<div class="container">
+
+<header>
+<h1>习近平新时代中国特色社会主义思想概论</h1>
+<p>第二章 · 以中国式现代化全面推进中华民族伟大复兴 · 完整习题集</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1.中国梦</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">2.两个一百年·新两步走</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">3.长期探索与实践</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">4.中国特色·本质要求</button>
+  <button class="nav-btn" onclick="scrollToSec('sec5')">5.党的领导</button>
+  <button class="nav-btn" onclick="scrollToSec('sec6')">6.人类文明新形态</button>
+  <button class="nav-btn" onclick="scrollToSec('sec7')">7.重大原则·团结奋斗</button>
+</div>
+
+<!-- ============ 一、中国梦 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、中华民族近代以来最伟大的梦想 — 实现中华民族伟大复兴的中国梦 <span class="section-label">选5 | 简1</span></div>
+
+<div class="card" data-correct="D" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">习近平指出，中华民族近代以来最伟大的梦想是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>民族独立和人民解放</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全面建设小康社会</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>实现社会主义现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实现中华民族伟大复兴</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">习近平在参观《复兴之路》展览时指出：<strong>实现中华民族伟大复兴，就是中华民族近代以来最伟大的梦想</strong>。这个梦想凝聚了几代中国人的夙愿，体现了中华民族和中国人民的整体利益。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">中华民族伟大复兴的形象表达是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>共同富裕</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国梦</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>民族振兴</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国家富强</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>中国梦</strong>是中华民族伟大复兴的形象表达。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="3">
+  <span class="q-num">3</span><span class="q-type">单选</span>
+  <div class="q-text">中国梦最核心的内容（本质）是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展、社会和谐、文化繁荣</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国家富强、民族振兴、人民幸福</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>民主健全、科技进步、教育公平</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>劳有所得、老有所养、住有所居</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国梦的本质 = <strong>国家富强 + 民族振兴 + 人民幸福</strong>。其中，国家富强、民族振兴是人民幸福的<strong>基础和保障</strong>；人民幸福是国家富强、民族振兴的<strong>根本出发点和落脚点</strong>。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="4">
+  <span class="q-num">4</span><span class="q-type">单选</span>
+  <div class="q-text">中国梦的主体是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人民</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国家</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>民族</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>家庭</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民</strong>是中国梦的<strong>主体</strong>，是中国梦的创造者和享有者。中国梦的深厚源泉在于人民，根本归宿也在于人民。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="5">
+  <span class="q-num">5</span><span class="q-type">单选</span>
+  <div class="q-text">中国梦中，属于"根本出发点和落脚点"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>国家富强</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>民族振兴</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>共同富裕</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人民幸福</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">国家富强、民族振兴是人民幸福的<strong>基础和保障</strong>；<strong>人民幸福</strong>是国家富强、民族振兴的题中之义和必然要求，是<strong>根本出发点和落脚点</strong>。</div>
+</div>
+
+<div class="card" data-id="6">
+  <span class="q-num">6</span><span class="q-type">简答</span>
+  <div class="q-text">简述中国梦的本质及其内在关系。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>中国梦的本质：</strong>①国家富强；②民族振兴；③人民幸福。</p>
+    <p><strong>内在关系：</strong>国家富强、民族振兴是人民幸福的<strong>基础和保障</strong>；人民幸福是国家富强、民族振兴的<strong>题中之义和必然要求</strong>，是<strong>根本出发点和落脚点</strong>。</p>
+    <p>人民是中国梦的主体，是中国梦的创造者和享有者。中国梦的深厚源泉在于人民，根本归宿也在于人民。中国梦是国家的梦、民族的梦，也是每一个中国人的梦。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 2. 两个一百年 + 新两步走 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 一、中华民族近代以来最伟大的梦想 — 两个一百年 · 新两步走 <span class="section-label">选6</span></div>
+
+<div class="card" data-correct="D" data-id="7">
+  <span class="q-num">7</span><span class="q-type">单选</span>
+  <div class="q-text">"两个一百年"奋斗目标中第一个一百年（2021年）的目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>基本实现现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建成社会主义现代化强国</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>解决人民温饱问题</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建成惠及十几亿人口的更高水平的小康社会</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>第一个一百年（2021年建党一百周年）：</strong>建成惠及十几亿人口的更高水平的小康社会。第二个一百年（2049年建国一百周年）在旧版中为"建成社会主义现代化国家"。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="8">
+  <span class="q-num">8</span><span class="q-type">单选</span>
+  <div class="q-text">十九大明确从2020年到本世纪中叶分两个阶段。第一个阶段（到2035年）的奋斗目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实现共同富裕</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全面实现社会主义现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>基本实现社会主义现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>实现国家治理体系和治理能力现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>第一阶段（2020→2035年）：基本实现社会主义现代化。</strong>总体目标：经济实力、科技实力、综合国力大幅跃升，人均GDP迈上新的大台阶，达到中等发达国家水平。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="9">
+  <span class="q-num">9</span><span class="q-type">单选</span>
+  <div class="q-text">十九大明确第二个阶段（2035年到2050年）的奋斗目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实现共同富裕</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建成富强民主文明的社会主义现代化国家</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>基本实现社会主义现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建成富强民主文明和谐美丽的社会主义现代化强国</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>第二阶段（2035→2050年）：</strong>建成<strong>富强民主文明和谐美丽</strong>的社会主义现代化强国。注意与旧版区别：旧版第二个一百年是"社会主义现代化国家"。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="10">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">实现社会主义现代化和中华民族伟大复兴，是坚持和发展中国特色社会主义的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>总路线</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>总依据</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>总布局</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>总任务</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">实现社会主义现代化和中华民族伟大复兴，是坚持和发展中国特色社会主义的<strong>总任务</strong>。这就是导论中"十个明确"的第一条——🌟梦。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="11">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">五个必由之路中，实现中华民族伟大复兴的必由之路是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持党的全面领导</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国特色社会主义</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>贯彻新发展理念</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>团结奋斗</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>中国特色社会主义</strong>是实现中华民族伟大复兴的<strong>必由之路</strong>。团结奋斗是中国人民创造历史伟业的必由之路。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="12">
+  <span class="q-num">12</span><span class="q-type">单选</span>
+  <div class="q-text">从2020年到2035年，我国发展的总体目标中，"达到中等发达国家水平"指的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济总量超过美国</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>GDP增速保持世界第一</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人均国内生产总值迈上新的大台阶</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>成为世界第一大经济体</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">2035年目标：经济实力、科技实力、综合国力大幅跃升，<strong>人均GDP迈上新的大台阶，达到中等发达国家水平</strong>。【门槛】实现高水平科技自立自强，进入创新型国家前列。</div>
+</div>
+</div>
+
+<!-- ============ 二-一、长期探索 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 二、中国式现代化是强国建设、民族复兴的唯一正确道路 — 长期探索与实践 <span class="section-label">选4</span></div>
+
+<div class="card" data-correct="A" data-id="13">
+  <span class="q-num">13</span><span class="q-type">单选</span>
+  <div class="q-text">新民主主义革命时期为中国式现代化起到的历史作用是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>为实现现代化创造了根本社会条件</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>为现代化建设奠定了制度基础</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>提供了快速发展的物质条件</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>成功推进和拓展了中国式现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">四个历史阶段的作用：①<strong>新民主主义革命时期</strong>→创造<strong>根本社会条件</strong>；②<strong>社会主义革命和建设时期</strong>（1949-1978）→奠定根本政治前提和<strong>制度基础</strong>；③<strong>改革开放新时期</strong>→提供体制保证和快速发展的<strong>物质条件</strong>；④<strong>新时代</strong>（十八大之后）→<strong>成功推进和拓展</strong>了中国式现代化【厚积薄发】。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="14">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">为中国式现代化提供了充满新的活力的体制保证和快速发展的物质条件是哪个时期？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>新民主主义革命时期</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革开放和社会主义现代化建设新时期</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>社会主义革命和建设时期</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>进入新时代</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>改革开放和社会主义现代化建设新时期</strong>：作出把工作中心转移到经济建设上来、实行改革开放的历史性决策，开启了中国式现代化的<strong>新长征</strong>，提供了充满新的活力的<strong>体制保证</strong>和快速发展的<strong>物质条件</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="15">
+  <span class="q-num">15</span><span class="q-type">单选</span>
+  <div class="q-text">进入新时代，我们党围绕解决现代化建设中存在的突出矛盾和问题，不断实现理论和实践上的创新突破，最终（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>仅完成了理论准备</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>照搬了西方现代化模式</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>放弃了现代化目标</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>成功推进和拓展了中国式现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>新时代（十八大之后）：</strong>成功推进和拓展了中国式现代化【厚积薄发】。这是在前三个时期积累基础上的质的飞跃。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="16">
+  <span class="q-num">16</span><span class="q-type">单选</span>
+  <div class="q-text">社会主义革命和建设时期（1949-1978）为中国式现代化提供的贡献不包括（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>奠定根本政治前提和制度基础</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>提供宝贵经验、理论准备、物质基础</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>提供了充满新的活力的体制保证</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>完成社会主义革命、推进社会主义建设</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">"充满新的活力的体制保证"是<strong>改革开放新时期</strong>的贡献，而非社会主义革命和建设时期。后者（1949-1978）的贡献是奠定<strong>制度基础</strong>+<strong>宝贵经验、理论准备、物质基础</strong>。</div>
+</div>
+</div>
+
+<!-- ============ 二-二/三：中国特色 + 本质要求 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 二、中国式现代化 — 中国特色与本质要求 <span class="section-label">选10 | 简2</span></div>
+
+<div class="card" data-correct="A" data-id="17">
+  <span class="q-num">17</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化的"显著特征"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人口规模巨大的现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全体人民共同富裕的现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>物质文明和精神文明相协调的现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人与自然和谐共生的现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人口规模巨大</strong>的现代化——<strong>显著特征</strong>【发达水平】。14亿多人口整体迈进现代化社会，规模超过现有发达国家人口的总和。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="18">
+  <span class="q-num">18</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化的"本质特征"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人口规模巨大的现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全体人民共同富裕的现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>走和平发展道路的现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人与自然和谐共生的现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>全体人民共同富裕</strong>的现代化——<strong>本质特征</strong>。这是中国式现代化区别于西方现代化的根本所在。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="19">
+  <span class="q-num">19</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化与西方现代化最突出的区别在于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人口规模巨大</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>共同富裕</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>走和平发展道路</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>物质文明和精神文明相协调</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>走和平发展道路</strong>的现代化——<strong>突出特征</strong>【西方不同】。西方现代化伴随着侵略、剥削、殖民；中国式现代化走和平发展道路。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="20">
+  <span class="q-num">20</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化的"鲜明特点"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人口规模巨大的现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全体人民共同富裕的现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>物质文明和精神文明相协调的现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人与自然和谐共生的现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人与自然和谐共生</strong>的现代化——<strong>鲜明特点</strong>【环境优美】。不走先污染后治理的老路。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="21">
+  <span class="q-num">21</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化的"崇高追求"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人口规模巨大的现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全体人民共同富裕的现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>物质文明和精神文明相协调的现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>走和平发展道路的现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>物质文明和精神文明相协调</strong>的现代化——<strong>崇高追求</strong>【全方位】。既要物质富足，也要精神富有。</div>
+</div>
+
+<div class="card" data-id="22">
+  <span class="q-num">22</span><span class="q-type">简答</span>
+  <div class="q-text">简述中国式现代化的五个中国特色。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案（口诀：人、富、文明、自然、和平）：</div>
+    <p>①<strong>人口规模巨大</strong>的现代化——<strong>显著特征</strong>【发达水平】</p>
+    <p>②<strong>全体人民共同富裕</strong>的现代化——<strong>本质特征</strong></p>
+    <p>③<strong>物质文明和精神文明相协调</strong>的现代化——<strong>崇高追求</strong>【全方位】</p>
+    <p>④<strong>人与自然和谐共生</strong>的现代化——<strong>鲜明特点</strong>【环境优美】</p>
+    <p>⑤<strong>走和平发展道路</strong>的现代化——<strong>突出特征</strong>【西方不同】</p>
+  </div>
+</div>
+
+<div class="card" data-correct="D" data-id="23">
+  <span class="q-num">23</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化本质要求的第一条是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>实现高质量发展</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实现全体人民共同富裕</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>创造人类文明新形态</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持中国共产党领导，坚持中国特色社会主义</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">本质要求共<strong>9条</strong>，第一条=坚持中国共产党领导+坚持中国特色社会主义，这在9条中是<strong>管总体、管根本的</strong>。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="24">
+  <span class="q-num">24</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化本质要求共有几条？（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>5条</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>7条</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>8条</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>9条</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">本质要求共<strong>9条</strong>：坚持党的领导+坚持中国特色社会主义、实现高质量发展、发展全过程人民民主、丰富人民精神世界、实现共同富裕、促进人与自然和谐共生、推动构建人类命运共同体、创造人类文明新形态。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="25">
+  <span class="q-num">25</span><span class="q-type">单选</span>
+  <div class="q-text">对中国式现代化的定性，管总体、管根本的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>中国式现代化是人口规模巨大的现代化</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国式现代化是中国共产党领导的社会主义现代化</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>中国式现代化是全体人民共同富裕的现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>中国式现代化是走和平发展道路的现代化</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国式现代化是<strong>中国共产党领导的社会主义现代化</strong>，这是对中国式现代化的<strong>定性</strong>，是<strong>管总体、管根本</strong>的。党的领导直接关系中国式现代化的根本方向、前途命运、最终成败。</div>
+</div>
+
+<div class="card" data-id="26">
+  <span class="q-num">26</span><span class="q-type">简答</span>
+  <div class="q-text">简述中国式现代化的本质要求（9条）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>①坚持中国共产党领导，坚持中国特色社会主义</p>
+    <p>②实现高质量发展</p>
+    <p>③发展全过程人民民主</p>
+    <p>④丰富人民精神世界</p>
+    <p>⑤实现全体人民共同富裕</p>
+    <p>⑥促进人与自然和谐共生</p>
+    <p>⑦推动构建人类命运共同体</p>
+    <p>⑧创造人类文明新形态</p>
+    <p><strong>其中第一条</strong>是定性，管总体、管根本。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 二-三：党的领导 ============ -->
+<div id="sec5">
+<div class="section-title"><span>📌</span> 二、中国式现代化 — 党的领导地位 <span class="section-label">选4</span></div>
+
+<div class="card" data-correct="B" data-id="27">
+  <span class="q-num">27</span><span class="q-type">单选</span>
+  <div class="q-text">党的领导决定中国式现代化的（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展速度</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>根本性质（是社会主义现代化）</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>经济效益</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技水平</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">强调党的领导的四个原因：<strong>①决定根本性质</strong>（是社会主义现代化）；②确保锚定奋斗目标行稳致远（一代一代接力推进）；③激发强劲动力（与时俱进）；④凝聚磅礴力量（汇集全体人民的智慧和力量）。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="28">
+  <span class="q-num">28</span><span class="q-type">单选</span>
+  <div class="q-text">"党的领导确保中国式现代化锚定奋斗目标行稳致远"，这体现的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党的领导能快速完成任务</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>党的领导可以跳过发展阶段</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>一代一代地接力推进</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>党的领导完全依靠外部力量</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">党的领导确保中国式现代化锚定奋斗目标行稳致远——<strong>一代一代地接力推进</strong>，不因领导人改变而改变方向。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="29">
+  <span class="q-num">29</span><span class="q-type">单选</span>
+  <div class="q-text">"党的领导激发建设中国式现代化的强劲动力"，强调的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>与时俱进</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>保持稳定</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>以逸待劳</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>按部就班</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">四个关键点：①决定根本性质；②一代一代接力推进；③<strong>与时俱进</strong>（焕发强劲动力）；④汇集全体人民的智慧和力量（凝聚磅礴力量）。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="30">
+  <span class="q-num">30</span><span class="q-type">单选</span>
+  <div class="q-text">"党的领导凝聚建设中国式现代化的磅礴力量"，这主要依靠（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>行政命令</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济激励</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国际援助</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>汇集全体人民的智慧和力量</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">党的领导凝聚建设中国式现代化的磅礴力量——<strong>汇集全体人民的智慧和力量</strong>。人民是历史的创造者。</div>
+</div>
+</div>
+
+<!-- ============ 二-四：人类文明新形态 ============ -->
+<div id="sec6">
+<div class="section-title"><span>📌</span> 二、中国式现代化 — 创造了人类文明新形态 <span class="section-label">选3</span></div>
+
+<div class="card" data-correct="B" data-id="31">
+  <span class="q-num">31</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化提供了一种全新的现代化模式，打破了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>现代化等于发展的神话</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"现代化=西方化"的迷思</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>现代化等于工业化的观念</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>现代化等于市场经济的认识</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国式现代化打破了<strong>"现代化=西方化"的迷思</strong>，提供了一种全新的现代化模式。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="32">
+  <span class="q-num">32</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化对西方式现代化理论和实践的重大超越体现在（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>中国式现代化完全模仿西方模式</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国式现代化比西方更早实现</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>不走侵略、剥削、殖民的老路</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>中国式现代化拒绝一切国际交流</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国式现代化是对西方式现代化理论和实践的<strong>重大超越</strong>——西方现代化走的是<strong>侵略、剥削、殖民</strong>的道路，中国式现代化走和平发展道路。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="33">
+  <span class="q-num">33</span><span class="q-type">单选</span>
+  <div class="q-text">中国式现代化为广大发展中国家提供了（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全新选择</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>照搬模式</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>唯一答案</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>淘汰方案</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">中国式现代化为广大发展中国家提供了<strong>全新选择</strong>——不是<strong>照搬</strong>西方模式，而是找到适合本国国情的发展道路。</div>
+</div>
+</div>
+
+<!-- ============ 三、一以贯之（重大原则+团结奋斗） ============ -->
+<div id="sec7">
+<div class="section-title"><span>📌</span> 三、推进中国式现代化行稳致远 — 重大原则 · 团结奋斗 <span class="section-label">选6 | 简2</span></div>
+
+<div class="card" data-correct="A" data-id="34">
+  <span class="q-num">34</span><span class="q-type">单选</span>
+  <div class="q-text">推进中国式现代化需要牢牢把握的重大原则中，属于"领导力量"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持和加强党的全面领导</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持中国特色社会主义道路</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持以人民为中心的发展思想</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持深化改革开放</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">五个重大原则：①坚持和加强党的全面领导（<strong>领导力量</strong>）②坚持中国特色社会主义道路（<strong>旗帜方向</strong>）③坚持以人民为中心（<strong>价值立场</strong>）④坚持深化改革开放（<strong>根本动力</strong>）⑤坚持发扬斗争精神（<strong>精神状态</strong>）。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="35">
+  <span class="q-num">35</span><span class="q-type">单选</span>
+  <div class="q-text">推进中国式现代化需要牢牢把握的重大原则中，属于"旗帜方向"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持发扬斗争精神</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持中国特色社会主义道路</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持以人民为中心的发展思想</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持和加强党的全面领导</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持中国特色社会主义道路——旗帜方向</strong>。方向决定道路，道路决定命运。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="36">
+  <span class="q-num">36</span><span class="q-type">单选</span>
+  <div class="q-text">推进中国式现代化需要牢牢把握的重大原则中，属于"价值立场"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持深化改革开放</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持发扬斗争精神</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持以人民为中心的发展思想</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持中国特色社会主义道路</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持以人民为中心的发展思想——价值立场</strong>。人民对美好生活的向往就是我们的奋斗目标。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="37">
+  <span class="q-num">37</span><span class="q-type">单选</span>
+  <div class="q-text">推进中国式现代化需要牢牢把握的重大原则中，属于"根本动力"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持和加强党的全面领导</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持以人民为中心的发展思想</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持发扬斗争精神</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持深化改革开放</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持深化改革开放——根本动力</strong>。改革开放是决定当代中国命运的关键一招。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="38">
+  <span class="q-num">38</span><span class="q-type">单选</span>
+  <div class="q-text">推进中国式现代化需要牢牢把握的重大原则中，属于"精神状态"的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持发扬斗争精神</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持中国特色社会主义道路</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持深化改革开放</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持和加强党的全面领导</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持发扬斗争精神——精神状态</strong>。必须敢于斗争、善于斗争，依靠顽强斗争打开事业发展新天地。</div>
+</div>
+
+<div class="card" data-id="39">
+  <span class="q-num">39</span><span class="q-type">简答</span>
+  <div class="q-text">简述推进中国式现代化需要牢牢把握的五个重大原则及其定位。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案（口诀：党、路、人、改革、斗争）：</div>
+    <p>①<strong>坚持和加强党的全面领导</strong>——领导力量</p>
+    <p>②<strong>坚持中国特色社会主义道路</strong>——旗帜方向</p>
+    <p>③<strong>坚持以人民为中心的发展思想</strong>——价值立场</p>
+    <p>④<strong>坚持深化改革开放</strong>——根本动力</p>
+    <p>⑤<strong>坚持发扬斗争精神</strong>——精神状态</p>
+  </div>
+</div>
+
+<div class="card" data-correct="B" data-id="40">
+  <span class="q-num">40</span><span class="q-type">单选</span>
+  <div class="q-text">中国共产党和中国人民最显著的精神标识是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>艰苦奋斗</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>团结奋斗</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>自力更生</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>开拓创新</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>团结奋斗</strong>是中国共产党和中国人民最显著的精神标识，是中国人民创造历史伟业的<strong>必由之路</strong>。</div>
+</div>
+
+<div class="card" data-id="41">
+  <span class="q-num">41</span><span class="q-type">简答</span>
+  <div class="q-text">简述推进中国式现代化为什么必须坚持团结奋斗。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>团结奋斗</strong>是中国共产党和中国人民最显著的精神标识，是中国人民创造历史伟业的必由之路。</p>
+    <p>推进中国式现代化是前无古人的伟大事业，必须大力弘扬团结奋斗精神，汇集全体人民的智慧和力量，奋力以中国式现代化全面推进中华民族伟大复兴。</p>
+  </div>
+</div>
+</div>
+
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button>
+</div>
+
+<footer>习近平新时代中国特色社会主义思想概论 · 第二章完整习题集 · 共41题</footer>
+</div>
+
+<script>
+let totalCorrect = 0, totalDone = 0;
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = 33;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+function pickMC(opt, letter) {
+  const card = opt.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+
+  allOpts.forEach(o => o.classList.add('disabled'));
+  allOpts.forEach(o => {
+    if (o.onclick && o.onclick.toString().includes("'" + correct + "'")) {
+      o.classList.add('correct-answer');
+    }
+  });
+
+  const isCorrect = (letter === correct);
+  if (!isCorrect) {
+    opt.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 错误，正确答案是 ' + correct;
+    resultMsg.className = 'result-msg wrong show';
+  } else {
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function toggleA(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('确定重置���部答案？此操作不可撤销。')) return;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('done', 'wrong-card'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('disabled', 'correct-answer', 'wrong-answer'));
+  document.querySelectorAll('.result-msg').forEach(m => { m.classList.remove('show','correct','wrong'); m.textContent=''; });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.answer-reveal').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('.toggle-btn').forEach(b => { if(b.textContent.includes('隐藏')) b.textContent='📝 点击查看答案'; });
+  totalCorrect = 0; totalDone = 0;
+  updateStats();
+}
+
+updateStats();
+
+window.addEventListener('scroll', () => {
+  const secs = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
+  let current = 'sec1';
+  secs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 200) current = id;
+  });
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', secs[i] === current);
+  });
+});
+</script>
+</body>
+</html>
