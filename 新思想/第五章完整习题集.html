@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第五章 全面深化改革 完整习题集</title>
+<style>
+:root {
+  --bg: #faf8f6; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #b71c1c; --primary-light: #ffebee;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px;
+}
+.container { max-width: 840px; margin: 0 auto; }
+
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+
+.stats-bar {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 24px;
+  display: flex; justify-content: space-around; text-align: center;
+  margin-bottom: 20px; position: sticky; top: 20px; z-index: 10;
+}
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn {
+  padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px;
+  font-size: 12px; cursor: pointer; background: var(--card-bg);
+  transition: all 0.2s; font-weight: 500; white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.section-title {
+  font-size: 19px; font-weight: 700; color: var(--primary);
+  padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light);
+  margin-top: 8px; display: flex; align-items: center; gap: 8px;
+}
+.section-label {
+  font-size: 11px; background: var(--primary-light); color: var(--primary);
+  padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px;
+  border-left: 4px solid transparent; transition: border-color 0.3s;
+}
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num {
+  display: inline-block; background: var(--primary-light);
+  color: var(--primary); font-size: 12px; font-weight: 700;
+  padding: 2px 10px; border-radius: 12px; margin-bottom: 8px;
+}
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+
+.options { list-style: none; }
+.option {
+  padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; margin-bottom: 6px; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px;
+}
+.option:hover { border-color: var(--primary); background: #fef8f8; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+.option.correct-answer { border-color: var(--success); background: var(--success-light); color: var(--success); font-weight: 600; }
+.option.wrong-answer { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+.opt-letter { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+
+.result-msg { margin-top: 8px; font-weight: 600; font-size: 14px; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { color: var(--success); }
+.result-msg.wrong { color: var(--wrong); }
+
+.explanation {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.explanation.show { display: block; }
+
+.toggle-btn {
+  padding: 8px 18px; background: #fff; border: 1.5px solid var(--primary);
+  border-radius: 20px; color: var(--primary); cursor: pointer;
+  font-size: 13px; font-weight: 500; transition: all 0.2s;
+}
+.toggle-btn:hover { background: var(--primary); color: #fff; }
+
+.answer-reveal {
+  margin-top: 10px; padding: 12px 16px; background: var(--primary-light);
+  border-radius: 8px; font-size: 13px; display: none; line-height: 1.8;
+}
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+
+.mnemonic {
+  display: inline-block; background: var(--primary); color: #fff;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px;
+}
+
+.key-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  margin: 10px 0; font-size: 13px;
+}
+.key-table th, .key-table td {
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.key-table th { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+
+.highlight { color: var(--primary); font-weight: 700; }
+
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn {
+  padding: 10px 28px; background: var(--text); color: #fff;
+  border: none; border-radius: 20px; cursor: pointer;
+  font-size: 14px; transition: opacity 0.2s;
+}
+.reset-btn:hover { opacity: 0.85; }
+
+footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 13px; }
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border: 1.5px solid var(--primary);
+  border-radius: 20px; color: var(--primary); text-decoration: none;
+  font-size: 14px; font-weight: 500; transition: all 0.2s; margin-bottom: 20px;
+}
+.back-btn:hover { background: var(--primary); color: #fff; }
+
+@media print {
+  .stats-bar, .reset-bar, footer, .nav { display: none; }
+  .explanation, .answer-reveal { display: block !important; }
+}
+@media (max-width: 600px) {
+  body { padding: 8px; } .card { padding: 14px; } .stats-bar { padding: 10px 14px; }
+  .section-title { font-size: 16px; } .card .q-text { font-size: 14px; }
+  .option { font-size: 13px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+
+<div class="container">
+
+<header>
+<h1>习近平新时代中国特色社会主义思想概论</h1>
+<p>第五章 · 全面深化改革 · 完整习题集</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1.重要法宝·深刻革命</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">2.正确方向</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">3.总目标·六个围绕</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">4.治理能力·方法论</button>
+  <button class="nav-btn" onclick="scrollToSec('sec5')">5.改发稳·将改革到底</button>
+</div>
+
+<!-- ============ 一=一+二：重要法宝 + 深刻革命 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、改革开放是决定当代中国命运的关键一招 — 重要法宝 · 深刻革命 <span class="section-label">选2 | 简2</span></div>
+
+<div class="card" data-correct="B" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">通过《中共中央关于全面深化改革若干重大问题的决定》的会议是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党的十八大</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>党的十八届三中全会（2013年11月）</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>党的十九大</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>党的十九届四中全会</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>2013年11月，党的十八届三中全会</strong>通过《中共中央关于全面深化改革若干重大问题的决定》，提出全面深化改革的总目标。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">全面深化改革进入"攻坚期和深水区"，意味着（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>改革已经基本完成</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>只需要小修小补</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>面临深层次矛盾和问题，需要涉险滩、闯难关</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>改革可以放慢脚步</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">全面深化改革开放是一场<strong>深刻革命</strong>。改革进入<strong>攻坚期和深水区</strong>，面临许多深层次矛盾和问题，如旧体制弊端、先富后富等"难啃的骨头"，需要<strong>涉险滩、闯难关</strong>。</div>
+</div>
+
+<div class="card" data-id="3">
+  <span class="q-num">3</span><span class="q-type">简答</span>
+  <div class="q-text">简述为什么改革开放是我们前进的重要法宝。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>是党和人民<strong>大踏步赶上时代</strong>的重要法宝【现代化-有钱】。</p>
+    <p><strong>②</strong>是坚持和发展中国特色社会主义的<strong>必由之路</strong>【人民，民族】。</p>
+    <p><strong>③</strong>是完成<strong>新时代目标任务</strong>的必然要求【两个一百年】。</p>
+    <p><strong>④</strong>中国要前进，就要全面深化改革开放；除了全面深化改革开放，<strong>别无他途</strong>。</p>
+  </div>
+</div>
+
+<div class="card" data-id="4">
+  <span class="q-num">4</span><span class="q-type">简答</span>
+  <div class="q-text">简述新时代全面深化改革开放是一场深刻革命。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>就其<strong>艰巨性、复杂性和系统性</strong>来说，是一场深刻的革命。是涉险滩、闯难关的变革【难啃骨头：旧体制弊端，先富后富】。</p>
+    <p><strong>②</strong>面对改革进入<strong>攻坚期和深水区</strong>的新形势，以习近平同志为核心的党中央以<strong>巨大政治勇气</strong>打响改革攻坚战【方向，怎么走】。</p>
+    <p><strong>③</strong>是在多年改革开放基础上的深化，是一场全面、系统、整体的<strong>制度创新</strong>。完善基本经济制度、对外开放制度等，推动国家治理体系和治理能力现代化。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 一=三：正确方向 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 一、改革开放是决定当代中国命运的关键一招 — 坚持正确方向 <span class="section-label">选2 | 简1</span></div>
+
+<div class="card" data-correct="D" data-id="5">
+  <span class="q-num">5</span><span class="q-type">单选</span>
+  <div class="q-text">全面深化改革开放"改什么、怎么改"是一个（　）的问题。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>次要性</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>技术性</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>阶段性</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>根本性</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">全面深化改革开放改什么、怎么改，这是一个带有<strong>根本性</strong>的问题，关系到改革的性质和方向。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="6">
+  <span class="q-num">6</span><span class="q-type">单选</span>
+  <div class="q-text">坚持全面深化改革开放的正确方向，必须坚持和改善党的全面领导、坚持和完善（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>市场经济体制</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>中国特色社会主义制度</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>对外开放政策</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>行政管理体制</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">如何坚持正确方向：①必须坚持和改善党的全面领导、坚持和完善<strong>中国特色社会主义制度</strong>；②必须坚持以人民为中心，促进社会公平正义、增进人民福祉【党的根基，国家性质】；③必须有利于进一步解放思想、解放和发展生产力、解放和增强社会活力。</div>
+</div>
+
+<div class="card" data-id="7">
+  <span class="q-num">7</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何坚持全面深化改革开放的正确方向。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>必须坚持和改善党的<strong>全面领导</strong>、坚持和完善<strong>中国特色社会主义制度</strong>。</p>
+    <p><strong>②</strong>必须坚持<strong>以人民为中心</strong>，促进社会公平正义、增进人民福祉【党的根基，国家性质】。</p>
+    <p><strong>③</strong>必须有利于进一步<strong>解放思想</strong>、进一步<strong>解放和发展生产力</strong>、进一步<strong>解放和增强社会活力</strong>。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 二=一：总目标 + 六个紧紧围绕 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 二、统筹推进各领域各方面改革开放 — 总目标 · 六个紧紧围绕 <span class="section-label">选7 | 简1</span></div>
+
+<div class="card" data-correct="C" data-id="8">
+  <span class="q-num">8</span><span class="q-type">单选</span>
+  <div class="q-text">十八届三中全会提出的全面深化改革总目标是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全面建成小康社会</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设社会主义法治国家</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>完善和发展中国特色社会主义制度、推进国家治理体系和治理能力现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设社会主义现代化强国</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">总目标：<strong>完善和发展中国特色社会主义制度</strong>（规定了改革的根本方向【性质】）+ <strong>推进国家治理体系和治理能力现代化</strong>（明确了改革的鲜明指向和时代要求【发达水平】）。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="9">
+  <span class="q-num">9</span><span class="q-type">单选</span>
+  <div class="q-text">十八届三中全会指出，市场在资源配置中起（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>决定性作用</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>主导性作用</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>基础性作用</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>协调性作用</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">十八届三中全会提出使市场在资源配置中起<strong>决定性作用</strong>，这是经济体制改革的核心。此前是"基础性作用"，三中全会提升为"决定性作用"。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="10">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">全面深化改革的主线是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治建设</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>思想建设</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>体制建设</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>制度建设</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">全面深化改革的主线是<strong>制度建设</strong>【政治、经济更完善】。以制度建设为主线，使各方面制度更加成熟更加定型。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="11">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">统筹推进各领域各方面改革开放的"重点"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济体制改革</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>政治体制改革</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化体制改革</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>生态文明体制改革</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">统筹推进各领域各方面改革开放，以总目标为引领，以<strong>制度建设为主线</strong>，以<strong>经济体制改革为重点</strong>【人民，民族】，以重要领域和关键环节改革为突破口【民生，生态】。</div>
+</div>
+
+<div class="card" data-id="12">
+  <span class="q-num">12</span><span class="q-type">匹配</span>
+  <div class="q-text">将"六个紧紧围绕"与对应的改革领域匹配：</div>
+  <table class="key-table">
+    <tr><th>领域</th><th>核心内容</th></tr>
+    <tr><td><strong>经济</strong></td><td style="font-weight:700;color:var(--primary);">使市场在资源配置中起决定性作用</td></tr>
+    <tr><td><strong>政治</strong></td><td style="font-weight:700;color:var(--primary);">坚持党的领导、人民当家作主、依法治国有机统一</td></tr>
+    <tr><td><strong>文化</strong></td><td style="font-weight:700;color:var(--primary);">建设社会主义核心价值体系、社会主义文化强国</td></tr>
+    <tr><td><strong>社会</strong></td><td style="font-weight:700;color:var(--primary);">更好保障和改善民生、促进社会公平正义</td></tr>
+    <tr><td><strong>生态</strong></td><td style="font-weight:700;color:var(--primary);">建设美丽中国</td></tr>
+    <tr><td><strong>党建</strong></td><td style="font-weight:700;color:var(--primary);">提高科学执政、民主执政、依法执政水平</td></tr>
+  </table>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看记忆口诀</button>
+  <div class="answer-reveal">
+    <div class="answer-label">口诀：经、政、文、社、生、党</div>
+    <p>经济-市场决定；政治-党人法；文化-核心价值；社会-民生公平；生态-美丽中国；党建-三个执政</p>
+  </div>
+</div>
+
+<div class="card" data-correct="C" data-id="13">
+  <span class="q-num">13</span><span class="q-type">单选</span>
+  <div class="q-text">一个国家现代化的重要标志是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济总量世界第一</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人均GDP达到发达国家水平</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国家治理体系和治理能力现代化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>城市化率达到80%以上</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>国家治理体系和治理能力现代化</strong>，是一个国家现代化的<strong>重要标志</strong>【发达水平】。国家治理体系和治理能力是一个国家<strong>制度和制度执行能力的集中体现</strong>【制度完善=经济，文化，政治；依法办事】。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="14">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">一个国家制度和制度执行能力的集中体现是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>国家治理体系和政治建设</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国家治理体系和思想建设</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国家治理体系和治理能力</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国家治理体系和制度建设</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>国家治理体系和治理能力</strong>是一个国家制度和制度执行能力的集中体现。制度完善涵盖经济、文化、政治各方面。</div>
+</div>
+
+<div class="card" data-id="15">
+  <span class="q-num">15</span><span class="q-type">简答</span>
+  <div class="q-text">简述推进国家治理体系和治理能力现代化的要求。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>必须坚定<strong>中国特色社会主义制度自信</strong>【先进的制度】。</p>
+    <p><strong>②</strong>必须更好发挥<strong>中国特色社会主义制度优势</strong>【集中力量】。</p>
+    <p><strong>③</strong>必须把<strong>中国特色社会主义制度优势转化为国家治理效能</strong>【政治，经济，文化——融入到生活中】。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 二=三 + 三：方法论 + 改革开放到底 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 二、统筹推进各领域各方面改革开放 — 正确方法论 <span class="section-label">选6 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="16">
+  <span class="q-num">16</span><span class="q-type">单选</span>
+  <div class="q-text">改革、发展、稳定三者关系中，"动力"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>稳定</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人民</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">改革、发展、稳定三者关系：<strong>稳定</strong>——前提；<strong>发展</strong>——关键【社会经济问题】；<strong>改革</strong>——动力【社会发展】。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="17">
+  <span class="q-num">17</span><span class="q-type">单选</span>
+  <div class="q-text">改革、发展、稳定三者关系中，"关键"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>稳定</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>创新</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>发展</strong>是解决一切社会经济问题的<strong>关键</strong>。一体两面：稳定-前提；改革-动力。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="18">
+  <span class="q-num">18</span><span class="q-type">单选</span>
+  <div class="q-text">改革、发展、稳定三者关系中，"前提"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>改革</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>稳定</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>开放</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>稳定</strong>是改革和发展的<strong>前提</strong>，没有稳定什么事情也办不成。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="19">
+  <span class="q-num">19</span><span class="q-type">单选</span>
+  <div class="q-text">处理改革、发展、稳定关系的重要结合点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>提高生产力水平</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>不断改善人民生活</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>公有资产占优势</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持四项基本原则</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">处理改革、发展、稳定关系的重要结合点：<strong>不断改善人民的生活</strong>。我国社会主义现代化建设的三个重要支点：<strong>改革、发展、稳定</strong>。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="20">
+  <span class="q-num">20</span><span class="q-type">单选</span>
+  <div class="q-text">我国社会主义现代化建设的三个重要支点是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>工业、国防、科技</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>干部、企业、工人</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>改革、发展、稳定</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>政策、方针、原则</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">我国社会主义现代化建设的三个重要支点是<strong>改革、发展、稳定</strong>。三者统一于中国特色社会主义伟大实践。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="21">
+  <span class="q-num">21</span><span class="q-type">单选</span>
+  <div class="q-text">新时代坚持和发展中国特色社会主义的"根本动力"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全面深化改革开放</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全面从严治党</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>全面依法治国</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>全面以人民为中心</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>全面深化改革开放</strong>，是新时代坚持和发展中国特色社会主义的<strong>根本动力</strong>。</div>
+</div>
+
+<div class="card" data-id="22">
+  <span class="q-num">22</span><span class="q-type">简答</span>
+  <div class="q-text">简述全面深化改革开放要坚持的正确方法论（5条）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>增强全面深化改革的<strong>系统性、整体性、协同性</strong>【地区，行业】。</p>
+    <p><strong>②</strong>加强<strong>顶层设计和摸着石头过河</strong>相结合【法律，探索】。</p>
+    <p><strong>③</strong>统筹<strong>改革发展稳定</strong>。</p>
+    <p><strong>④</strong><strong>胆子要大，步子要稳</strong>【风险】。</p>
+    <p><strong>⑤</strong>坚持<strong>重大改革于法有据</strong>。</p>
+    <p>补充：改发稳三者的关系——稳定是前提，发展是关键，改革是动力。重要结合点：不断改善人民生活。</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 将改革开放进行到底 ============ -->
+<div id="sec5">
+<div class="section-title"><span>📌</span> 三、将改革开放进行到底 <span class="section-label">选2 | 简3</span></div>
+
+<div class="card" data-correct="B" data-id="23">
+  <span class="q-num">23</span><span class="q-type">单选</span>
+  <div class="q-text">"改革推进到今天，比认识更重要的是（　），比方法更关键的是（　）"</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>勇气；智慧</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>决心；担当</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>速度；效率</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>理论；实践</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">改革开放进入深水区后，<strong>比认识更重要的是决心，比方法更关键的是担当</strong>。这体现了将改革进行到底的勇气和魄力。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="24">
+  <span class="q-num">24</span><span class="q-type">单选</span>
+  <div class="q-text">关于开放与改革的关系，正确的说法是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>开放与改革是两件完全独立的事</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>开放比改革更重要</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>开放也是改革，以开放促改革、促发展</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>开放可以替代改革</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>开放也是改革</strong>。以开放促改革、促发展是我国发展不断取得新成就的宝贵经验【生活，大锅饭】。</div>
+</div>
+
+<div class="card" data-id="25">
+  <span class="q-num">25</span><span class="q-type">简答</span>
+  <div class="q-text">简述改革开放永无止境的原因。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>是社会<strong>基本矛盾运动规律</strong>的深刻反映【生产力】——随着生产力发展，需要不断调整生产关系。</p>
+    <p><strong>②</strong>是总结<strong>世界社会主义实践经验</strong>得出的重要结论【市场和计划】【苏联和东欧】。</p>
+    <p><strong>③</strong>是推进<strong>党和人民事业发展</strong>的必然要求——新时代实现中华民族伟大复兴需要持续深化改革开放。</p>
+  </div>
+</div>
+
+<div class="card" data-id="26">
+  <span class="q-num">26</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何坚定不移把全面深化改革引向深入。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>在全面建设社会主义现代化国家新征程上，根本动力仍然是改革开放，要继续用足用好<strong>改革开放这个关键一招</strong>。</p>
+    <p><strong>②</strong>要聚焦全面建设社会主义现代化国家中的<strong>重大问题</strong>，注重统筹全局、把握重点，抓好重大改革任务攻坚克难【生态，文化，民生】。</p>
+    <p><strong>③</strong>改革推进到今天，<strong>比认识更重要的是决心，比方法更关键的是担当</strong>。</p>
+  </div>
+</div>
+
+<div class="card" data-id="27">
+  <span class="q-num">27</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何坚定不移扩大高水平对外开放。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>开放也是改革。以开放促改革、促发展是宝贵经验【生活，大锅饭】。</p>
+    <p><strong>②</strong>实行更加积极主动的开放战略，坚持对内对外开放相互促进、"<strong>引进来</strong>"和"<strong>走出去</strong>"更好结合。</p>
+    <p><strong>③</strong>继续扩大对外开放，构建更高水平<strong>开放型经济新体制</strong>【高质量】。</p>
+    <p><strong>④</strong>中国的发展离不开世界，<strong>世界的繁荣也需要中国</strong>。</p>
+  </div>
+</div>
+</div>
+
+<div class="reset-bar">
+  <button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button>
+</div>
+
+<footer>习近平新时代中国特色社会主义思想概论 · 第五章完整习题集 · 共27题</footer>
+</div>
+
+<script>
+let totalCorrect = 0, totalDone = 0;
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = 18;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statScore').textContent = totalCorrect;
+}
+
+function pickMC(opt, letter) {
+  const card = opt.closest('.card');
+  if (card.classList.contains('done')) return;
+  const correct = card.dataset.correct;
+  const allOpts = card.querySelectorAll('.option');
+  const resultMsg = card.querySelector('.result-msg');
+  const expl = card.querySelector('.explanation');
+  allOpts.forEach(o => o.classList.add('disabled'));
+  allOpts.forEach(o => {
+    if (o.onclick && o.onclick.toString().includes("'" + correct + "'")) {
+      o.classList.add('correct-answer');
+    }
+  });
+  const isCorrect = (letter === correct);
+  if (!isCorrect) {
+    opt.classList.add('wrong-answer');
+    resultMsg.textContent = '❌ 错误，正确答案是 ' + correct;
+    resultMsg.className = 'result-msg wrong show';
+  } else {
+    resultMsg.textContent = '✅ 正确！';
+    resultMsg.className = 'result-msg correct show';
+  }
+  if (expl) expl.classList.add('show');
+  card.classList.add('done');
+  if (!isCorrect) card.classList.add('wrong-card');
+  totalDone++; if (isCorrect) totalCorrect++;
+  updateStats();
+}
+
+function toggleA(btn) {
+  const card = btn.closest('.card');
+  const reveal = card.querySelector('.answer-reveal');
+  if (reveal.classList.contains('show')) {
+    reveal.classList.remove('show');
+    btn.textContent = '📝 点击查看答案';
+  } else {
+    reveal.classList.add('show');
+    btn.textContent = '🔽 隐藏答案';
+  }
+}
+
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function resetAll() {
+  if (!confirm('确定重置全部答案？此操作不可撤销。')) return;
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('done', 'wrong-card'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('disabled', 'correct-answer', 'wrong-answer'));
+  document.querySelectorAll('.result-msg').forEach(m => { m.classList.remove('show','correct','wrong'); m.textContent=''; });
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.answer-reveal').forEach(r => r.classList.remove('show'));
+  document.querySelectorAll('.toggle-btn').forEach(b => { if(b.textContent.includes('隐藏')) b.textContent='📝 点击查看答案'; });
+  totalCorrect = 0; totalDone = 0;
+  updateStats();
+}
+
+updateStats();
+
+window.addEventListener('scroll', () => {
+  const secs = ['sec1','sec2','sec3','sec4','sec5'];
+  let current = 'sec1';
+  secs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= 200) current = id;
+  });
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', secs[i] === current);
+  });
+});
+</script>
+</body>
+</html>
