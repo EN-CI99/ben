@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第九章 全面依法治国 完整习题集</title>
+<style>
+:root {--bg:#faf8f6;--card-bg:#fff;--text:#2c3e50;--text-secondary:#666;--border:#e0e4e8;--primary:#b71c1c;--primary-light:#ffebee;--success:#27ae60;--success-light:#e8f8ef;--wrong:#e74c3c;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:20px}
+.container{max-width:840px;margin:0 auto}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:26px;color:var(--primary);margin-bottom:6px}
+header p{color:var(--text-secondary);font-size:14px}
+.stats-bar{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 24px;display:flex;justify-content:space-around;text-align:center;margin-bottom:20px;position:sticky;top:20px;z-index:10}
+.stat-item .stat-num{font-size:24px;font-weight:700}
+.stat-item .stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.stat-num.done{color:var(--primary)}.stat-num.score{color:var(--success)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.nav-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:18px;font-size:12px;cursor:pointer;background:var(--card-bg);transition:all .2s;font-weight:500;white-space:nowrap}
+.nav-btn:hover{border-color:var(--primary)}.nav-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.section-title{font-size:19px;font-weight:700;color:var(--primary);padding:20px 0 10px;border-bottom:2px solid var(--primary-light);margin-top:8px;display:flex;align-items:center;gap:8px}
+.section-label{font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;margin-left:8px;font-weight:500}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;border-left:4px solid transparent;transition:border-color .3s}
+.card.done{border-left-color:var(--success)}.card.wrong-card{border-left-color:var(--wrong)}
+.card .q-num{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px}
+.card .q-type{font-size:12px;color:var(--text-secondary);margin-left:8px}
+.card .q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6}
+.options{list-style:none}
+.option{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;font-size:14px}
+.option:hover{border-color:var(--primary);background:#fef8f8}
+.option.disabled{pointer-events:none;opacity:.85}
+.option.correct-answer{border-color:var(--success);background:var(--success-light);color:var(--success);font-weight:600}
+.option.wrong-answer{border-color:var(--wrong);background:#fdedec;color:var(--wrong)}
+.opt-letter{font-weight:700;color:var(--primary);min-width:20px;flex-shrink:0}
+.result-msg{margin-top:8px;font-weight:600;font-size:14px;display:none}
+.result-msg.show{display:block}.result-msg.correct{color:var(--success)}.result-msg.wrong{color:var(--wrong)}
+.explanation{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.explanation.show{display:block}
+.toggle-btn{padding:8px 18px;background:#fff;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.toggle-btn:hover{background:var(--primary);color:#fff}
+.answer-reveal{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.answer-reveal.show{display:block}.answer-reveal .answer-label{font-weight:700;color:var(--primary);margin-bottom:4px}
+.answer-reveal p{margin-bottom:4px}
+.key-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;font-size:13px}
+.key-table th,.key-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.key-table th{background:var(--primary-light);color:var(--primary);font-weight:700}
+.highlight{color:var(--primary);font-weight:700}
+.reset-bar{text-align:center;padding:30px 0}
+.reset-btn{padding:10px 28px;background:var(--text);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px;transition:opacity .2s}
+.reset-btn:hover{opacity:.85}
+footer{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{background:var(--primary);color:#fff}
+@media print{.stats-bar,.reset-bar,footer,.nav{display:none}.explanation,.answer-reveal{display:block!important}}
+@media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第九章 · 全面依法治国 · 完整习题集</p></header>
+<div class="stats-bar"><div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div><div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div><div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div></div>
+<div class="nav">
+<button class="nav-btn active" onclick="scrollToSec('sec1')">1.法治道路</button>
+<button class="nav-btn" onclick="scrollToSec('sec2')">2.法治体系</button>
+<button class="nav-btn" onclick="scrollToSec('sec3')">3.法治中国</button>
+</div>
+
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、坚持中国特色社会主义法治道路 <span class="section-label">选6 | 简2</span></div>
+<div class="card" data-correct="A" data-id="1"><span class="q-num">1</span><span class="q-type">单选</span><div class="q-text">通过《中共中央关于全面推进依法治国若干重大问题的决定》的会议是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党的十八届四中全会</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>党的十七届四中全会</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>党的十六届四中全会</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>党的十五届四中全会</li></ul><div class="result-msg"></div><div class="explanation"><strong>党的十八届四中全会</strong>通过《中共中央关于全面推进依法治国若干重大问题的决定》，首次以全会形式专题研究依法治国。</div></div>
+<div class="card" data-correct="A" data-id="2"><span class="q-num">2</span><span class="q-type">单选</span><div class="q-text">社会主义法治最根本的保证是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党的领导</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人民民主</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>以德治国</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>依宪治国</li></ul><div class="result-msg"></div><div class="explanation"><strong>党的领导</strong>是社会主义法治<strong>最根本的保证</strong>，是中国特色社会主义法治之魂。</div></div>
+<div class="card" data-correct="A" data-id="3"><span class="q-num">3</span><span class="q-type">单选</span><div class="q-text">中国特色社会主义法治之魂是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持党的领导</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>依法治国</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民民主专政</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人民当家作主</li></ul><div class="result-msg"></div><div class="explanation"><strong>坚持党的领导</strong>是中国特色社会主义法治之<strong>魂</strong>。核心要义=坚持党的领导+坚持中国特色社会主义制度+贯彻中国特色社会主义法治理论。</div></div>
+<div class="card" data-correct="B" data-id="4"><span class="q-num">4</span><span class="q-type">单选</span><div class="q-text">社会主义法律的基本属性是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>法治</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>平等</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人民</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>制度</li></ul><div class="result-msg"></div><div class="explanation"><strong>平等</strong>是社会主义法律的基本属性。法治道路五大原则之一=坚持法律面前人人平等。</div></div>
+<div class="card" data-correct="D" data-id="5"><span class="q-num">5</span><span class="q-type">单选</span><div class="q-text">下列关于中国特色社会主义法治道路的表述，<strong>错误</strong>的是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持中国共产党的领导</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持人民在全面依法治国中的主体地位</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持法律面前人人平等</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>坚持依法治国和民主治国相结合</li></ul><div class="result-msg"></div><div class="explanation">五大原则：党的领导+以人民为中心+法律面前人人平等+<strong>依法治国和以德治国</strong>相结合+从中国实际出发。D错在"民主治国"应为"<strong>以德治国</strong>"。</div></div>
+<div class="card" data-correct="A" data-id="6"><span class="q-num">6</span><span class="q-type">单选</span><div class="q-text">全面依法治国是（　）的一场深刻革命。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>国家治理</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济发展</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化领域</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技创新</li></ul><div class="result-msg"></div><div class="explanation">全面依法治国是<strong>国家治理</strong>的一场深刻革命，关系党执政兴国、关系人民幸福安康、关系党和国家长治久安【法-先进，人-动荡】。</div></div>
+<div class="card" data-id="7"><span class="q-num">7</span><span class="q-type">简答</span><div class="q-text">简述全面依法治国的重大意义。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>是国家治理的一场<strong>深刻革命</strong>，关系党执政兴国、人民幸福安康、党和国家长治久安【法-先进，人-动荡】</p><p><strong>②</strong>是完善和发展中国特色社会主义制度、推进国家治理体系和治理能力现代化的<strong>重要方面</strong>，是坚持和发展中国特色社会主义的<strong>本质要求和重要保障</strong>【保障人民权益】</p></div></div>
+<div class="card" data-id="8"><span class="q-num">8</span><span class="q-type">简答</span><div class="q-text">简述中国特色社会主义法治道路的五条原则。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①坚持<strong>中国共产党</strong>的领导</p><p>②坚持<strong>以人民为中心</strong></p><p>③坚持<strong>法律面前人人平等</strong>（平等是社会主义法律的基本属性）</p><p>④坚持<strong>依法治国和以德治国</strong>相结合</p><p>⑤坚持<strong>从中国实际出发</strong></p></div></div>
+</div>
+
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、建设中国特色社会主义法治体系 <span class="section-label">选7 | 简1</span></div>
+<div class="card" data-correct="D" data-id="9"><span class="q-num">9</span><span class="q-type">单选</span><div class="q-text">全面推进依法治国的总抓手是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设中国特色社会主义文化体系</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>建设中国特色社会主义道德体系</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>建设中国特色社会主义法制体系</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设中国特色社会主义法治体系</li></ul><div class="result-msg"></div><div class="explanation">总抓手=<strong>建设中国特色社会主义法治体系</strong>（十八届四中全会）。注意区分：法制（legal system）vs 法治（rule of law）。</div></div>
+<div class="card" data-correct="C" data-id="10"><span class="q-num">10</span><span class="q-type">单选</span><div class="q-text">宪法是国家的（　），是治国安邦的总章程。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>基本法</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>普通法</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>根本法</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>程序法</li></ul><div class="result-msg"></div><div class="explanation">宪法是国家的<strong>根本法</strong>，是治国安邦的<strong>总章程</strong>，是党和人民意志的集中体现【框架、灵魂】。具有<strong>最高的法律地位、法律权威、法律效力</strong>。</div></div>
+<div class="card" data-correct="A" data-id="11"><span class="q-num">11</span><span class="q-type">单选</span><div class="q-text">坚持依法治国首先要坚持（　），坚持依法执政首先要坚持（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>依宪治国；依宪执政</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>以德治国；以德执政</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>党的领导；人民民主</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>依法行政；公正司法</li></ul><div class="result-msg"></div><div class="explanation">坚持<strong>依法治国</strong>首先要坚持<strong>依宪治国</strong>；坚持<strong>依法执政</strong>首先要坚持<strong>依宪执政</strong>。宪法是国家各种制度和法律法规的总依据。</div></div>
+<div class="card" data-correct="B" data-id="12"><span class="q-num">12</span><span class="q-type">单选</span><div class="q-text">坚持依宪治国、依宪执政的首要任务是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设文化体系</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>全面贯彻实施宪法</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持党的领导</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>建设法治体系</li></ul><div class="result-msg"></div><div class="explanation">依宪治国/依宪执政的<strong>首要任务=全面贯彻实施宪法</strong>。宪法的<strong>生命在于实施</strong>，宪法的<strong>权威也在于实施</strong>。</div></div>
+<div class="card" data-correct="B" data-id="13"><span class="q-num">13</span><span class="q-type">单选</span><div class="q-text">宪法的生命在于（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>建设</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>实施</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>领导</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>规范</li></ul><div class="result-msg"></div><div class="explanation">宪法的<strong>生命在于实施</strong>，宪法的<strong>权威也在于实施</strong>。再好的宪法如果不实施也是一纸空文。</div></div>
+<div class="card" data-id="14"><span class="q-num">14</span><span class="q-type">简答</span><div class="q-text">简述如何推进中国特色社会主义法治体系建设（五大体系）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①<strong>完备的法律规范体系</strong>【法要完善】</p><p>②<strong>高效的法治实施体系</strong>【法的作用】</p><p>③<strong>严密的法治监督体系</strong>【国家，社会组织，个人】</p><p>④<strong>有力的法治保障体系</strong>【培养法治人才】</p><p>⑤形成<strong>完善的党内法规体系</strong>【自我革命】</p></div></div>
+<div class="card" data-correct="C" data-id="15"><span class="q-num">15</span><span class="q-type">单选</span><div class="q-text">中国特色社会主义法治体系，本质上是（　）的法律表现形式。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>中国共产党意志</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人民意志</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>中国特色社会主义制度</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>社会主义核心价值</li></ul><div class="result-msg"></div><div class="explanation">中国特色社会主义法治体系，本质上是<strong>中国特色社会主义制度</strong>的法律表现形式【国家制度都是以法的形式确立】。</div></div>
+</div>
+
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、加快建设法治中国 <span class="section-label">选4 | 简2</span></div>
+<div class="card" data-correct="B" data-id="16"><span class="q-num">16</span><span class="q-type">单选</span><div class="q-text">全面依法治国的重点任务和主体工程是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>法治体系</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>法治政府建设</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>法治国家</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>法治社会</li></ul><div class="result-msg"></div><div class="explanation"><strong>法治政府建设</strong>是全面依法治国的<strong>重点任务和主体工程</strong>【政府和人民】。法治国家是目标【中国梦】，法治社会是基础【法治氛围】。</div></div>
+<div class="card" data-correct="C" data-id="17"><span class="q-num">17</span><span class="q-type">单选</span><div class="q-text">法治建设的目标是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>法治体系</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>法治政府</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>法治国家</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>法治社会</li></ul><div class="result-msg"></div><div class="explanation"><strong>法治国家</strong>是法治建设的<strong>目标</strong>【中国梦】。三者关系：法治国家=目标，法治政府=重点任务/主体工程，法治社会=基础。</div></div>
+<div class="card" data-correct="D" data-id="18"><span class="q-num">18</span><span class="q-type">单选</span><div class="q-text">构筑法治国家的基础是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>法治体系</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>法治政府</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>司法公正</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>法治社会</li></ul><div class="result-msg"></div><div class="explanation"><strong>法治社会</strong>是构筑法治国家的<strong>基础</strong>【法治氛围】。需要全社会尊法、守法、用法、信法。</div></div>
+<div class="card" data-correct="A" data-id="19"><span class="q-num">19</span><span class="q-type">单选</span><div class="q-text">建设更高水平法治中国，完善法律体系的核心是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>以宪法为核心</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>以民法为核心</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>以刑法为核心</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>以行政法为核心</li></ul><div class="result-msg"></div><div class="explanation">完善<strong>以宪法为核心</strong>的中国特色社会主义法律体系。四个方向：完善法律体系（宪法为核）+ 扎实推进依法行政【城管，市场监管局】+ 严格公正司法【法院】+ 加快建设法治社会【法治思维】。</div></div>
+<div class="card" data-id="20"><span class="q-num">20</span><span class="q-type">简答</span><div class="q-text">简述如何为法治中国建设进行工作布局。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>坚持<strong>依法治国、依法执政、依法行政</strong>共同推进【党，政府】</p><p><strong>②</strong>坚持<strong>法治国家、法治政府、法治社会</strong>一体建设：法治国家=目标【中国梦】；法治政府=重点任务/主体工程【政府和人民】；法治社会=基础【法治氛围】</p><p><strong>③</strong>坚持统筹推进<strong>国内法治和涉外法治</strong>【我国】【国际法】</p></div></div>
+<div class="card" data-id="21"><span class="q-num">21</span><span class="q-type">简答</span><div class="q-text">简述如何建设更高水平的法治中国。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>完善<strong>以宪法为核心</strong>的中国特色社会主义法律体系【符合宪法】</p><p><strong>②</strong>扎实推进<strong>依法行政</strong>【政府】【城管，市场监管局】</p><p><strong>③</strong>严格<strong>公正司法</strong>【法院】</p><p><strong>④</strong>加快建设<strong>法治社会</strong>【法治思维】</p></div></div>
+</div>
+
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第九章完整习题集 · 共21题</footer>
+</div>
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=17;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(o,l){let c=o.closest('.card');if(c.classList.contains('done'))return;let d=c.dataset.correct,n=c.querySelectorAll('.option'),m=c.querySelector('.result-msg'),e=c.querySelector('.explanation');n.forEach(x=>x.classList.add('disabled'));n.forEach(x=>{if(x.onclick&&x.onclick.toString().includes("'"+d+"'"))x.classList.add('correct-answer')});let ok=l===d;if(!ok){o.classList.add('wrong-answer');m.textContent='❌ 错误，正确答案是 '+d;m.className='result-msg wrong show'}else{m.textContent='✅ 正确！';m.className='result-msg correct show'}if(e)e.classList.add('show');c.classList.add('done');if(!ok)c.classList.add('wrong-card');totalDone++;if(ok)totalCorrect++;updateStats()}
+function toggleA(b){let c=b.closest('.card'),r=c.querySelector('.answer-reveal');if(r.classList.contains('show')){r.classList.remove('show');b.textContent='📝 点击查看答案'}else{r.classList.add('show');b.textContent='🔽 隐藏答案'}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function resetAll(){if(!confirm('确定重置全部答案？'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent=''});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('隐藏'))b.textContent='📝 点击查看答案'});totalCorrect=0;totalDone=0;updateStats()}
+updateStats();
+window.addEventListener('scroll',()=>{let s=['sec1','sec2','sec3'],c='sec1';s.forEach(id=>{let e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=200)c=id});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',s[i]===c)})});
+</script>
+</body>
+</html>

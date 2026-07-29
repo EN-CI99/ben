@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第七章 教育、科技、人才战略 完整习题集</title>
+<style>
+:root {
+  --bg: #faf8f6; --card-bg: #ffffff;
+  --text: #2c3e50; --text-secondary: #666;
+  --border: #e0e4e8;
+  --primary: #b71c1c; --primary-light: #ffebee;
+  --success: #27ae60; --success-light: #e8f8ef;
+  --wrong: #e74c3c;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px; }
+.container { max-width: 840px; margin: 0 auto; }
+header { text-align: center; padding: 40px 20px 30px; }
+header h1 { font-size: 26px; color: var(--primary); margin-bottom: 6px; }
+header p { color: var(--text-secondary); font-size: 14px; }
+.stats-bar { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 24px; display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px; position: sticky; top: 20px; z-index: 10; }
+.stat-item .stat-num { font-size: 24px; font-weight: 700; }
+.stat-item .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.stat-num.done { color: var(--primary); }
+.stat-num.score { color: var(--success); }
+.nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.nav-btn { padding: 7px 13px; border: 1.5px solid var(--border); border-radius: 18px; font-size: 12px; cursor: pointer; background: var(--card-bg); transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+.nav-btn:hover { border-color: var(--primary); }
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.section-title { font-size: 19px; font-weight: 700; color: var(--primary); padding: 20px 0 10px; border-bottom: 2px solid var(--primary-light); margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+.section-label { font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 10px; border-radius: 20px; margin-left: 8px; font-weight: 500; }
+.card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px; border-left: 4px solid transparent; transition: border-color 0.3s; }
+.card.done { border-left-color: var(--success); }
+.card.wrong-card { border-left-color: var(--wrong); }
+.card .q-num { display: inline-block; background: var(--primary-light); color: var(--primary); font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 12px; margin-bottom: 8px; }
+.card .q-type { font-size: 12px; color: var(--text-secondary); margin-left: 8px; }
+.card .q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.6; }
+.options { list-style: none; }
+.option { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 8px; font-size: 14px; }
+.option:hover { border-color: var(--primary); background: #fef8f8; }
+.option.disabled { pointer-events: none; opacity: 0.85; }
+.option.correct-answer { border-color: var(--success); background: var(--success-light); color: var(--success); font-weight: 600; }
+.option.wrong-answer { border-color: var(--wrong); background: #fdedec; color: var(--wrong); }
+.opt-letter { font-weight: 700; color: var(--primary); min-width: 20px; flex-shrink: 0; }
+.result-msg { margin-top: 8px; font-weight: 600; font-size: 14px; display: none; }
+.result-msg.show { display: block; }
+.result-msg.correct { color: var(--success); }
+.result-msg.wrong { color: var(--wrong); }
+.explanation { margin-top: 10px; padding: 12px 16px; background: var(--primary-light); border-radius: 8px; font-size: 13px; display: none; line-height: 1.8; }
+.explanation.show { display: block; }
+.toggle-btn { padding: 8px 18px; background: #fff; border: 1.5px solid var(--primary); border-radius: 20px; color: var(--primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+.toggle-btn:hover { background: var(--primary); color: #fff; }
+.answer-reveal { margin-top: 10px; padding: 12px 16px; background: var(--primary-light); border-radius: 8px; font-size: 13px; display: none; line-height: 1.8; }
+.answer-reveal.show { display: block; }
+.answer-reveal .answer-label { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.answer-reveal p { margin-bottom: 4px; }
+.mnemonic { display: inline-block; background: var(--primary); color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 12px; margin-left: 8px; }
+.highlight { color: var(--primary); font-weight: 700; }
+.reset-bar { text-align: center; padding: 30px 0; }
+.reset-btn { padding: 10px 28px; background: var(--text); color: #fff; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; transition: opacity 0.2s; }
+.reset-btn:hover { opacity: 0.85; }
+footer { text-align: center; padding: 20px; color: var(--text-secondary); font-size: 13px; }
+.back-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border: 1.5px solid var(--primary); border-radius: 20px; color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s; margin-bottom: 20px; }
+.back-btn:hover { background: var(--primary); color: #fff; }
+@media print { .stats-bar, .reset-bar, footer, .nav { display: none; } .explanation, .answer-reveal { display: block !important; } }
+@media (max-width: 600px) { body { padding: 8px; } .card { padding: 14px; } .stats-bar { padding: 10px 14px; } .section-title { font-size: 16px; } .card .q-text { font-size: 14px; } .option { font-size: 13px; padding: 8px 10px; } }
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第七章 · 教育、科技、人才战略 · 完整习题集</p></header>
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div>
+  <div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div>
+  <div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div>
+</div>
+<div class="nav">
+  <button class="nav-btn active" onclick="scrollToSec('sec1')">1.基础性战略性支撑</button>
+  <button class="nav-btn" onclick="scrollToSec('sec2')">2.教育强国</button>
+  <button class="nav-btn" onclick="scrollToSec('sec3')">3.科技强国</button>
+  <button class="nav-btn" onclick="scrollToSec('sec4')">4.人才强国</button>
+</div>
+
+<!-- ============ 一、基础性战略性支撑 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、全面建设社会主义现代化国家的基础性、战略性支撑 <span class="section-label">选6 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="1">
+  <span class="q-num">1</span><span class="q-type">单选</span>
+  <div class="q-text">建设教育强国、科技强国、人才强国中，"根本"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>教育</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人才</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">教育、科技、人才三者定位：<strong>教育是根本</strong>，科技是关键，人才是基础。三者具有内在一致性和相互支撑性。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="2">
+  <span class="q-num">2</span><span class="q-type">单选</span>
+  <div class="q-text">建设教育强国、科技强国、人才强国中，"关键"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>教育</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人才</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>经济</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>科技是关键</strong>，人才是基础，教育是根本。三者协同发力。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="3">
+  <span class="q-num">3</span><span class="q-type">单选</span>
+  <div class="q-text">建设教育强国、科技强国、人才强国中，"基础"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>教育</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>科技</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>政治</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人才</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人才是基础</strong>。教育是根本，科技是关键。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="4">
+  <span class="q-num">4</span><span class="q-type">单选</span>
+  <div class="q-text">教育优先发展，重在夯实（　）深度开发基础。</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>文化资源</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>教育资源</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人力资源</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技资源</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>教育优先发展</strong>，重在夯实<strong>人力资源</strong>深度开发基础，是推动党和国家各项事业发展的重要先手棋【建设需要人才，教育培养】。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="5">
+  <span class="q-num">5</span><span class="q-type">单选</span>
+  <div class="q-text">科技自立自强，"重在"（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>坚持独立自主开拓创新</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>引进国外先进技术</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>依靠国际科技合作</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>增加科技人员数量</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">科技自立自强，重在<strong>坚持独立自主开拓创新</strong>，是决定我国生存和发展的基础能力，对于掌握全球经济科技竞争先机具有战略意义【科技创新=主动权】。</div>
+</div>
+
+<div class="card" data-correct="B" data-id="6">
+  <span class="q-num">6</span><span class="q-type">单选</span>
+  <div class="q-text">人才引领驱动，"重在"（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>增加人才数量</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>巩固发展优势赢得竞争主动</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>提高人才薪资</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>扩大人才出口</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人才引领驱动</strong>，重在巩固发展优势<strong>赢得竞争主动</strong>【大国→强国】。</div>
+</div>
+
+<div class="card" data-id="7">
+  <span class="q-num">7</span><span class="q-type">简答</span>
+  <div class="q-text">简述科教兴国战略、人才强国战略、创新驱动发展战略的核心内涵。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①科教兴国战略：</strong>全面落实<strong>科学技术是第一生产力</strong>的思想，是我国的基本国策【科技-生产效率-生产力】</p>
+    <p><strong>②人才强国战略：</strong>牢固树立<strong>人才资源是第一资源</strong>的理念【人才-科技-生产力】</p>
+    <p><strong>③创新驱动发展战略：</strong>坚持<strong>创新是第一动力</strong></p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 二、教育强国 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、加快建设教育强国 <span class="section-label">选4 | 简1</span></div>
+
+<div class="card" data-correct="B" data-id="8">
+  <span class="q-num">8</span><span class="q-type">单选</span>
+  <div class="q-text">在国家发展中始终具有基础性、先导性、全局性地位的是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>教育</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人力</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>教育</strong>是国家经济社会发展的支撑力量，在国家发展中始终具有<strong>基础性、先导性、全局性</strong>地位【教育强-国家强】。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="9">
+  <span class="q-num">9</span><span class="q-type">单选</span>
+  <div class="q-text">育人的根本在于（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>传授知识</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>培养技能</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>立德</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>考试升学</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">育人的<strong>根本在于立德</strong>。落实立德树人根本任务，解决好"培养什么人、怎样培养人、为谁培养人"三个根本问题。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="10">
+  <span class="q-num">10</span><span class="q-type">单选</span>
+  <div class="q-text">发展教育的根本尺度是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人民满意</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>升学率</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国际排名</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>学校数量</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>人民满意</strong>是发展教育的根本尺度。要大力促进教育公平【东西教育差距】【支援】，加快建设高质量教育体系。</div>
+</div>
+
+<div class="card" data-correct="D" data-id="11">
+  <span class="q-num">11</span><span class="q-type">单选</span>
+  <div class="q-text">办好中国特色社会主义教育，必须坚持（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>照搬西方教育模式</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>完全市场化办学</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>只重视国际化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>扎根中国大地办教育</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">办好中国特色社会主义教育：①必须坚持<strong>党对教育工作的全面领导</strong>，坚持党的教育方针，坚持<strong>社会主义办学方向</strong>【党-教育性质】；②必须坚持<strong>扎根中国大地办教育</strong>【国情】。</div>
+</div>
+
+<div class="card" data-id="12">
+  <span class="q-num">12</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何办好人民满意的教育（5条措施）。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p>①大力促进<strong>教育公平</strong>【东西教育差距】【支援】</p>
+    <p>②加快建设<strong>高质量教育体系</strong>，高质量发展是各级各类教育的生命线【世界一流大学】</p>
+    <p>③提升教育服务<strong>经济社会发展能力</strong>【社会需要-教育培养】【人工智能，新能源】</p>
+    <p>④坚持深化<strong>教育改革创新</strong>【双减政策】</p>
+    <p>⑤坚持把<strong>教师队伍建设</strong>作为基础工作【专业能力，道德品质】</p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 三、科技强国 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、加快建设科技强国 <span class="section-label">选3 | 简2</span></div>
+
+<div class="card" data-correct="B" data-id="13">
+  <span class="q-num">13</span><span class="q-type">单选</span>
+  <div class="q-text">科技创新的"源头"是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>应用研究</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>基础研究</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>技术转化</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>产品开发</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>基础研究</strong>是科技创新的<strong>源头</strong>【理论】。国家战略科技力量是世界科技强国竞争的<strong>着力点</strong>【国家实验室，高水平大学】。</div>
+</div>
+
+<div class="card" data-correct="A" data-id="14">
+  <span class="q-num">14</span><span class="q-type">单选</span>
+  <div class="q-text">国家强盛之基、安全之要是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>科技自立自强</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济发展速度</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>军事力量</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>文化软实力</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>科技自立自强</strong>是国家<strong>强盛之基、安全之要</strong>【国际竞争-主导权】。关键核心技术是国之重器，必须掌握在自己手中【钱学森】。</div>
+</div>
+
+<div class="card" data-correct="C" data-id="15">
+  <span class="q-num">15</span><span class="q-type">单选</span>
+  <div class="q-text">自主创新的正确理解是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>闭门造车，完全靠自己</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>只依靠引进国外技术</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>加强原始创新、集成创新和开放创新</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>放弃自主研发</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation">自主创新=加强<strong>原始创新</strong>（全靠自己）+<strong>集成创新</strong>（技术整合后）+<strong>开放创新</strong>（借鉴他人后）。自力更生是奋斗基点，自主创新是攀登世界科技高峰的必由之路【导弹技术、超级计算机、量子计算】。</div>
+</div>
+
+<div class="card" data-id="16">
+  <span class="q-num">16</span><span class="q-type">简答</span>
+  <div class="q-text">简述实现高水平科技自立自强的必要性和原因。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①战略基石：</strong>国家强盛和民族复兴的战略基石。全面建成社会主义现代化强国<strong>关键看科技自立自强</strong>【科技-生产力】</p>
+    <p><strong>②必然选择：</strong>应对风险挑战和维护国家利益的必然选择。科技自立自强是<strong>国家强盛之基、安全之要</strong>【国际竞争-主导权】</p>
+    <p><strong>③内在要求：</strong>构建新发展格局、推动高质量发展、满足人民美好生活需要的内在要求【经济质量】【美好生活】</p>
+  </div>
+</div>
+
+<div class="card" data-id="17">
+  <span class="q-num">17</span><span class="q-type">简答</span>
+  <div class="q-text">简述增强自主创新能力的举措。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>基础研究是科技创新的<strong>源头</strong>【理论】</p>
+    <p><strong>②</strong>国家战略科技力量是世界科技强国竞争的<strong>着力点</strong>【国家实验室，高水平大学】</p>
+    <p><strong>③</strong>关键核心技术是<strong>国之重器</strong>，必须掌握在自己手中【钱学森】</p>
+    <p><strong>④</strong>加强<strong>原始创新、集成创新和开放创新</strong></p>
+  </div>
+</div>
+</div>
+
+<!-- ============ 四、人才强国 ============ -->
+<div id="sec4">
+<div class="section-title"><span>📌</span> 四、加快建设人才强国 <span class="section-label">选1 | 简2</span></div>
+
+<div class="card" data-correct="C" data-id="18">
+  <span class="q-num">18</span><span class="q-type">单选</span>
+  <div class="q-text">做好人才工作的根本保证是（　）</div>
+  <ul class="options">
+    <li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>提高人才待遇</li>
+    <li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>引进海外人才</li>
+    <li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持党对人才工作的全面领导</li>
+    <li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>增加教育投入</li>
+  </ul>
+  <div class="result-msg"></div>
+  <div class="explanation"><strong>坚持党对人才工作的全面领导</strong>是做好人才工作的<strong>根本保证</strong>【为谁服务】。深化人才发展体制机制改革是重要保障【发展路线】。��造识才爱才敬才用才的环境是社会条件【好环境】。</div>
+</div>
+
+<div class="card" data-id="19">
+  <span class="q-num">19</span><span class="q-type">简答</span>
+  <div class="q-text">简述培养人才是国家和民族长远发展大计的内涵。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①</strong>国家发展靠人才，<strong>民族振兴靠人才</strong>。</p>
+    <p><strong>②</strong>人才是人力资源中<strong>能力和素质较高的劳动者</strong>，在国家发展中具有重要战略地位【主导权】。</p>
+    <p><strong>③</strong>加快人才队伍建设是推动国家发展、实现民族复兴的<strong>必然要求</strong>【培养，引进，使用】。</p>
+  </div>
+</div>
+
+<div class="card" data-id="20">
+  <span class="q-num">20</span><span class="q-type">简答</span>
+  <div class="q-text">简述如何把各方面优秀人才集聚到党和国家事业中来。</div>
+  <button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+  <div class="answer-reveal">
+    <div class="answer-label">参考答案：</div>
+    <p><strong>①根本保证：</strong>坚持<strong>党对人才工作的全面领导</strong>【为谁服务】</p>
+    <p><strong>②重要保障：</strong>坚持深化<strong>人才发展体制机制改革</strong>【发展路线】</p>
+    <p><strong>③社会条件：</strong>坚持营造<strong>识才爱才敬才用才</strong>的环境【好环境】</p>
+  </div>
+</div>
+</div>
+
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第七章完整习题集 · 共20题</footer>
+</div>
+
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=15;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(opt,letter){const card=opt.closest('.card');if(card.classList.contains('done'))return;const correct=card.dataset.correct;const allOpts=card.querySelectorAll('.option');const resultMsg=card.querySelector('.result-msg');const expl=card.querySelector('.explanation');allOpts.forEach(o=>o.classList.add('disabled'));allOpts.forEach(o=>{if(o.onclick&&o.onclick.toString().includes("'"+correct+"'"))o.classList.add('correct-answer');});const isCorrect=(letter===correct);if(!isCorrect){opt.classList.add('wrong-answer');resultMsg.textContent='❌ 错误，正确答案是 '+correct;resultMsg.className='result-msg wrong show';}else{resultMsg.textContent='✅ 正确！';resultMsg.className='result-msg correct show';}if(expl)expl.classList.add('show');card.classList.add('done');if(!isCorrect)card.classList.add('wrong-card');totalDone++;if(isCorrect)totalCorrect++;updateStats();}
+function toggleA(btn){const card=btn.closest('.card');const reveal=card.querySelector('.answer-reveal');if(reveal.classList.contains('show')){reveal.classList.remove('show');btn.textContent='📝 点击查看答案';}else{reveal.classList.add('show');btn.textContent='🔽 隐藏答案';}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}
+function resetAll(){if(!confirm('确定重置全部答案？此操作不可撤销。'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent='';});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('隐藏'))b.textContent='📝 点击查看答案';});totalCorrect=0;totalDone=0;updateStats();}
+updateStats();
+window.addEventListener('scroll',()=>{const secs=['sec1','sec2','sec3','sec4'];let current='sec1';secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=200)current=id;});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',secs[i]===current);});});
+</script>
+</body>
+</html>
