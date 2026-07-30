@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第十一章 以保障和改善民生为重点加强社会建设 完整习题集</title>
+<style>
+:root {--bg:#faf8f6;--card-bg:#fff;--text:#2c3e50;--text-secondary:#666;--border:#e0e4e8;--primary:#b71c1c;--primary-light:#ffebee;--success:#27ae60;--success-light:#e8f8ef;--wrong:#e74c3c;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:20px}
+.container{max-width:840px;margin:0 auto}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:26px;color:var(--primary);margin-bottom:6px}
+header p{color:var(--text-secondary);font-size:14px}
+.stats-bar{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 24px;display:flex;justify-content:space-around;text-align:center;margin-bottom:20px;position:sticky;top:20px;z-index:10}
+.stat-item .stat-num{font-size:24px;font-weight:700}
+.stat-item .stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.stat-num.done{color:var(--primary)}.stat-num.score{color:var(--success)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.nav-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:18px;font-size:12px;cursor:pointer;background:var(--card-bg);transition:all .2s;font-weight:500;white-space:nowrap}
+.nav-btn:hover{border-color:var(--primary)}.nav-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.section-title{font-size:19px;font-weight:700;color:var(--primary);padding:20px 0 10px;border-bottom:2px solid var(--primary-light);margin-top:8px;display:flex;align-items:center;gap:8px}
+.section-label{font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;margin-left:8px;font-weight:500}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;border-left:4px solid transparent;transition:border-color .3s}
+.card.done{border-left-color:var(--success)}.card.wrong-card{border-left-color:var(--wrong)}
+.card .q-num{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px}
+.card .q-type{font-size:12px;color:var(--text-secondary);margin-left:8px}
+.card .q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6}
+.options{list-style:none}
+.option{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;font-size:14px}
+.option:hover{border-color:var(--primary);background:#fef8f8}
+.option.disabled{pointer-events:none;opacity:.85}
+.option.correct-answer{border-color:var(--success);background:var(--success-light);color:var(--success);font-weight:600}
+.option.wrong-answer{border-color:var(--wrong);background:#fdedec;color:var(--wrong)}
+.opt-letter{font-weight:700;color:var(--primary);min-width:20px;flex-shrink:0}
+.result-msg{margin-top:8px;font-weight:600;font-size:14px;display:none}
+.result-msg.show{display:block}.result-msg.correct{color:var(--success)}.result-msg.wrong{color:var(--wrong)}
+.explanation{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.explanation.show{display:block}
+.toggle-btn{padding:8px 18px;background:#fff;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.toggle-btn:hover{background:var(--primary);color:#fff}
+.answer-reveal{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.answer-reveal.show{display:block}.answer-reveal .answer-label{font-weight:700;color:var(--primary);margin-bottom:4px}
+.answer-reveal p{margin-bottom:4px}
+.key-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;font-size:13px}
+.key-table th,.key-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.key-table th{background:var(--primary-light);color:var(--primary);font-weight:700}
+.highlight{color:var(--primary);font-weight:700}
+.reset-bar{text-align:center;padding:30px 0}
+.reset-btn{padding:10px 28px;background:var(--text);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px;transition:opacity .2s}
+.reset-btn:hover{opacity:.85}
+footer{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{background:var(--primary);color:#fff}
+@media print{.stats-bar,.reset-bar,footer,.nav{display:none}.explanation,.answer-reveal{display:block!important}}
+@media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第十一章 · 以保障和改善民生为重点加强社会建设 · 完整习题集</p></header>
+<div class="stats-bar"><div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div><div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div><div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div></div>
+<div class="nav">
+<button class="nav-btn active" onclick="scrollToSec('sec1')">1.民生福祉</button>
+<button class="nav-btn" onclick="scrollToSec('sec2')">2.生活品质</button>
+<button class="nav-btn" onclick="scrollToSec('sec3')">3.社会治理</button>
+</div>
+
+<!-- ============ 一、让人民生活幸福是"国之大者" ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、让人民生活幸福是"国之大者" <span class="section-label">选6 | 简2</span></div>
+<div class="card" data-correct="A" data-id="1"><span class="q-num">1</span><span class="q-type">单选</span><div class="q-text">社会主义生产的根本目的是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>增进民生福祉</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>增进社会福祉</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>增进国家福祉</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>增进政党福祉</li></ul><div class="result-msg"></div><div class="explanation">增进民生福祉是<strong>社会主义生产的根本目的</strong>【主人】。是坚持立党为公、执政为民的本质要求【人民】，是全面建设社会主义现代化国家的应有之义【中国梦】。</div></div>
+<div class="card" data-correct="B" data-id="2"><span class="q-num">2</span><span class="q-type">单选</span><div class="q-text">全面建成小康社会的底线任务是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>打赢文化攻坚战</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>打赢脱贫攻坚战</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>打赢资本攻坚战</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>打赢思想攻坚战</li></ul><div class="result-msg"></div><div class="explanation">打赢<strong>脱贫攻坚战</strong>，消除绝对贫困，是全面建成小康社会的<strong>底线任务</strong>，是必须抓紧抓好的<strong>第一民生工程</strong>【不能饿死人】。</div></div>
+<div class="card" data-correct="A" data-id="3"><span class="q-num">3</span><span class="q-type">单选</span><div class="q-text">解决民生问题的"总钥匙"是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>政治</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>意识</li></ul><div class="result-msg"></div><div class="explanation"><strong>发展</strong>是解决民生问题的"总钥匙"，<strong>民生</strong>是发展的"指南针"【发展-物质，人民-消费】。</div></div>
+<div class="card" data-correct="B" data-id="4"><span class="q-num">4</span><span class="q-type">单选</span><div class="q-text">保障和改善民生的重要方针是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全力以赴、不计成本</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>尽力而为、量力而行</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>政府全部兜底</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>完全市场化</li></ul><div class="result-msg"></div><div class="explanation">坚持<strong>尽力而为、量力而行</strong>，是保障和改善民生的<strong>重要方针</strong>【福利水平-经济基础】。意味着福利水平要与经济发展阶段相匹配。</div></div>
+<div class="card" data-correct="D" data-id="5"><span class="q-num">5</span><span class="q-type">单选</span><div class="q-text">保障和改善民生的重要原则是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政府全责全揽</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>市场自发调节</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>少数人享有</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人人尽责、人人享有</li></ul><div class="result-msg"></div><div class="explanation">坚持<strong>人人尽责、人人享有</strong>，让所有劳动者在推动发展中分享发展成果【政府兜底，幸福靠自己】。</div></div>
+<div class="card" data-correct="C" data-id="6"><span class="q-num">6</span><span class="q-type">单选</span><div class="q-text">保障和改善民生的"重中之重"是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>完善制度</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>扩大财政支出</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>解决人民群众最关心最直接最现实的利益问题</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>追求国际标准</li></ul><div class="result-msg"></div><div class="explanation">解决人民群众<strong>最关心最直接最现实</strong>的利益问题，是保障和改善民生的<strong>重中之重</strong>。工作思路=坚守底线、突出重点、完善制度、引导预期【低保户，边疆/贫困地区，制度完善】。</div></div>
+<div class="card" data-id="7"><span class="q-num">7</span><span class="q-type">简答</span><div class="q-text">简述增进民生福祉的重要性。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①是坚持<strong>立党为公、执政为民</strong>的本质要求【人民】</p><p>②是<strong>社会主义生产</strong>的根本目的【主人】</p><p>③是全面建设<strong>社会主义现代化国家</strong>的应有之义【中国梦】</p><p>必须始终坚持把实现人民对美好生活的向往作为现代化建设的<strong>出发点和落脚点</strong>。</p></div></div>
+<div class="card" data-id="8"><span class="q-num">8</span><span class="q-type">简答</span><div class="q-text">简述如何坚持在发展中增进民生福祉。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>发展是"总钥匙"，民生是"指南针"。</p><p><strong>①重要前提：</strong>正确把握<strong>民生和发展的关系</strong>【发展-物质，人民-消费】</p><p><strong>②工作思路：</strong>坚守底线、突出重点、完善制度、引导预期</p><p><strong>③重中之重：</strong>解决人民群众<strong>最关心最直接最现实</strong>的利益问题</p><p><strong>④重要方针：</strong>尽力而为、量力而行【福利水平-经济基础】</p><p><strong>⑤重要原则：</strong>人人尽责、人人享有【政府兜底，幸福靠自己】</p></div></div>
+</div>
+
+<!-- ============ 二、不断提高人民生活品质 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、不断提高人民生活品质 <span class="section-label">选4 | 简1</span></div>
+<div class="card" data-correct="C" data-id="9"><span class="q-num">9</span><span class="q-type">单选</span><div class="q-text">改善民生、实现发展成果由人民共享最重要最直接的方式是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>慈善分配</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>社保分配</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>收入分配</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>政府保障</li></ul><div class="result-msg"></div><div class="explanation"><strong>收入分配</strong>是民生之源，是改善民生、实现发展成果由人民共享<strong>最重要最直接</strong>的方式。</div></div>
+<div class="card" data-correct="C" data-id="10"><span class="q-num">10</span><span class="q-type">单选</span><div class="q-text">民生改善的"温度计"是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>发展问题</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>分配问题</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>就业问题</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>保障问题</li></ul><div class="result-msg"></div><div class="explanation"><strong>就业是最基本的民生</strong>【生存】。解决好<strong>就业问题</strong>，是民生改善的"温度计"。实施就业优先战略，把就业摆在经济社会发展优先位置。</div></div>
+<div class="card" data-correct="B" data-id="11"><span class="q-num">11</span><span class="q-type">单选</span><div class="q-text">最大的民生是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>教育</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>就业</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>医疗</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>社会保障</li></ul><div class="result-msg"></div><div class="explanation"><strong>就业</strong>是最大���民生，是最基本的民生【生存】。就业对国家长治久安具有重要支撑作用。</div></div>
+<div class="card" data-correct="A" data-id="12"><span class="q-num">12</span><span class="q-type">单选</span><div class="q-text">完善分配制度中，初次分配发挥的是（　）作用。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>基础性</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>调节性</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>补充性</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>决定性</li></ul><div class="result-msg"></div><div class="explanation">三次分配：①<strong>初次分配</strong>——基础性作用【按劳分配】②<strong>再分配</strong>——调节作用【国家分配】【医保】③<strong>第三次分配</strong>——补充【慈善】。</div></div>
+<div class="card" data-id="13"><span class="q-num">13</span><span class="q-type">简答</span><div class="q-text">简述如何完善分配制度（三次分配）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①发挥<strong>初次分配</strong>的基础性作用【按劳分配】</p><p>②发挥<strong>再分配</strong>的调节作用【国家分配】【医保】</p><p>③建立健全<strong>第三次分配</strong>机制【慈善】</p><p>收入分配是民生之源，是改善民生、实现发展成果由人民共享最重要最直接的方式。</p></div></div>
+</div>
+
+<!-- ============ 三、社会治理 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、在共建共治共享中推进社会治理现代化 <span class="section-label">选4 | 简2</span></div>
+<div class="card" data-correct="A" data-id="14"><span class="q-num">14</span><span class="q-type">单选</span><div class="q-text">完善社会治理体系的"先导"是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>理念（共建共治共享）</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>制度</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>方式方法</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>人员队伍</li></ul><div class="result-msg"></div><div class="explanation">完善社会治理体系三大要素：<strong>理念=先导</strong>（共建共治共享）【思想】；<strong>制度=保障</strong>【法律】；<strong>方式方法=重要内容</strong>【互联网】。</div></div>
+<div class="card" data-correct="B" data-id="15"><span class="q-num">15</span><span class="q-type">单选</span><div class="q-text">完善社会治理体系的"保障"是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>理念</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>制度</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>方式方法</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>技术手段</li></ul><div class="result-msg"></div><div class="explanation"><strong>制度</strong>是完善社会治理体系的<strong>保障</strong>，必须健全社会治理制度，提升社会治理效能【法律】。</div></div>
+<div class="card" data-correct="A" data-id="16"><span class="q-num">16</span><span class="q-type">单选</span><div class="q-text">新时代"枫桥经验"最突出的特点是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>最大限度把矛盾风险防范化解在基层</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>大规模上访维权</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>依靠公安力量解决矛盾</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>主要通过法律诉讼解决</li></ul><div class="result-msg"></div><div class="explanation">新时代<strong>"枫桥经验"</strong>最突出的特点是<strong>最大限度把矛盾风险防范化解在基层</strong>【政府，社会，人民三方】。"枫桥经验"和"浦江经验"是正确处理新形势下人民内部矛盾的重要机制。</div></div>
+<div class="card" data-correct="D" data-id="17"><span class="q-num">17</span><span class="q-type">单选</span><div class="q-text">关于社会治理体系，十九届四中全会提出的构成不包括（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党委领导、政府负责</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>民主协商、社会协同</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>公众参与、法治保障、科技支撑</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>军队治理、国际协作</li></ul><div class="result-msg"></div><div class="explanation">社会治理体系七要素：<strong>党委领导、政府负责、民主协商、社会协同、公众参与、法治保障、科技支撑</strong>。</div></div>
+<div class="card" data-id="18"><span class="q-num">18</span><span class="q-type">简答</span><div class="q-text">简述如何加快完善社会治理体系。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①理念=先导：</strong>必须坚持<strong>共建共治共享</strong>的社会治理理念【思想】</p><p><strong>②制度=保障：</strong>必须健全社会治理<strong>制度</strong>，提升治理效能【法律】</p><p><strong>③方式方法=重要内容：</strong>必须不断创新<strong>社会治理方式、途径和手段</strong>【互联网】</p></div></div>
+<div class="card" data-id="19"><span class="q-num">19</span><span class="q-type">简答</span><div class="q-text">简述加强城乡社区治理的举措。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>健全党组织领导的<strong>城乡基层治理体系</strong>，实现政府治理和社会调节、居民自治良性互动【政府，人民，社会三方】</p><p><strong>②</strong>坚持和发展新时代<strong>"枫桥经验""浦江经验"</strong>，最大限度把矛盾风险化解在基层</p><p><strong>③</strong>加快推进<strong>市域社会治理现代化</strong>，提高市域社会治理能力【不同市治理能力】</p></div></div>
+</div>
+
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第十一章��整习题集 · 共19题</footer>
+</div>
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=15;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(o,l){let c=o.closest('.card');if(c.classList.contains('done'))return;let d=c.dataset.correct,n=c.querySelectorAll('.option'),m=c.querySelector('.result-msg'),e=c.querySelector('.explanation');n.forEach(x=>x.classList.add('disabled'));n.forEach(x=>{if(x.onclick&&x.onclick.toString().includes("'"+d+"'"))x.classList.add('correct-answer')});let ok=l===d;if(!ok){o.classList.add('wrong-answer');m.textContent='❌ 错误，正确答案是 '+d;m.className='result-msg wrong show'}else{m.textContent='✅ 正确！';m.className='result-msg correct show'}if(e)e.classList.add('show');c.classList.add('done');if(!ok)c.classList.add('wrong-card');totalDone++;if(ok)totalCorrect++;updateStats()}
+function toggleA(b){let c=b.closest('.card'),r=c.querySelector('.answer-reveal');if(r.classList.contains('show')){r.classList.remove('show');b.textContent='📝 点击查看答案'}else{r.classList.add('show');b.textContent='🔽 隐藏答案'}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function resetAll(){if(!confirm('确定重置全部答案？'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent=''});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('隐藏'))b.textContent='📝 点击查看答案'});totalCorrect=0;totalDone=0;updateStats()}
+updateStats();
+window.addEventListener('scroll',()=>{let s=['sec1','sec2','sec3'],c='sec1';s.forEach(id=>{let e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=200)c=id});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',s[i]===c)})});
+</script>
+</body>
+</html>
