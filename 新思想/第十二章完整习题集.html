@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第十二章 建设社会主义生态文明 完整习题集</title>
+<style>
+:root {--bg:#faf8f6;--card-bg:#fff;--text:#2c3e50;--text-secondary:#666;--border:#e0e4e8;--primary:#b71c1c;--primary-light:#ffebee;--success:#27ae60;--success-light:#e8f8ef;--wrong:#e74c3c;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:20px}
+.container{max-width:840px;margin:0 auto}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:26px;color:var(--primary);margin-bottom:6px}
+header p{color:var(--text-secondary);font-size:14px}
+.stats-bar{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 24px;display:flex;justify-content:space-around;text-align:center;margin-bottom:20px;position:sticky;top:20px;z-index:10}
+.stat-item .stat-num{font-size:24px;font-weight:700}.stat-item .stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.stat-num.done{color:var(--primary)}.stat-num.score{color:var(--success)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.nav-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:18px;font-size:12px;cursor:pointer;background:var(--card-bg);transition:all .2s;font-weight:500;white-space:nowrap}
+.nav-btn:hover{border-color:var(--primary)}.nav-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.section-title{font-size:19px;font-weight:700;color:var(--primary);padding:20px 0 10px;border-bottom:2px solid var(--primary-light);margin-top:8px;display:flex;align-items:center;gap:8px}
+.section-label{font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;margin-left:8px;font-weight:500}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;border-left:4px solid transparent;transition:border-color .3s}
+.card.done{border-left-color:var(--success)}.card.wrong-card{border-left-color:var(--wrong)}
+.card .q-num{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px}
+.card .q-type{font-size:12px;color:var(--text-secondary);margin-left:8px}
+.card .q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6}
+.options{list-style:none}
+.option{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;font-size:14px}
+.option:hover{border-color:var(--primary);background:#fef8f8}
+.option.disabled{pointer-events:none;opacity:.85}
+.option.correct-answer{border-color:var(--success);background:var(--success-light);color:var(--success);font-weight:600}
+.option.wrong-answer{border-color:var(--wrong);background:#fdedec;color:var(--wrong)}
+.opt-letter{font-weight:700;color:var(--primary);min-width:20px;flex-shrink:0}
+.result-msg{margin-top:8px;font-weight:600;font-size:14px;display:none}
+.result-msg.show{display:block}.result-msg.correct{color:var(--success)}.result-msg.wrong{color:var(--wrong)}
+.explanation{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.explanation.show{display:block}
+.toggle-btn{padding:8px 18px;background:#fff;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.toggle-btn:hover{background:var(--primary);color:#fff}
+.answer-reveal{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.answer-reveal.show{display:block}.answer-reveal .answer-label{font-weight:700;color:var(--primary);margin-bottom:4px}
+.answer-reveal p{margin-bottom:4px}
+.key-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;font-size:13px}
+.key-table th,.key-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.key-table th{background:var(--primary-light);color:var(--primary);font-weight:700}
+.highlight{color:var(--primary);font-weight:700}
+.reset-bar{text-align:center;padding:30px 0}
+.reset-btn{padding:10px 28px;background:var(--text);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px;transition:opacity .2s}
+.reset-btn:hover{opacity:.85}
+footer{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{background:var(--primary);color:#fff}
+@media print{.stats-bar,.reset-bar,footer,.nav{display:none}.explanation,.answer-reveal{display:block!important}}
+@media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第十二章 · 建设社会主义生态文明 · 完整习题集</p></header>
+<div class="stats-bar"><div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div><div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div><div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div></div>
+<div class="nav">
+<button class="nav-btn active" onclick="scrollToSec('sec1')">1.人与自然和谐共生</button>
+<button class="nav-btn" onclick="scrollToSec('sec2')">2.美丽中国</button>
+<button class="nav-btn" onclick="scrollToSec('sec3')">3.全球生态文明</button>
+</div>
+
+<!-- ============ 一、坚持人与自然和谐共生 ============ -->
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、坚持人与自然和谐共生 <span class="section-label">选5 | 简3</span></div>
+<div class="card" data-correct="C" data-id="1"><span class="q-num">1</span><span class="q-type">单选</span><div class="q-text">下列不属于严守"三条红线"内容的是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>生态保护红线</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>环境质量底线</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>粮食产量底线</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>资源利用上线</li></ul><div class="result-msg"></div><div class="explanation">三条红线=<strong>生态保护红线+环境质量底线+资源利用上线</strong>。全国生态保护红线面积稳定在315万平方公里以上。</div></div>
+<div class="card" data-correct="A" data-id="2"><span class="q-num">2</span><span class="q-type">单选</span><div class="q-text">生态环境问题归根到底是（　）问题。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展方式和生活方式</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>科学技术</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人口数量</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>地理气候</li></ul><div class="result-msg"></div><div class="explanation">生态环境问题归根到底是<strong>经济发展方式和生活方式</strong>问题【资源发展经济，一次性】。绿水青山就是金山银山，处理好二者关系关键在人、关键在思路【高速→高质量】。</div></div>
+<div class="card" data-correct="B" data-id="3"><span class="q-num">3</span><span class="q-type">单选</span><div class="q-text">生态文明强调协调的是（　）关系。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展与科技进步</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>人与自然</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>城市与农村</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国内与国际</li></ul><div class="result-msg"></div><div class="explanation">生态文明<strong>强调协调人与自然关系</strong>。从原始文明→农业文明→工业文明→生态文明，是人类文明发展的历史趋势。</div></div>
+<div class="card" data-correct="D" data-id="4"><span class="q-num">4</span><span class="q-type">单选</span><div class="q-text">"三条红线"的正确组合是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>生态保护红线、粮食安全底线、资源利用上线</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>生态保护红线、环境质量底线、能源消耗上线</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>耕地保护红线、环境质量底线、森林覆盖率上线</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>生态保护红线、环境质量底线、资源利用上线</li></ul><div class="result-msg"></div><div class="explanation"><strong>三条红线=生态保护红线+环境质量底线+资源利用上线</strong>。全国生态保护红线面积稳定在315万平方公里以上。</div></div>
+<div class="card" data-correct="A" data-id="5"><span class="q-num">5</span><span class="q-type">单选</span><div class="q-text">处理好绿水青山和金山银山的关系，关键在（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人、关键在思路</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>资金、关键在投入</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>技术、关键在创新</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>政策、关键在立法</li></ul><div class="result-msg"></div><div class="explanation">处理好绿水青山和金山银山的关系，<strong>关键在人、关键在思路</strong>【高速→高质量】。绿水青山既是自然财富、生态财富，又是社会财富、经济财富，是永续发展的最大本钱。</div></div>
+<div class="card" data-id="6"><span class="q-num">6</span><span class="q-type">简答</span><div class="q-text">简述"绿水青山就是金山银山"的内涵。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>生态环境问题归根到底是<strong>经济发展方式和生活方式</strong>问题【一次性开发】。这是重要的发展理念，也是推进现代化建设的<strong>重大原则</strong>。</p><p><strong>②</strong>绿水青山既是<strong>自然财富、生态财富</strong>，又是<strong>社会财富、经济财富</strong>【自然景色】。绿水青山是永续发展的<strong>最大本钱</strong>。</p><p><strong>③</strong>处理好绿水青山和金山银��的关系，<strong>关键在人、关键在思路</strong>【高速→高质量】。</p></div></div>
+<div class="card" data-id="4"><span class="q-num">4</span><span class="q-type">简答</span><div class="q-text">简述新时代生态文明建设的重大成就（四个方面）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>生态文明建设战略地位更加凸显【现代化本质，中特基本方略】</p><p><strong>②</strong>生态文明制度体系更加健全【30多部】</p><p><strong>③</strong>污染防治和生态保护更加有力【大气，水，土壤】。严守<strong>生态保护红线、环境质量底线、资源利用上线</strong>三条红线</p><p><strong>④</strong>美丽中国建设迈出重大步伐</p></div></div>
+<div class="card" data-id="5"><span class="q-num">5</span><span class="q-type">简答</span><div class="q-text">简述生态文明是人类文明发展的历史趋势（结合四大文明古国分析）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①生态环境变化<strong>直接影响文明的兴衰演替</strong>。四大文明古国均诞生于肥沃地区，古埃及、古巴比伦因土地荒漠化而衰落。</p><p>②生态文明<strong>强调协调人与自然关系</strong>。从原始文明→农业文明→工业文明→<strong>生态文明</strong>，是人类文明发展的历史趋势。</p></div></div>
+</div>
+
+<!-- ============ 二、建设美丽中国 ============ -->
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、建设美丽中国 <span class="section-label">选6 | 简3</span></div>
+<div class="card" data-correct="B" data-id="6"><span class="q-num">6</span><span class="q-type">单选</span><div class="q-text">实现绿色发展需要加快推动产业结构、（　）、交通运输结构等调整优化。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>粮食结构</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>能源结构</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>发展结构</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>资本结构</li></ul><div class="result-msg"></div><div class="explanation">加快推动<strong>产业结构、能源结构、交通运输结构</strong>等调整优化。产业结构：资源型→服务/金融；能源结构：水/风/太阳能；交通运输：电动汽车/氢能车辆。</div></div>
+<div class="card" data-correct="D" data-id="7"><span class="q-num">7</span><span class="q-type">单选</span><div class="q-text">在山水林田湖草沙一体化保护中，要加快实施重要生态系统保护和（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>生态环境红线</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>环境质量底线</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>资源利用上线</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>修复重大工程</li></ul><div class="result-msg"></div><div class="explanation">山水林田湖草沙一体化保护五措施：①加快实施<strong>生态系统保护和修复重大工程</strong>【长江，北方防沙带】②推进<strong>自然保护地体系</strong>建设【海南热带雨林，武夷山】③推进<strong>荒漠化/石漠化/水土流失</strong>综合治理④实施<strong>生物多样性</strong>保护⑤推行<strong>休养生息</strong>【禁牧，休牧】。</div></div>
+<div class="card" data-correct="C" data-id="8"><span class="q-num">8</span><span class="q-type">单选</span><div class="q-text">绿色发展中要积极稳妥推进（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>供给侧改革</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>乡村振兴</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>碳达峰碳中和</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>全面脱贫</li></ul><div class="result-msg"></div><div class="explanation">积极稳妥推进<strong>碳达峰碳中和</strong>【峰值，植树造林】。碳达峰=排放量达到峰值后下降；碳中和=通过植树造林等方式抵消排放。</div></div>
+<div class="card" data-correct="A" data-id="9"><span class="q-num">9</span><span class="q-type">单选</span><div class="q-text">建设美丽中国最终要转化为（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>全体人民自觉行动</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>政府行政命令</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>企业社会责任</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际环保条约</li></ul><div class="result-msg"></div><div class="explanation">坚持把建设美丽中国转化为<strong>全体人民自觉行动</strong>【人人】。绿色发展需要全社会共同参与。</div></div>
+<div class="card" data-correct="B" data-id="10"><span class="q-num">10</span><span class="q-type">单选</span><div class="q-text">下列属于资源高效利用制度典型的是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>环境保护税法</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>垃圾分类和回收利用制度</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>碳排放交易制度</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>污染排放许可证</li></ul><div class="result-msg"></div><div class="explanation"><strong>资源高效利用制度</strong>的典型=垃圾分类和回收利用制度。最严格生态环境保护制度=追责-赔偿；严明责任制度=政府问责。</div></div>
+<div class="card" data-correct="D" data-id="11"><span class="q-num">11</span><span class="q-type">单选</span><div class="q-text">生物多样性保护重大工程保护的对象包括（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>仅植物物种</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>仅海洋生物</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>仅微生物</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>大熊猫、华南虎等珍稀物种</li></ul><div class="result-msg"></div><div class="explanation">实施<strong>生物多样性保护重大工程</strong>，重点保护大熊猫、华南虎等珍稀濒危物种及其栖息地。</div></div>
+<div class="card" data-id="12"><span class="q-num">12</span><span class="q-type">简答</span><div class="q-text">简述如何加快形成绿色生产方式和生活方式。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①加快推动<strong>产业结构、能源结构、交通运输结构</strong>等调整优化【资源型→服务金融】【水风太阳】【电动/氢能汽车】</p><p>②推进各类<strong>资源节约集约利用</strong>【衣食住行节约】</p><p>③积极稳妥推进<strong>碳达峰碳中和</strong>【峰值，植树造林】</p><p>④健全<strong>绿色发展保障体系</strong>【法律】</p><p>⑤坚持把建设美丽中国转化为<strong>全体人民自觉行动</strong>【人人】</p></div></div>
+<div class="card" data-id="9"><span class="q-num">9</span><span class="q-type">简答</span><div class="q-text">简述如何坚持山水林田湖草沙一体化保护和系统治理。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①加快实施<strong>重要生态系统保护和修复重大工程</strong>【长江重点生态区，北方防沙带】</p><p>②推进<strong>自然保护地体系</strong>建设【海南热带雨林，武夷山】</p><p>③科学推进<strong>荒漠化、石漠化、水土流失</strong>综合治理【塔里木河，广西贵州，黄河】</p><p>④实施<strong>生物多样性保护</strong>重大工程【大熊猫，华南虎】</p><p>⑤推行草原森林河流湖泊湿地<strong>休养生息</strong>【禁牧，休牧】</p></div></div>
+<div class="card" data-id="10"><span class="q-num">10</span><span class="q-type">简答</span><div class="q-text">简述用最严格制度最严密法治保护生态环境的内涵（三方面制度）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①实行<strong>最严格的生态环境保护制度</strong>【追责-赔偿】</p><p>②全面建立<strong>资源高效利用制度</strong>【垃圾分类和回收利用制度】</p><p>③严明<strong>生态环境保护责任制度</strong>【政府】</p></div></div>
+</div>
+
+<!-- ============ 三、全球生态文明 ============ -->
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、共谋全球生态文明建设之路 <span class="section-label">选2 | 简2</span></div>
+<div class="card" data-correct="D" data-id="13"><span class="q-num">13</span><span class="q-type">单选</span><div class="q-text">共建清洁美丽世界，对发达国家和发展中国家应坚持（　）原则。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>完全相同的责任</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>发展中国家承担主要责任</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>各自为政</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>共同但有区别的责任</li></ul><div class="result-msg"></div><div class="explanation">坚持<strong>共同但有区别的责任</strong>原则。发达国家和发展中国家承担共同责任，但发达国家应承担更多<strong>历史责任</strong>（它们历史上排放了更多温室气体）。</div></div>
+<div class="card" data-correct="A" data-id="14"><span class="q-num">14</span><span class="q-type">单选</span><div class="q-text">中国为全球气候治理作出的突出贡献是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>人工林面积世界第一</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>森林覆盖率全球最高</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>率先实现碳中和</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>空气质量全球最优</li></ul><div class="result-msg"></div><div class="explanation">中国积极参与全球气候治理，<strong>人工林面积世界第一</strong>，积极参与臭氧层保护。同时推进全球生物多样性治理，打造绿色"一带一路"。</div></div>
+<div class="card" data-id="15"><span class="q-num">15</span><span class="q-type">简答</span><div class="q-text">简述如何共建清洁美丽世界（四个坚持）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①坚持<strong>以人为本</strong>【目的】</p><p>②坚持<strong>科学治理</strong>【规律，科技】</p><p>③坚持<strong>多边主义</strong>【共同】</p><p>④坚持<strong>共同但有区别的责任</strong>原则【发达和发展】——发达国家应承担更多历史责任</p></div></div>
+<div class="card" data-id="16"><span class="q-num">16</span><span class="q-type">简答</span><div class="q-text">简述中国如何推动全球可持续发展。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①积极参与<strong>全球气候治理</strong>【人工林面积世界第一，臭氧层保护】</p><p>②积极推进<strong>全球生物多样性治理</strong></p><p>③积极打造<strong>绿色"一带一路"</strong>，承担大国责任，展现大国担当</p></div></div>
+</div>
+
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第十二章完整习题集 · 共16题</footer>
+</div>
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=13;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(o,l){let c=o.closest('.card');if(c.classList.contains('done'))return;let d=c.dataset.correct,n=c.querySelectorAll('.option'),m=c.querySelector('.result-msg'),e=c.querySelector('.explanation');n.forEach(x=>x.classList.add('disabled'));n.forEach(x=>{if(x.onclick&&x.onclick.toString().includes("'"+d+"'"))x.classList.add('correct-answer')});let ok=l===d;if(!ok){o.classList.add('wrong-answer');m.textContent='❌ 错误，正确答案是 '+d;m.className='result-msg wrong show'}else{m.textContent='✅ 正确！';m.className='result-msg correct show'}if(e)e.classList.add('show');c.classList.add('done');if(!ok)c.classList.add('wrong-card');totalDone++;if(ok)totalCorrect++;updateStats()}
+function toggleA(b){let c=b.closest('.card'),r=c.querySelector('.answer-reveal');if(r.classList.contains('show')){r.classList.remove('show');b.textContent='📝 点击查看答案'}else{r.classList.add('show');b.textContent='🔽 隐藏答案'}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function resetAll(){if(!confirm('确定重置全部答案？'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent=''});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('隐藏'))b.textContent='📝 点击查看答案'});totalCorrect=0;totalDone=0;updateStats()}
+updateStats();
+window.addEventListener('scroll',()=>{let s=['sec1','sec2','sec3'],c='sec1';s.forEach(id=>{let e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=200)c=id});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',s[i]===c)})});
+</script>
+</body>
+</html>

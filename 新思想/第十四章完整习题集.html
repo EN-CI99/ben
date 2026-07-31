@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第十四章 建设巩固国防和强大人民军队 完整习题集</title>
+<style>
+:root {--bg:#faf8f6;--card-bg:#fff;--text:#2c3e50;--text-secondary:#666;--border:#e0e4e8;--primary:#b71c1c;--primary-light:#ffebee;--success:#27ae60;--success-light:#e8f8ef;--wrong:#e74c3c;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:20px}
+.container{max-width:840px;margin:0 auto}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:26px;color:var(--primary);margin-bottom:6px}
+header p{color:var(--text-secondary);font-size:14px}
+.stats-bar{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 24px;display:flex;justify-content:space-around;text-align:center;margin-bottom:20px;position:sticky;top:20px;z-index:10}
+.stat-item .stat-num{font-size:24px;font-weight:700}.stat-item .stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.stat-num.done{color:var(--primary)}.stat-num.score{color:var(--success)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.nav-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:18px;font-size:12px;cursor:pointer;background:var(--card-bg);transition:all .2s;font-weight:500;white-space:nowrap}
+.nav-btn:hover{border-color:var(--primary)}.nav-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.section-title{font-size:19px;font-weight:700;color:var(--primary);padding:20px 0 10px;border-bottom:2px solid var(--primary-light);margin-top:8px;display:flex;align-items:center;gap:8px}
+.section-label{font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;margin-left:8px;font-weight:500}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;border-left:4px solid transparent;transition:border-color .3s}
+.card.done{border-left-color:var(--success)}.card.wrong-card{border-left-color:var(--wrong)}
+.card .q-num{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px}
+.card .q-type{font-size:12px;color:var(--text-secondary);margin-left:8px}
+.card .q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6}
+.options{list-style:none}
+.option{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;font-size:14px}
+.option:hover{border-color:var(--primary);background:#fef8f8}
+.option.disabled{pointer-events:none;opacity:.85}
+.option.correct-answer{border-color:var(--success);background:var(--success-light);color:var(--success);font-weight:600}
+.option.wrong-answer{border-color:var(--wrong);background:#fdedec;color:var(--wrong)}
+.opt-letter{font-weight:700;color:var(--primary);min-width:20px;flex-shrink:0}
+.result-msg{margin-top:8px;font-weight:600;font-size:14px;display:none}
+.result-msg.show{display:block}.result-msg.correct{color:var(--success)}.result-msg.wrong{color:var(--wrong)}
+.explanation{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.explanation.show{display:block}
+.toggle-btn{padding:8px 18px;background:#fff;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.toggle-btn:hover{background:var(--primary);color:#fff}
+.answer-reveal{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.answer-reveal.show{display:block}.answer-reveal .answer-label{font-weight:700;color:var(--primary);margin-bottom:4px}
+.answer-reveal p{margin-bottom:4px}
+.highlight{color:var(--primary);font-weight:700}
+.reset-bar{text-align:center;padding:30px 0}
+.reset-btn{padding:10px 28px;background:var(--text);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px;transition:opacity .2s}
+.reset-btn:hover{opacity:.85}
+footer{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{background:var(--primary);color:#fff}
+@media print{.stats-bar,.reset-bar,footer,.nav{display:none}.explanation,.answer-reveal{display:block!important}}
+@media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第十四章 · 建设巩固国防和强大人民军队 · 完整习题集</p></header>
+<div class="stats-bar"><div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div><div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div><div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div></div>
+<div class="nav"><button class="nav-btn active" onclick="scrollToSec('sec1')">1.强国必须强军</button><button class="nav-btn" onclick="scrollToSec('sec2')">2.强军目标</button><button class="nav-btn" onclick="scrollToSec('sec3')">3.国防军队现代化</button></div>
+
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、强国必须强军，军强才能国安 <span class="section-label">选3 | 简2</span></div>
+
+<div class="card" data-correct="A" data-id="1"><span class="q-num">1</span><span class="q-type">单选</span><div class="q-text">关于国防和军队建设，正确的说法是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>国无防不立，民无兵不安</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>国无兵不立，民无防不安</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国无防不强，民无兵不富</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国无军不立，民无防不安</li></ul><div class="result-msg"></div><div class="explanation"><strong>国无防不立，民无兵不安</strong>。没有一支强大的军队，就不可能有强大的祖国。当今世界，和平与发展仍是时代主题，但<strong>并不太平</strong>【地区冲突】。</div></div>
+
+<div class="card" data-correct="B" data-id="2"><span class="q-num">2</span><span class="q-type">单选</span><div class="q-text">新时代人民军队的使命任务是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>三个战略支撑</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>四个战略支撑</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>五个战略支撑</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>六个战略支撑</li></ul><div class="result-msg"></div><div class="explanation">新时代人民军队使命任务="<strong>四个战略支撑</strong>"：①巩固党的领导和社会主义制度 ②捍卫国家主权/统一/领土完整 ③维护海外利益 ④促进世界和平与发展。</div></div>
+
+<div class="card" data-correct="D" data-id="3"><span class="q-num">3</span><span class="q-type">单选</span><div class="q-text">"四个战略支撑"中，"为维护我国海外利益"最典型实践是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>参加国际维和</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>海外军事演习</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>国际军事合作</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>海外撤侨行动</li></ul><div class="result-msg"></div><div class="explanation">四个战略支撑：巩固党的领导【政权-军队】→捍卫主权【挑衅】→维护海外利益【<strong>撤侨</strong>】→促进世界和平【稳定】。</div></div>
+
+<div class="card" data-id="4"><span class="q-num">4</span><span class="q-type">简答</span><div class="q-text">简述建设巩固国防和强大人民军队的必要性。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>国无防不立，民无兵不安。<strong>没有一支强大的军队，就不可能有强大的祖国</strong>。</p><p><strong>②</strong>中国越发展壮大，<strong>遇到的阻力和压力就会越大</strong>，面临的风险就会越多。</p><p><strong>③</strong>当今世界，和平与发展仍然是时代主题，但<strong>并不太平</strong>【地区冲突】。</p></div></div>
+
+<div class="card" data-id="5"><span class="q-num">5</span><span class="q-type">简答</span><div class="q-text">简述新时代人民军队使命任务（"四个战略支撑"）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>为巩固<strong>中国共产党领导</strong>和我国<strong>社会主义制度</strong>提供战略支撑【政权-军队】</p><p><strong>②</strong>为捍卫<strong>国家主权、统一和领土完整</strong>提供战略支撑【挑衅】</p><p><strong>③</strong>为维护我国<strong>海外利益</strong>提供战略支撑【撤侨】</p><p><strong>④</strong>为促进<strong>世界和平与发展</strong>提供战略支撑【稳定】</p></div></div>
+</div>
+
+<div id="sec2">
+<div class="section-title"><span>📌</span> 二、实现党在新时代的强军目标 <span class="section-label">选9 | 简1</span></div>
+
+<div class="card" data-correct="C" data-id="6"><span class="q-num">6</span><span class="q-type">单选</span><div class="q-text">强军目标中，决定军队建设政治方向的是（　），是灵魂。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>能打胜仗</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>作风优良</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>听党指挥</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技强军</li></ul><div class="result-msg"></div><div class="explanation"><strong>听党指挥是灵魂</strong>，决定军队建设的政治方向【社】。坚持党对人民军队的绝对领导是人民军队<strong>永远不变的军魂</strong>。</div></div>
+
+<div class="card" data-correct="C" data-id="7"><span class="q-num">7</span><span class="q-type">单选</span><div class="q-text">强军目标中，反映军队根本职能和根本指向的是（　），是核心。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>听党指挥</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>作风优良</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>能打胜仗</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>改革强军</li></ul><div class="result-msg"></div><div class="explanation"><strong>能打胜仗是核心</strong>，反映军队的根本职能和军队建设的根本指向，是军队的<strong>根本价值所在</strong>。</div></div>
+
+<div class="card" data-correct="B" data-id="8"><span class="q-num">8</span><span class="q-type">单选</span><div class="q-text">强军目标中，体现我军鲜明特色和政治优势的是（　），是保证。</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>听党指挥</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>作风优良</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>能打胜仗</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>本领过硬</li></ul><div class="result-msg"></div><div class="explanation"><strong>作风优良是保证</strong>，关系军队的性质、宗旨、本色，是人民军队的<strong>鲜明特色和政治优势</strong>【三大纪律八项注意】。</div></div>
+
+<div class="card" data-correct="C" data-id="9"><span class="q-num">9</span><span class="q-type">单选</span><div class="q-text">人民军队永远不变的军魂是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>能打胜仗</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>作风优良</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持党对人民军队的绝对领导</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技强军</li></ul><div class="result-msg"></div><div class="explanation">坚持<strong>党对人民军队的绝对领导</strong>是人民军队<strong>永远不变的军魂</strong>，是建军之本、强军之魂。</div></div>
+
+<div class="card" data-correct="C" data-id="10"><span class="q-num">10</span><span class="q-type">单选</span><div class="q-text">实现建军100年奋斗目标的时间是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>2025年</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>2026年</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>2027年</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>2028年</li></ul><div class="result-msg"></div><div class="explanation"><strong>2027年</strong>实现建军100年奋斗目标。三步走：2027→2035基本实现现代化→本世纪中叶建成世界一流军队。</div></div>
+
+<div class="card" data-correct="B" data-id="11"><span class="q-num">11</span><span class="q-type">单选</span><div class="q-text">基本实现国防和军队现代化的时间是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>2027年</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>2035年</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>2049年</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>2050年</li></ul><div class="result-msg"></div><div class="explanation"><strong>2035年</strong>基本实现国防和军队现代化，关键是实现军事理论、军队组织形态、军事人员、武器装备四个现代化。</div></div>
+
+<div class="card" data-correct="D" data-id="12"><span class="q-num">12</span><span class="q-type">单选</span><div class="q-text">把人民军队全面建成世界一流军队的时间是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>2027年</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>2035年</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>2040年</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>本世纪中叶</li></ul><div class="result-msg"></div><div class="explanation"><strong>本世纪中叶</strong>全面建成世界一流军队：同我国强国地位相称+全面有效维护国家安全+具备强大国际影响力【话语权】。</div></div>
+
+<div class="card" data-correct="B" data-id="13"><span class="q-num">13</span><span class="q-type">单选</span><div class="q-text">党对军队绝对领导的最高实现形式是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>党委制、政治委员制、政治机关制</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>军委主席负责制</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>党委统一的集体领导下的首长分工负责制</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>支部建在连上</li></ul><div class="result-msg"></div><div class="explanation"><strong>军委主席负责制</strong>是坚持党对人民军队绝对领导的根本制度和根本实现形式，在党领导军队的制度体系中处于<strong>最高层次、居于统领地位</strong>。</div></div>
+
+<div class="card" data-correct="A" data-id="14"><span class="q-num">14</span><span class="q-type">单选</span><div class="q-text">在党领导军队制度体系中处于最高层次的是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>军委主席负责制</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>党委制</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>政治委员制</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>政治机关制</li></ul><div class="result-msg"></div><div class="explanation"><strong>军委主席负责制</strong>在党领导军队的一整套制度体系中处于最高层次、居于统领地位。</div></div>
+
+<div class="card" data-id="15"><span class="q-num">15</span><span class="q-type">简答</span><div class="q-text">简述党在新时代的强军目标及三者的定位关系。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p>强军目标：建设一支<strong>听党指挥、能打胜仗、作风优良</strong>的人民军队，建成世界一流军队。</p><p><strong>①听党指挥是灵魂</strong>——决定军队建设的政治方向，党对军队的绝对领导是永远不变的军魂</p><p><strong>②能打胜仗是核心</strong>——反映军队的根本职能和根本指向，军队的根本价值所在</p><p><strong>③作风优良是保证</strong>——关系军队的性质/宗旨/本色，是鲜明特色和政治优势【三大纪律八项注意】</p></div></div>
+</div>
+
+<div id="sec3">
+<div class="section-title"><span>📌</span> 三、加快推进国防和军队现代化 <span class="section-label">选8 | 简3</span></div>
+
+<div class="card" data-correct="A" data-id="16"><span class="q-num">16</span><span class="q-type">单选</span><div class="q-text">人民军队的立军之本是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治建军</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革强军</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技强军</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>依法治军</li></ul><div class="result-msg"></div><div class="explanation"><strong>政治建军是人民军队的立军之本</strong>【思想，领导-性质】。改革是关键一招【五大战区】；科技是核心战斗力【歼20】；依法治军是基本方式。</div></div>
+
+<div class="card" data-correct="C" data-id="17"><span class="q-num">17</span><span class="q-type">单选</span><div class="q-text">决定人民军队发展壮大、制胜未来的关键一招是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>思想</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>法律</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>改革</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>科技</li></ul><div class="result-msg"></div><div class="explanation"><strong>改革</strong>是决定人民军队发展壮大、制胜未来的<strong>关键一招</strong>【五大战区】。</div></div>
+
+<div class="card" data-correct="B" data-id="18"><span class="q-num">18</span><span class="q-type">单选</span><div class="q-text">军事发展中最活跃、最具革命性的因素是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>科技</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人才</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>制度</li></ul><div class="result-msg"></div><div class="explanation"><strong>科技是核心战斗力</strong>，是军事发展中最活跃、最具革命性的因素【歼20】。人才是赢得军事竞争主动的关键因素。</div></div>
+
+<div class="card" data-correct="D" data-id="19"><span class="q-num">19</span><span class="q-type">单选</span><div class="q-text">我们党建军治军的基本方式是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>政治建军</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>改革强军</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技强军</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>依法治军</li></ul><div class="result-msg"></div><div class="explanation"><strong>依法治军</strong>是我们党建军治军的<strong>基本方式</strong>。</div></div>
+
+<div class="card" data-correct="B" data-id="20"><span class="q-num">20</span><span class="q-type">单选</span><div class="q-text">军队的出发点和落脚点，唯一的根本标准是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>科技</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>战斗力</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>人才</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>战略</li></ul><div class="result-msg"></div><div class="explanation">牢固树立<strong>战斗力</strong>这个唯一的根本标准，作为军队出发点和落脚点【备战打仗】。</div></div>
+
+<div class="card" data-correct="C" data-id="21"><span class="q-num">21</span><span class="q-type">单选</span><div class="q-text">最直接的军事斗争准备是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>武器装备研发</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>战略规划制定</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>军事训练</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际军事合作</li></ul><div class="result-msg"></div><div class="explanation"><strong>军事训练</strong>是提高实战能力的重要途径和抓手，是<strong>最直接的军事斗争准备</strong>【战争】。</div></div>
+
+<div class="card" data-correct="A" data-id="22"><span class="q-num">22</span><span class="q-type">单选</span><div class="q-text">巩固提高一体化国家战略体系和能力，关键是要（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>在一体化上下功夫</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>在军事化上下功夫</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>在信息化上下功夫</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>在国际化上下功夫</li></ul><div class="result-msg"></div><div class="explanation">关键是要在<strong>一体化</strong>上下功夫，实现<strong>国家战略能力最大化</strong>【政治，经济，科技】。</div></div>
+
+<div class="card" data-correct="D" data-id="23"><span class="q-num">23</span><span class="q-type">单选</span><div class="q-text">实现富国和强军相统一的重要政治保障是（　）</div><ul class="options"><li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展</li><li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>科技创新</li><li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>外交斡旋</li><li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>军政军民团结</li></ul><div class="result-msg"></div><div class="explanation"><strong>军政军民团结</strong>是实现富国和强军相统一的重要政治保障【党政军警民】。</div></div>
+
+<div class="card" data-id="24"><span class="q-num">24</span><span class="q-type">简答</span><div class="q-text">简述政治建军、改革强军、科技强军、人才强军、依法治军的内涵。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①政治建军</strong>——立军之本【思想，领导-性质】</p><p><strong>②改革强军</strong>——决定军队发展壮大、制胜未来的<strong>关键一招</strong>【五大战区】</p><p><strong>③科技强军</strong>——科技是<strong>核心战斗力</strong>，最活跃最具革命性的因素【歼20】</p><p><strong>④人才强军</strong>——推动高质量发展、赢得军事竞争的<strong>关键因素</strong></p><p><strong>⑤依法治军</strong>——党建军治军的<strong>基本方式</strong></p></div></div>
+
+<div class="card" data-id="25"><span class="q-num">25</span><span class="q-type">简答</span><div class="q-text">简述如何全面加强练兵备战。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>牢固树立<strong>战斗力</strong>这个唯一的根本标准【备战打仗】</p><p><strong>②</strong>深入推进<strong>实战化军事训练</strong>【军演】</p><p><strong>③</strong>创新<strong>军事战略指导</strong>【科学性，先进性】</p><p><strong>④</strong>大力培育<strong>"一不怕苦、二不怕死"</strong>的战斗精神</p></div></div>
+
+<div class="card" data-id="26"><span class="q-num">26</span><span class="q-type">简答</span><div class="q-text">简述全面推进国防和军队现代化的战略安排（三步走）。</div><button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button><div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①2027年</strong>——实现建军100年奋斗目标【正规化，现代化】</p><p><strong>②2035年</strong>——基本实现国防和军队现代化（军事理论/组织形态/军事人员/武器装备）</p><p><strong>③本世纪中叶</strong>——全面建成世界一流军队：同强国地位相称+全面维护国家安全+强大国际影响力</p></div></div>
+</div>
+
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第十四章完整习题集 · 共26题</footer>
+</div>
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=20;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(o,l){let c=o.closest('.card');if(c.classList.contains('done'))return;let d=c.dataset.correct,n=c.querySelectorAll('.option'),m=c.querySelector('.result-msg'),e=c.querySelector('.explanation');n.forEach(x=>x.classList.add('disabled'));n.forEach(x=>{if(x.onclick&&x.onclick.toString().includes("'"+d+"'"))x.classList.add('correct-answer')});let ok=l===d;if(!ok){o.classList.add('wrong-answer');m.textContent='❌ 错误，正确答案是 '+d;m.className='result-msg wrong show'}else{m.textContent='✅ 正确！';m.className='result-msg correct show'}if(e)e.classList.add('show');c.classList.add('done');if(!ok)c.classList.add('wrong-card');totalDone++;if(ok)totalCorrect++;updateStats()}
+function toggleA(b){let c=b.closest('.card'),r=c.querySelector('.answer-reveal');if(r.classList.contains('show')){r.classList.remove('show');b.textContent='📝 点击查看答案'}else{r.classList.add('show');b.textContent='🔽 隐藏答案'}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function resetAll(){if(!confirm('确定重置全部答案？'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent=''});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('隐藏'))b.textContent='📝 点击查看答案'});totalCorrect=0;totalDone=0;updateStats()}
+updateStats();
+window.addEventListener('scroll',()=>{let s=['sec1','sec2','sec3'],c='sec1';s.forEach(id=>{let e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=200)c=id});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',s[i]===c)})});
+</script>
+</body>
+</html>
