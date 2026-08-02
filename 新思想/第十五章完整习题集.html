@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新思想 · 第十五章 坚持"一国两制"和推进祖国完全统一 完整习题集</title>
+<style>
+:root {--bg:#faf8f6;--card-bg:#fff;--text:#2c3e50;--text-secondary:#666;--border:#e0e4e8;--primary:#b71c1c;--primary-light:#ffebee;--success:#27ae60;--success-light:#e8f8ef;--wrong:#e74c3c;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:20px}
+.container{max-width:840px;margin:0 auto}
+header{text-align:center;padding:40px 20px 30px}
+header h1{font-size:26px;color:var(--primary);margin-bottom:6px}
+header p{color:var(--text-secondary);font-size:14px}
+.stats-bar{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 24px;display:flex;justify-content:space-around;text-align:center;margin-bottom:20px;position:sticky;top:20px;z-index:10}
+.stat-item .stat-num{font-size:24px;font-weight:700}.stat-item .stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.stat-num.done{color:var(--primary)}.stat-num.score{color:var(--success)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.nav-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:18px;font-size:12px;cursor:pointer;background:var(--card-bg);transition:all .2s;font-weight:500;white-space:nowrap}
+.nav-btn:hover{border-color:var(--primary)}.nav-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.section-title{font-size:19px;font-weight:700;color:var(--primary);padding:20px 0 10px;border-bottom:2px solid var(--primary-light);margin-top:8px;display:flex;align-items:center;gap:8px}
+.section-label{font-size:11px;background:var(--primary-light);color:var(--primary);padding:2px 10px;border-radius:20px;margin-left:8px;font-weight:500}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px;border-left:4px solid transparent;transition:border-color .3s}
+.card.done{border-left-color:var(--success)}.card.wrong-card{border-left-color:var(--wrong)}
+.card .q-num{display:inline-block;background:var(--primary-light);color:var(--primary);font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-bottom:8px}
+.card .q-type{font-size:12px;color:var(--text-secondary);margin-left:8px}
+.card .q-text{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.6}
+.options{list-style:none}
+.option{padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:8px;font-size:14px}
+.option:hover{border-color:var(--primary);background:#fef8f8}
+.option.disabled{pointer-events:none;opacity:.85}
+.option.correct-answer{border-color:var(--success);background:var(--success-light);color:var(--success);font-weight:600}
+.option.wrong-answer{border-color:var(--wrong);background:#fdedec;color:var(--wrong)}
+.opt-letter{font-weight:700;color:var(--primary);min-width:20px;flex-shrink:0}
+.result-msg{margin-top:8px;font-weight:600;font-size:14px;display:none}
+.result-msg.show{display:block}.result-msg.correct{color:var(--success)}.result-msg.wrong{color:var(--wrong)}
+.explanation{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.explanation.show{display:block}
+.toggle-btn{padding:8px 18px;background:#fff;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);cursor:pointer;font-size:13px;font-weight:500;transition:all .2s}
+.toggle-btn:hover{background:var(--primary);color:#fff}
+.answer-reveal{margin-top:10px;padding:12px 16px;background:var(--primary-light);border-radius:8px;font-size:13px;display:none;line-height:1.8}
+.answer-reveal.show{display:block}.answer-reveal .answer-label{font-weight:700;color:var(--primary);margin-bottom:4px}
+.answer-reveal p{margin-bottom:4px}
+.highlight{color:var(--primary);font-weight:700}
+.key-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;font-size:13px}
+.key-table th,.key-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.key-table th{background:var(--primary-light);color:var(--primary);font-weight:700}
+.reset-bar{text-align:center;padding:30px 0}
+.reset-btn{padding:10px 28px;background:var(--text);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px;transition:opacity .2s}
+.reset-btn:hover{opacity:.85}
+footer{text-align:center;padding:20px;color:var(--text-secondary);font-size:13px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1.5px solid var(--primary);border-radius:20px;color:var(--primary);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{background:var(--primary);color:#fff}
+@media print{.stats-bar,.reset-bar,footer,.nav{display:none}.explanation,.answer-reveal{display:block!important}}
+@media(max-width:600px){body{padding:8px}.card{padding:14px}.stats-bar{padding:10px 14px}.section-title{font-size:16px}.card .q-text{font-size:14px}.option{font-size:13px;padding:8px 10px}}
+</style>
+</head>
+<body>
+<a class="back-btn" href="index.html">← 返回上级</a>
+<div class="container">
+<header><h1>习近平新时代中国特色社会主义思想概论</h1><p>第十五章 · 坚持"一国两制"和推进祖国完全统一 · 完整习题集</p></header>
+<div class="stats-bar"><div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">计分题</div></div><div class="stat-item"><div class="stat-num done" id="statDone">0</div><div class="stat-label">已作答</div></div><div class="stat-item"><div class="stat-num score" id="statScore">0</div><div class="stat-label">正确</div></div></div>
+<div class="nav">
+<button class="nav-btn active" onclick="scrollToSec('sec1')">1.一国两制方针</button>
+<button class="nav-btn" onclick="scrollToSec('sec2')">2.科学内涵</button>
+<button class="nav-btn" onclick="scrollToSec('sec3')">3.祖国完全统一</button>
+</div>
+<div id="sec1">
+<div class="section-title"><span>📌</span> 一、全面准确理解和贯彻"一国两制"方针 <span class="section-label">选7 | 简2</span></div>
+<div class="card" data-correct="A" data-id="1">
+<span class="q-num">1</span><span class="q-type">单选</span>
+<div class="q-text">"和平统一、一国两制"构想的提出，最早是针对（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>台湾问题提出来的</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>香港问题提出来的</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>澳门问题提出来的</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>香港和澳门问题提出来的</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">"一国两制"伟大构想的提出是从<strong>台湾问题</strong>开始的，但最先用于解决<strong>香港和澳门</strong>问题。</div></div>
+<div class="card" data-correct="A" data-id="2">
+<span class="q-num">2</span><span class="q-type">单选</span>
+<div class="q-text">"和平统一、一国两制"的核心是坚持（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>一个中国</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>两制并存</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>高度自治</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>和平统一</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">"和平统一、一国两制"的<strong>核心是坚持一个中国</strong>。"一国"是实行"两制"的<strong>前提和基础</strong>。</div></div>
+<div class="card" data-correct="B" data-id="3">
+<span class="q-num">3</span><span class="q-type">单选</span>
+<div class="q-text">"一国两制"方针的最高原则是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>保持香港澳门繁荣稳定</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>维护国家主权、安全、发展利益</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>保障高度自治权</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>促进经济文化交流</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">维护<strong>国家主权、安全、发展利益</strong>是"一国两制"方针的<strong>最高原则</strong>【一中原则】。根本宗旨=维护国家主权/安全/发展利益+保持港澳长期繁荣稳定。</div></div>
+<div class="card" data-correct="A" data-id="4">
+<span class="q-num">4</span><span class="q-type">单选</span>
+<div class="q-text">关于"一国"和"两制"的关系，正确的是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"一国"是实行"两制"的前提和基础，"两制"从属和派生于"一国"</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>"两制"是"一国"的前提</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>"一国"和"两制"互不相关</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>"两制"决定"一国"</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">"一国"是<strong>根</strong>，是<strong>本</strong>；"两制"<strong>从属和派生</strong>于"一国"，并<strong>统一于"一国"之内</strong>。</div></div>
+<div class="card" data-correct="C" data-id="5">
+<span class="q-num">5</span><span class="q-type">单选</span>
+<div class="q-text">中央全面管治权和特别行政区高度自治权的关系是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>两者互不相关</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>高度自治权是全面管治权的前提</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>源与流、本与末的关系</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>两者完全对等</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">全面管治权是授权高度自治的<strong>前提和基础</strong>，高度自治权是中央行使全面管治权的<strong>体现</strong>。它们之间是<strong>源与流、本与末</strong>的关系。</div></div>
+<div class="card" data-correct="D" data-id="6">
+<span class="q-num">6</span><span class="q-type">单选</span>
+<div class="q-text">特别行政区的宪制基础是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>仅宪法</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>仅基本法</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>仅特区立法</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>宪法和基本法共同构成</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation"><strong>宪法和基本法</strong>共同构成特别行政区的<strong>宪制基础</strong>。依法治港治澳是全面依法治国的应有之义。</div></div>
+<div class="card" data-correct="B" data-id="7">
+<span class="q-num">7</span><span class="q-type">单选</span>
+<div class="q-text">贯彻"一国两制"方针要确保（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>可以走样变形</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>不会变、不动摇，不走样、不变形</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>根据需要随时调整</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>放松对港治理</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">贯彻方针坚持两点：一是<strong>坚定不移</strong>，确保不会变、不动摇【宗旨】；二是<strong>全面准确</strong>，确保不走样、不变形【和平统一】。</div></div>
+<div class="card" data-id="8">
+<span class="q-num">8</span><span class="q-type">简答</span>
+<div class="q-text">简述"一国两制"的重要性。</div>
+<button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+<div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①</strong>是中国特色社会主义制度<strong>创新</strong>的重要成果【和平统一】</p><p><strong>②</strong>是党领导人民实现祖国<strong>和平统一</strong>的伟大构想【政治勇气】</p><p><strong>③</strong>为国际社会解决类似问题提供了<strong>新思路新方案</strong></p></div></div>
+<div class="card" data-id="9">
+<span class="q-num">9</span><span class="q-type">简答</span>
+<div class="q-text">简述准确把握"一国两制"的科学内涵（五个要点）。</div>
+<button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+<div class="answer-reveal"><div class="answer-label">参考答案：</div><p><strong>①根本宗旨：</strong>维护国家主权/安全/发展利益+保持港澳长期繁荣稳定</p><p><strong>②一国与两制关系：</strong>"一国"是前提基础(根本)，"两制"从属派生</p><p><strong>③中央全面管治权与特区高度自治权：</strong>源与流、本与末的关系</p><p><strong>④</strong>坚定落实<strong>"爱国者治港""爱国者治澳"</strong></p><p><strong>⑤</strong>坚持<strong>依法治港治澳</strong>，宪法和基本法共同构成宪制基础</p></div></div>
+</div>
+<div id="sec3">
+<div class="section-title"><span>📌</span> 二、推进祖国完全统一 <span class="section-label">选8 | 简3</span></div>
+<div class="card" data-correct="A" data-id="10">
+<span class="q-num">10</span><span class="q-type">单选</span>
+<div class="q-text">对两岸关系和平发展的最大现实威胁是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>"台独"势力及其分裂活动</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济问题</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化差异</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>思想问题</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">对两岸关系和平发展的<strong>最大现实威胁</strong>是"台独"势力及其分裂活动。"台独"分裂是祖国统一的<strong>最大障碍</strong>，是民族复兴的<strong>严重隐患</strong>。</div></div>
+<div class="card" data-correct="B" data-id="11">
+<span class="q-num">11</span><span class="q-type">单选</span>
+<div class="q-text">实现祖国完全统一，统一的根本保证是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持党中央对对台工作的集中统一领导</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化影响</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际支持</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">十个坚持中：<strong>坚持党中央对对台工作集中统一领导</strong>是统一的<strong>根本保证</strong>【党】。</div></div>
+<div class="card" data-correct="C" data-id="12">
+<span class="q-num">12</span><span class="q-type">单选</span>
+<div class="q-text">新时代党解决台湾问题的"政治基础"是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>和平统一方针</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济融合发展</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>坚持一个中国原则和"九二共识"</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>反对台独</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">坚持<strong>一个中国原则和"九二共识"</strong>，是统一的<strong>政治基础</strong>。和平统一/一国两制是大政方针【策略】。</div></div>
+<div class="card" data-correct="A" data-id="13">
+<span class="q-num">13</span><span class="q-type">单选</span>
+<div class="q-text">统一的"根本动力"是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>团结台湾同胞、争取台湾民心</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>经济制裁</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>军事威慑</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际施压</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">坚持<strong>团结台湾同胞、争取台湾民心</strong>，这是统一的<strong>根本动力</strong>【一家人】。</div></div>
+<div class="card" data-correct="B" data-id="14">
+<span class="q-num">14</span><span class="q-type">单选</span>
+<div class="q-text">统一的"战略支撑"是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济融合</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>坚持决不承诺放弃使用武力</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>和平谈判</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际支持</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">坚持<strong>决不承诺放弃使用武力</strong>，这是统一的<strong>战略支撑</strong>【针对台独和外部势力】。</div></div>
+<div class="card" data-correct="C" data-id="15">
+<span class="q-num">15</span><span class="q-type">单选</span>
+<div class="q-text">实现两岸统一的最佳方式是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济扶持</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>武力统一</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>和平统一、一国两制</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>国际共管</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">"<strong>和平统一、一国两制</strong>"方针是实现两岸统一的<strong>最佳方式</strong>。但决不承诺放弃使用武力。</div></div>
+<div class="card" data-correct="D" data-id="16">
+<span class="q-num">16</span><span class="q-type">单选</span>
+<div class="q-text">国家核心利益中不可逾越的红线是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>经济发展</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>文化传承</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>科技创新</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>确保国家主权和领土完整</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">确保<strong>国家主权和领土完整</strong>是国家核心利益，是一条<strong>不可逾越的红线</strong>。</div></div>
+<div class="card" data-correct="A" data-id="17">
+<span class="q-num">17</span><span class="q-type">单选</span>
+<div class="q-text">台湾问题的根源是（　）</div>
+<ul class="options">
+<li class="option" onclick="pickMC(this,'A')"><span class="opt-letter">A</span>民族弱乱</li>
+<li class="option" onclick="pickMC(this,'B')"><span class="opt-letter">B</span>地理隔阂</li>
+<li class="option" onclick="pickMC(this,'C')"><span class="opt-letter">C</span>文化差异</li>
+<li class="option" onclick="pickMC(this,'D')"><span class="opt-letter">D</span>经济差距</li>
+</ul>
+<div class="result-msg"></div>
+<div class="explanation">台湾问题<strong>因民族弱乱而产生，必将随着民族复兴而解决</strong>。国家统一永远是中国核心利益的核心。</div></div>
+<div class="card" data-id="18">
+<span class="q-num">18</span><span class="q-type">简答</span>
+<div class="q-text">简述实现祖国完全统一的必然性。</div>
+<button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+<div class="answer-reveal"><div class="answer-label">参考答案：</div><p>实现祖国完全统一是由中华民族<strong>伟大复兴的时和势</strong>决定的，是不可阻挡的历史潮流。</p><p><strong>①</strong>民族复兴、国家统一是<strong>大势所趋、大义所在、民心所向</strong>。中华文明具有突出的统一性，国家统一永远是中国核心利益的核心。</p><p><strong>②</strong>台湾前途在于国家统一，台湾同胞福祉系于民族复兴。</p><p><strong>③</strong>统一是历史大势，是<strong>正道</strong>；"台独"是历史逆流，是<strong>绝路</strong>。</p></div></div>
+<div class="card" data-id="19">
+<span class="q-num">19</span><span class="q-type">简答</span>
+<div class="q-text">简述新时代党解决台湾问题的总体方略（十个坚持核心要点）。</div>
+<button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+<div class="answer-reveal"><div class="answer-label">参考答案：</div><p>①<strong>根本保证</strong>——党中央集中统一领导【党】②<strong>历史方位</strong>——民族复兴进程中推进【时间】③<strong>战略思路</strong>——大陆发展进步基础上【实力】④<strong>大政方针</strong>——和平统一/一国两制【策略】⑤<strong>政治基础</strong>——一个中国原则/九二共识</p><p>⑥<strong>实践途径</strong>——两岸和平发展/融合发展⑦<strong>根本动力</strong>——团结台湾同胞/争取民心⑧<strong>必然要求</strong>——粉碎台独图谋⑨<strong>外部条件</strong>——反对外部干涉</p><p>⑩<strong>战略支撑</strong>——决不承诺放弃使用武力</p></div></div>
+<div class="card" data-id="20">
+<span class="q-num">20</span><span class="q-type">简答</span>
+<div class="q-text">简述如何牢牢把握两岸关系主导权和主动权。</div>
+<button class="toggle-btn" onclick="toggleA(this)">📝 点击查看答案</button>
+<div class="answer-reveal"><div class="answer-label">参考答案：</div><p>必须坚持<strong>一个中国原则和"九二共识"</strong>，坚决反对"台独"分裂行径，坚决反对外部势力干涉。</p><p><strong>①</strong>"和平统一、一国两制"是实现统一的最佳方式</p><p><strong>②</strong>促进两岸经济文化交流合作，深化各领域<strong>融合发展</strong></p><p><strong>③</strong>以最大诚意争取和平统一，但<strong>决不承诺放弃使用武力</strong></p></div></div>
+</div>
+<div class="reset-bar"><button class="reset-btn" onclick="resetAll()">🔄 重置全部答案</button></div>
+<footer>习近平新时代中国特色社会主义思想概论 · 第十五章完整习题集 · 共20题</footer>
+</div>
+<script>
+let totalCorrect=0,totalDone=0;
+function updateStats(){document.getElementById('statTotal').textContent=15;document.getElementById('statDone').textContent=totalDone;document.getElementById('statScore').textContent=totalCorrect;}
+function pickMC(o,l){let c=o.closest('.card');if(c.classList.contains('done'))return;let d=c.dataset.correct,n=c.querySelectorAll('.option'),m=c.querySelector('.result-msg'),e=c.querySelector('.explanation');n.forEach(x=>x.classList.add('disabled'));n.forEach(x=>{if(x.onclick&&x.onclick.toString().includes("'"+d+"'"))x.classList.add('correct-answer')});let ok=l===d;if(!ok){o.classList.add('wrong-answer');m.textContent='\u274c \u9519\u8bef\uff0c\u6b63\u786e\u7b54\u6848\u662f '+d;m.className='result-msg wrong show'}else{m.textContent='\u2705 \u6b63\u786e\uff01';m.className='result-msg correct show'}if(e)e.classList.add('show');c.classList.add('done');if(!ok)c.classList.add('wrong-card');totalDone++;if(ok)totalCorrect++;updateStats()}
+function toggleA(b){let c=b.closest('.card'),r=c.querySelector('.answer-reveal');if(r.classList.contains('show')){r.classList.remove('show');b.textContent='\ud83d\udcdd \u70b9\u51fb\u67e5\u770b\u7b54\u6848'}else{r.classList.add('show');b.textContent='\ud83d\udd3d \u9690\u85cf\u7b54\u6848'}}
+function scrollToSec(id){document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
+function resetAll(){if(!confirm('\u786e\u5b9a\u91cd\u7f6e\u5168\u90e8\u7b54\u6848\uff1f'))return;document.querySelectorAll('.card').forEach(c=>c.classList.remove('done','wrong-card'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('disabled','correct-answer','wrong-answer'));document.querySelectorAll('.result-msg').forEach(m=>{m.classList.remove('show','correct','wrong');m.textContent=''});document.querySelectorAll('.explanation').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.answer-reveal').forEach(r=>r.classList.remove('show'));document.querySelectorAll('.toggle-btn').forEach(b=>{if(b.textContent.includes('\u9690\u85cf'))b.textContent='\ud83d\udcdd \u70b9\u51fb\u67e5\u770b\u7b54\u6848'});totalCorrect=0;totalDone=0;updateStats()}
+updateStats();
+window.addEventListener('scroll',()=>{let s=['sec1','sec3'],c='sec1';s.forEach(id=>{let e=document.getElementById(id);if(e&&e.getBoundingClientRect().top<=200)c=id});document.querySelectorAll('.nav-btn').forEach((b,i)=>{b.classList.toggle('active',s[i]===c)})});
+</script>
+</body>
+</html>
