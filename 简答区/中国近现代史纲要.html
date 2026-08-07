@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国近现代史纲要 —— 简答/论述</title>
+<style>
+  :root {
+    --bg: #fdf6ec;
+    --card-bg: #fffef9;
+    --text: #3e3232;
+    --text-secondary: #6b5e5e;
+    --border: #e0d5c1;
+    --accent: #8b4513;
+    --accent-light: #c4956a;
+    --tag-jian: #e8f0e0;
+    --tag-jian-text: #4a7c3f;
+    --tag-lun: #f0e6e0;
+    --tag-lun-text: #8b4513;
+    --chapter-bg: linear-gradient(135deg, #8b4513 0%, #a0522d 50%, #6b3410 100%);
+    --divider: #d4c4a8;
+    --point-bg: #faf6ef;
+    --point-border: #e8ddcc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 40px 20px 80px;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* ===== 顶部标题 ===== */
+  .header {
+    text-align: center;
+    padding: 48px 24px 36px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--divider);
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .header .subtitle {
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+  }
+
+  /* ===== 章节标题 ===== */
+  .chapter-title {
+    position: relative;
+    margin: 48px 0 28px;
+    padding: 20px 28px;
+    background: var(--chapter-bg);
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(139,69,19,0.25);
+  }
+  .chapter-title .ch-num {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.85;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .chapter-title h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== 题目卡片 ===== */
+  .question-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+  }
+  .question-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .q-index {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .q-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .q-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+  }
+  .q-tag.jian {
+    background: var(--tag-jian);
+    color: var(--tag-jian-text);
+  }
+  .q-tag.lun {
+    background: var(--tag-lun);
+    color: var(--tag-lun-text);
+  }
+
+  .q-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  /* ===== 展开按钮 ===== */
+  .toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 14px 0 0 0;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: #faf6ef;
+    border: 1px solid var(--point-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .toggle-btn:hover {
+    background: #f0e6d6;
+    border-color: var(--accent-light);
+  }
+  .toggle-btn .arrow-icon {
+    display: inline-block;
+    transition: transform 0.2s;
+    font-size: 12px;
+  }
+  .toggle-btn.open .arrow-icon {
+    transform: rotate(90deg);
+  }
+
+  /* ===== 答案区 ===== */
+  .answer {
+    display: none;
+    font-size: 15px;
+    color: var(--text);
+    margin-top: 14px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--divider);
+  }
+  .answer.show {
+    display: block;
+  }
+  .answer p {
+    margin-bottom: 10px;
+  }
+  .answer ul, .answer ol {
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+  .answer li {
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .answer li::marker {
+    color: var(--accent-light);
+    font-weight: 700;
+  }
+  .answer .highlight {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .answer .point-box {
+    background: var(--point-bg);
+    border: 1px solid var(--point-border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 10px 0;
+  }
+  .answer .point-box ol {
+    margin-bottom: 0;
+  }
+  .answer .point-box ol li {
+    margin-bottom: 6px;
+  }
+  .answer .point-box ol li:last-child {
+    margin-bottom: 0;
+  }
+
+  .answer .memorize {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: #f5f0e8;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .answer .memorize .label {
+    font-weight: 600;
+    color: var(--accent);
+    margin-right: 4px;
+  }
+
+  .answer strong {
+    color: var(--accent);
+  }
+
+  /* ===== 关系图 ===== */
+  .relation-diagram {
+    background: #faf6ef;
+    border: 1px solid var(--point-border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .relation-diagram .rd-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+  .relation-diagram .rd-item {
+    margin-bottom: 10px;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent-light);
+  }
+  .relation-diagram .rd-item .formula {
+    font-weight: 700;
+    color: #8b4513;
+    margin-bottom: 2px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #8b4513;
+    color: #fff;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(139,69,19,0.3);
+    z-index: 999;
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 20px 12px 60px; }
+    .question-card { padding: 20px 18px; }
+    .chapter-title { padding: 16px 20px; }
+    .chapter-title h2 { font-size: 19px; }
+    .header h1 { font-size: 24px; }
+  }
+
+  /* ===== 返回按钮 ===== */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card-bg);
+    transition: all 0.15s;
+    margin-bottom: 12px;
+  }
+  .back-link:hover {
+    background: #f5ede0;
+    border-color: var(--accent-light);
+    transform: translateX(-3px);
+  }
+  .back-link .arrow { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+  <!-- 返回按钮 -->
+  <a class="back-link" href="index.html">
+    <span class="arrow">←</span> 返回简答区
+  </a>
+
+  <!-- 头部 -->
+  <div class="header">
+    <h1>中国近现代史纲要</h1>
+    <div class="subtitle">简答题 &middot; 论述题 &middot; 复习笔记</div>
+  </div>
+
+  <!-- ==================== 第一章 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">第一章</div>
+    <h2>进入近代后中华民族的磨难与抗争</h2>
+  </div>
+
+  <!-- 1. 中国封建社会的衰落（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">中国封建社会的衰落</div>
+    <div class="answer">
+      <p>自公元前5世纪的战国时代到1840年鸦片战争，中国的封建社会前后延续了两千多年。</p>
+      <ul>
+        <li><strong>经济上</strong>：封建地主土地所有制经济占主导地位。以个体家庭为单位并与家庭手工业牢固结合的小农经济是基本生产结构，自给自足的自然经济占主要地位。</li>
+        <li><strong>政治上</strong>：实行高度中央集权的封建君主专制制度。</li>
+        <li><strong>文化上</strong>：自汉武帝确立独尊儒术的政策，儒家思想开始成为中国封建社会的正统思想。</li>
+        <li><strong>社会结构上</strong>：族权和政权相结合的封建宗法等级制度，核心是宗族家长制，突出君权、父权、夫权。</li>
+      </ul>
+      <div class="memorize"><span class="label">助记：</span>地主专制儒家宗法</div>
+    </div>
+  </div>
+
+  <!-- 2. 中国封建社会的基本特点（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">中国封建社会的基本特点</div>
+    <div class="answer">
+      <ol>
+        <li><strong>经济上</strong>，封建土地所有制占主导地位。</li>
+        <li><strong>政治上</strong>，实行高度中央集权的封建君主专制制度。</li>
+        <li><strong>文化上</strong>，以儒家思想为核心。</li>
+        <li><strong>社会结构上</strong>，是族权与政权相结合的封建宗法等级制度。</li>
+      </ol>
+      <div class="memorize"><span class="label">补充：</span>中国封建社会的主要矛盾是地主阶级与农民阶级的矛盾。乾隆朝后期，清王朝由盛转衰。</div>
+    </div>
+  </div>
+
+  <!-- 3. 近代中国半殖民地半封建社会的特点（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">近代中国半殖民地半封建社会的特点</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li><strong>资本—帝国主义</strong>不但逐步操纵了中国的财政和经济命脉，而且逐步控制了中国的政治，日益成为支配中国的决定性力量。</li>
+          <li>中国的<strong>封建势力同外国侵略势力相勾结</strong>，成为外国列强压迫、奴役中国人民的社会基础和统治支柱。</li>
+          <li>中国自然经济的基础虽然遭到破坏，但是<strong>封建剥削制度的根基</strong>即封建地主的土地所有制依然在广大地区内保持着，成为中国走向现代化和民主化的严重障碍。</li>
+          <li>中国资本主义有所发展，并在政治、文化生活中起了一定的作用，但没有成为中国社会经济的主体，在帝国主义和封建主义的压迫下，<strong>发展缓慢、力量软弱</strong>，大部分与外国资本—帝国主义和本国封建主义都有或多或少的联系。</li>
+          <li>由于近代中国处于外国列强的斗争和间接统治之中，加上中国地域广大，以及地方性农业经济基础上形成地方割据势力的存在，近代中国各地区经济、政治和文化发展<strong>极不平衡</strong>。后来外国列强还分别支持不同政治势力以分裂中国，使中国处于<strong>不统一状态</strong>。</li>
+          <li>在外国列强和封建主义的双重压迫下（后来加上官僚资本主义），中国的广大人民尤其是农民日益贫困化以致大批破产，过着<strong>饥寒交迫和毫无政治权利</strong>的生活。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">记忆点：</span>政治：受制于人 / 互相勾结 &nbsp;|&nbsp; 经济：封建土地所有制仍在 / 资本主义夹缝生存 &nbsp;|&nbsp; 国家：不平衡、不统一 &nbsp;|&nbsp; 人民：三重压迫、艰难困苦</div>
+    </div>
+  </div>
+
+  <!-- 4. 近代中国工人阶级产生的过程（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">近代中国工人阶级产生的过程</div>
+    <div class="answer">
+      <ol>
+        <li>中国工人阶级<strong>最早出现于19世纪40至50年代外国资本主义在华企业中</strong>，因此它是先于中国的资产阶级而产生的。</li>
+        <li><strong>19世纪60年代后</strong>洋务派创办的大型军用工业和民用企业，又产生了一批产业工人。</li>
+        <li><strong>70年代以后</strong>的中国民族企业，又雇用了一批工人。</li>
+      </ol>
+      <div class="memorize"><span class="label">记忆点：</span>先外国 → 后洋务 → 再民族企业</div>
+    </div>
+  </div>
+
+  <!-- 5. 近代中国工人阶级的特点（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">近代中国工人阶级的特点</div>
+    <div class="answer">
+      <ol>
+        <li><strong>深受三重压迫</strong>（帝国主义、封建势力、资产阶级），劳动条件差，劳动时间长，工资待遇低，又毫无政治权利，<strong>革命性最强</strong>。因此它是近代中国最革命的阶级。</li>
+        <li><strong>人数虽少，但相对集中</strong>，便于形成革命的力量和传播先进思想。</li>
+        <li><strong>主要由破产农民和家庭手工业者转化而来</strong>，同农民有着天然的联系，便于结成工农联盟。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 6. 近代中国的社会主要矛盾和两大历史任务（论述）+ 两对主要矛盾之间的关系 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">近代中国的社会主要矛盾和两大历史任务</div>
+    <div class="answer">
+      <p><strong>占支配地位的主要矛盾：</strong>帝国主义和中华民族的矛盾，封建主义和人民大众的矛盾。其中，<span class="highlight">帝国主义和中华民族的矛盾，是最主要的矛盾。</span></p>
+      <p style="margin-top:12px;"><strong>两大历史任务：</strong></p>
+      <ol>
+        <li>争取<strong>民族独立</strong>和<strong>人民解放</strong>。</li>
+        <li>实现<strong>国家富强</strong>和<strong>人民幸福</strong>。</li>
+      </ol>
+
+      <div class="relation-diagram" style="margin-top:20px;">
+        <div class="rd-title">两对主要矛盾之间的关系（A = 人民 &nbsp; B = 清政府 &nbsp; C = 列强）</div>
+        <div class="rd-item">
+          <div class="formula">① A + B → C（人民与清政府联合对抗列强）</div>
+          <p>人民与清政府能够暂时团结起来共同对敌，阶级矛盾降到次要矛盾，而<strong>民族矛盾上升到主要地位</strong>。</p>
+        </div>
+        <div class="rd-item">
+          <div class="formula">② A → B（人民反对清政府）</div>
+          <p>外国列强同中国清政府勾结，共同镇压中国革命，这时<strong>阶级矛盾上升为主要矛盾</strong>。</p>
+        </div>
+        <div class="rd-item">
+          <div class="formula">③ A → B + C（人民同时反对清政府和列强）</div>
+          <p>国内战争发展直接威胁帝国主义在华利益以及中国封建地主阶级统治时，外国列强往往直接出兵镇压中国人民，援助中国反动派，这时<strong>帝国主义矛盾与阶级矛盾完全公开站在一条战线上</strong>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 列强瓜分中国的图谋失败的原因（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">列强瓜分中国的图谋失败的原因</div>
+    <div class="answer">
+      <ol>
+        <li><strong>帝国主义列强之间的矛盾和相互制约。</strong><br>
+        瓜分中国，变中国为自己的殖民地是外国列强的共同图谋，但是彼此之间又有许多矛盾、冲突，甚至可能爆发战争。因此，列强经过协商，暂缓瓜分中国，保全清政府，以使其成为统治中国的工具，实行"以华制华"。</li>
+        <li><span class="highlight">帝国主义列强不能灭亡和瓜分中国的最根本原因是中国人民进行了不屈不挠的反侵略斗争。</span><br>
+        在义和团反帝爱国运动期间，中国人民以其不畏强暴、敢与敌人血战到底的气概，打击了侵略者，使他们不敢为所欲为地瓜分中国。一个基本的历史事实不容抹杀：<strong>义和团运动在粉碎外国列强瓜分中国的斗争中，发挥了重大作用</strong>，遏制了侵略者瓜分中国的图谋。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 8. 反侵略战争的失败及其原因（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">反侵略战争的失败及其原因</div>
+    <div class="answer">
+      <p>从1840年到1919年，中国人民为反对外来侵略进行了英勇斗争，但都失败了。究其原因：</p>
+      <ol>
+        <li><strong>社会制度的腐败</strong>（<span class="highlight">最根本的原因</span>）。腐朽的清王朝统治者为了自身私利，不惜出卖国家和民族利益，总是把防止人民反抗放在首位，宣扬"防民甚于防寇"，压制、破坏人民群众和爱国官兵的反侵略斗争，导致反侵略失败。例如中法战争"中国不败而败，法国不胜而胜"。</li>
+        <li><strong>经济技术的落后。</strong>进入近代以后，西方资本主义强国经过工业革命，经济和技术飞速发展，而中国经济技术落后的局面没有改变，经济总量较小，工业技术落后，必然导致被动挨打。经济技术的落后，又使中国在武器装备、军队素质、综合实力等方面远远落后于帝国主义列强。</li>
+      </ol>
+    </div>
+  </div>
+
+
+  <!-- ==================== 第二章 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">第二章</div>
+    <h2>不同社会力量对国家出路的早期探索</h2>
+  </div>
+
+  <!-- 1. 太平天国的历史意义（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">太平天国的历史意义</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li>它<strong>沉重打击了封建统治阶级</strong>，强烈撼动了清政府的统治根基。</li>
+          <li>它是<strong>中国旧式农民战争的最高峰</strong>，具有了不同于以往农民战争的新的历史特点。</li>
+          <li>太平天国起义<strong>冲击了孔子和儒家经典的正统权威</strong>。</li>
+          <li>太平天国农民战争<strong>有力地打击了外国侵略势力</strong>。</li>
+          <li>在19世纪中叶的亚洲民族解放运动中，太平天国起义是<strong>时间最久、规模最大、影响最深</strong>的一次。它和其他亚洲国家的民族解放运动汇合在一起，冲击了西方殖民主义者在亚洲的统治。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">助记：</span>撼动清基峰旧式，冲击儒孔打外夷，亚解潮中称雄起。</div>
+    </div>
+  </div>
+
+  <!-- 2. 新式学堂包括（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">洋务运动创办的新式学堂包括哪些</div>
+    <div class="answer">
+      <ol>
+        <li><strong>翻译学堂</strong>：培养翻译人才，如1862年创办的<strong>京师同文馆</strong>。</li>
+        <li><strong>工艺学堂</strong>：主要培养电报、铁路、矿务等人才。</li>
+        <li><strong>军事学堂</strong>：如<strong>福州船政学堂</strong>、<strong>天津武备学堂</strong>等。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 3. 洋务运动的历史作用（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">洋务运动的历史作用</div>
+    <div class="answer">
+      <ol>
+        <li><strong>在客观上促进了中国早期工业和民族资本主义的发展。</strong><br>
+        洋务派继承了魏源的"师夷长技以制夷"的思想，以"自强"、"求富"为目标，通过所掌握的国家权力集中力量发展军事工业，同时也发展若干民营企业。</li>
+        <li><strong>成为中国近代教育的开端。</strong><br>
+        洋务派开办了一系列学堂，派出了最早的官派留学生。</li>
+        <li><strong>传播了新知识，打开了人们的眼界。</strong><br>
+        洋务派翻译了一批西学书籍，介绍西方近代的科学文化知识。</li>
+        <li><strong>引起了社会风气和价值观念的变化。</strong><br>
+        中国传统的重农抑商观念受到很大的冲击，商人、商业在社会中的地位明显提高。</li>
+      </ol>
+      <div class="memorize"><span class="label">记忆点：</span>工（工业）资（资本主义）教（教育）气（风气）观知识</div>
+    </div>
+  </div>
+
+  <!-- 4. 洋务运动失败的原因（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">洋务运动失败的原因</div>
+    <div class="answer">
+      <ol>
+        <li><strong>洋务运动具有封建性。</strong><br>
+        洋务运动的指导思想是"中学为体，西学为用"，即在维护封建的上层建筑、经济基础的条件下学习西方发展一些近代企业，目的是维持行将毁灭的清朝封建统治。</li>
+        <li><strong>洋务运动对西方列强具有依赖性。</strong><br>
+        在中国半殖民地半封建进程日益发展的情况下，洋务派官员越是积极引进西方的"船坚炮利"，也就越加深了对西方列强的依赖性。</li>
+        <li><strong>洋务企业的管理具有腐朽性。</strong><br>
+        洋务派所办的新式企业在管理方面仍采取封建衙门式的管理方法，使洋务企业缺乏应有的生机和活力。</li>
+      </ol>
+      <div class="memorize"><span class="label">标志：</span>中日甲午战争中，洋务派经营多年的<strong>北洋海军全军覆没</strong>，标志着洋务运动的失败。</div>
+    </div>
+  </div>
+
+  <!-- 5. 维新派宣传变法维新主张的行动（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">维新派主要通过以下行动宣传变法维新主张</div>
+    <div class="answer">
+      <ol>
+        <li><strong>向皇帝上书。</strong><br>
+        1895年康有为联合在京参加会试的举人共同发起的<strong>"公车上书"</strong>。</li>
+        <li><strong>著书立说。</strong><br>
+        康有为：《新学伪经考》、《孔子改制考》、《人类公理》；<br>
+        梁启超：《变法通义》；<br>
+        谭嗣同：《仁学》；<br>
+        严复：《天演论》。</li>
+        <li><strong>介绍外国的变法。</strong><br>
+        康有为向光绪皇帝进呈了《日本变政考》等书。</li>
+        <li><strong>办学会、办报纸、设学堂。</strong><br>
+        影响较大的报纸：梁启超任主笔的上海《时务报》、严复主办的天津《国闻报》、湖南《湘报》。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 6. 维新派和守旧派的论战主要内容（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">维新派和守旧派的论战 —— 主要内容</div>
+    <div class="answer">
+      <p>围绕<strong>三个问题</strong>展开：</p>
+      <ol>
+        <li><strong>要不要变法。</strong></li>
+        <li><strong>要不要兴民权、设议院，实行君主立宪。</strong></li>
+        <li><strong>要不要废八股、改科举和兴西学。</strong></li>
+      </ol>
+      <div class="memorize" style="margin-top:8px;"><span class="label">重要补充：</span>张之洞的《劝学篇》宣扬"中学为体，西学为用"，成为对抗维新派的代表作。维新派和守旧派的论战，实质上是<strong>资产阶级思想与封建主义思想在中国的第一次正面交锋</strong>。</div>
+    </div>
+  </div>
+
+  <!-- 7. 戊戌维新运动的意义（简答/论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">戊戌维新运动的意义</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li>戊戌维新运动是一次<strong>爱国救亡运动</strong>。维新派在瓜分危机迫在眉睫的关头挺身而出，掀起了变法图强、维护民族独立和发展资本主义的救国运动，反映了时代的要求。</li>
+          <li>戊戌维新运动是一场<strong>资产阶级性质的政治改革运动</strong>。维新派鼓吹民权，提倡设议院，主张用君主立宪制来取代君主专制制度，在一定程度上冲击了封建专制制度。</li>
+          <li>戊戌维新运动是一场<strong>思想启蒙运动</strong>。维新派大力传播西方的社会政治学说，有利于民主主义思想在中国的传播。在维新派的推动下，形成广泛的文化革新运动，并对近代教育发展起了积极作用。</li>
+          <li>戊戌维新运动在<strong>改革社会风气</strong>方面也有不可低估的意义。维新派主张革除吸食鸦片及妇女缠足等陋习，主张"剪辫易服"，倡导讲文明、重卫生、反跪拜等。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">助记：</span>戊戌爱国又救亡，资改思启风气扬。</div>
+    </div>
+  </div>
+
+  <!-- 8. 戊戌维新运动失败的原因和教训（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">戊戌维新运动失败的原因和教训</div>
+    <div class="answer">
+      <p><strong>失败原因：</strong></p>
+      <p>戊戌维新运动失败的主要原因在于<strong>维新派自身的局限</strong>和<strong>以慈禧太后为首的强大的守旧势力的反对</strong>。</p>
+      <ul>
+        <li><strong>客观上看</strong>：戊戌维新运动的失败是由于封建势力的强大和资产阶级的弱小。当时民族资本主义经济力量还十分微弱，民族资产阶级的社会基础相当狭窄。面对以慈禧太后为首的强大的守旧势力的反对，他们只能把自己实行改革的全部希望寄托在一个没有实权的光绪皇帝身上。</li>
+        <li><strong>主观上看</strong>：戊戌维新运动的失败，是由于维新派的局限性和策略错误。</li>
+      </ul>
+      <p style="margin-top:12px;"><strong>历史教训：</strong></p>
+      <p>戊戌维新作为中国民族资产阶级登上政治舞台的<strong>第一次表演</strong>，以悲剧性的失败而告终，不仅暴露了这个阶级的软弱性，同时也说明在半殖民地半封建的旧中国，企图通过统治者走自上而下的改良道路，是<strong>根本行不通的</strong>。要想争取国家走上独立、民主、富强的道路，就必须用革命的手段，推翻帝国主义与封建主义联合统治的半殖民地半封建的社会制度。</p>
+    </div>
+  </div>
+
+  <!-- 9. 维新派本身的弱点和局限性（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">9</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">维新派本身的弱点和局限性</div>
+    <div class="answer">
+      <ol>
+        <li><strong>不敢否定封建主义。</strong><br>
+        他们在政治上不敢根本否定封建君主制度，在经济上却要求发展民族资本主义。</li>
+        <li><strong>对帝国主义抱有幻想。</strong><br>
+        他们虽然在大声疾呼救亡图存，却又幻想西方列强能帮助自己变法维新。</li>
+        <li><strong>脱离人民群众。</strong><br>
+        维新派的活动范围基本上局限于官僚士大夫和知识分子。</li>
+      </ol>
+      <div class="memorize"><span class="label">助记：</span>不否封建 &nbsp; 帝幻离群</div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div style="text-align:center; padding: 48px 0 24px; color: var(--text-secondary); font-size: 13px;">
+    <p>—— 简答区 · 中国近现代史纲要 ——</p>
+    <a class="back-link" href="index.html" style="margin-top:12px; display:inline-flex;">
+      <span class="arrow">←</span> 返回简答区
+    </a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+(function() {
+  // 为每道题注入 — 展开答案 — 按钮，答案默认隐藏
+  var cards = document.querySelectorAll('.question-card');
+  cards.forEach(function(card) {
+    var qText = card.querySelector('.q-text');
+    var answer = card.querySelector('.answer');
+    if (!qText || !answer) return;
+
+    // 创建按钮
+    var btn = document.createElement('button');
+    btn.className = 'toggle-btn';
+    btn.innerHTML = '— 展开答案 —';
+
+    // 插入到 q-text 之后、answer 之前
+    qText.insertAdjacentElement('afterend', btn);
+
+    // 点击切换
+    btn.addEventListener('click', function() {
+      var isOpen = answer.classList.toggle('show');
+      btn.classList.toggle('open', isOpen);
+      btn.innerHTML = isOpen ? '— 收起答案 —' : '— 展开答案 —';
+    });
+  });
+
+  // Toast
+  window.showToast = function(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function(){ t.style.display = 'none'; }, 1800);
+  };
+
+  // Keyboard: shift+数字 跳转章节
+  document.addEventListener('keydown', function(e) {
+    if (e.shiftKey && e.key >= '1' && e.key <= '9') {
+      var chapterTitles = document.querySelectorAll('.chapter-title');
+      var ch = parseInt(e.key);
+      if (ch <= chapterTitles.length) {
+        chapterTitles[ch - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('跳转至第' + ch + '章');
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
