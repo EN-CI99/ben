@@ -68,6 +68,30 @@
     color: #fff;
     box-shadow: 0 4px 16px rgba(139,69,19,0.25);
   }
+
+  /* ===== 浮动章节指示器 ===== */
+  .chapter-indicator {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: rgba(139,69,19,0.92);
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 16px rgba(139,69,19,0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    white-space: nowrap;
+  }
+  .chapter-indicator.show {
+    opacity: 1;
+  }
   .chapter-title .ch-num {
     font-size: 13px;
     font-weight: 500;
@@ -317,12 +341,13 @@
     transform: translateX(-3px);
   }
   .back-link .arrow { font-size: 18px; }
-}
+
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
+<div class="chapter-indicator" id="chapterIndicator"></div>
 
 <div class="container">
 
@@ -920,6 +945,388 @@
     </div>
   </div>
 
+  <!-- ==================== 第四章 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">第四章</div>
+    <h2>中国共产党成立和中国革命新局面</h2>
+  </div>
+
+  <!-- 1. 十月革命推动中国先进分子的思想转变（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">十月革命是怎样推动中国先进分子把目光从西方转向东方，从资产阶级民主主义转向社会主义的呢？</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li><strong>国情相似，具有特殊吸引力。</strong>十月革命发生在其国情与中国相同（封建压迫严重）或近似（经济文化落后）的俄国，因而对中国先进分子具有特殊吸引力。</li>
+          <li><strong>社会主义俄国以平等态度对待中国。</strong>十月革命诞生的社会主义俄国号召反对帝国主义，并以新的平等的态度对待中国，有力推动了社会主义思想在中国的传播。</li>
+          <li><strong>新的革命方法的启示。</strong>十月革命中俄国工人、农民和士兵群众的广泛发动并由此赢得胜利的事实，给予中国先进知识分子新的革命方法的启示，推动他们去研究这个革命所遵循的主义。</li>
+        </ol>
+      </div>
+      <p>这样，在十月革命后、五四运动前后的中国思想界，就产生了一批赞成俄国十月社会主义革命、具有初步共产主义思想的知识分子。李大钊最先由民主主义者转变为共产主义者，在中国大地率先举起马克思主义旗帜。</p>
+    </div>
+  </div>
+
+  <!-- 2. 五四运动的历史特点和历史意义（简答、论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">五四运动的历史特点和历史意义</div>
+    <div class="answer">
+      <p><strong>就特点看：</strong></p>
+      <p>五四运动是一场以先进青年知识分子为先锋、广大人民群众参加的彻底反帝反封建的伟大爱国革命运动，是一场中国人民为拯救民族危亡、捍卫民族尊严、凝聚民族力量而掀起的伟大社会革命运动，是一场传播新思想新文化新知识的伟大思想启蒙运动和新文化运动，以磅礴之力鼓动了中国人民和中华民族实现民族复兴的志向和信心。</p>
+      <p style="margin-top:10px;"><strong>就意义看：</strong></p>
+      <div class="point-box">
+        <ol>
+          <li>五四运动是<strong>中国旧民主主义革命走向新民主主义革命的转折点</strong>，在近代以来中华民族追求民族独立和发展进步的历史进程中具有里程碑意义。</li>
+          <li>五四运动以全民族的力量高举起爱国主义的伟大旗帜，孕育了以<strong>爱国、进步、民主、科学</strong>为主要内容的伟大五四精神，其<strong>核心是爱国主义</strong>。</li>
+          <li>五四运动以全民族的行动激发了<strong>追求真理、追求进步的伟大觉醒</strong>。</li>
+          <li>五四运动以全民族的搏击培育了<strong>永久奋斗的伟大传统</strong>。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">补充：</span>五四运动的直接导火索是巴黎和会上中国外交的失败。</div>
+    </div>
+  </div>
+
+  <!-- 3. 早期信仰马克思主义的人物有三种类型（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">早期信仰马克思主义的人物有三种类型</div>
+    <div class="answer">
+      <ol>
+        <li><strong>新文化运动的精神领袖</strong>，主要代表人物是<strong>李大钊、陈独秀</strong>。</li>
+        <li><strong>五四爱国运动的左翼骨干</strong>，主要代表为<strong>毛泽东、周恩来</strong>等。</li>
+        <li><strong>一部分原中国同盟会会员、辛亥革命时期的活动家</strong>，其代表为<strong>董必武</strong>等。</li>
+      </ol>
+      <div class="memorize"><span class="label">助记：</span>领袖李大钊独秀，骨干毛周左翼走，同盟会员董必武。</div>
+    </div>
+  </div>
+
+  <!-- 4. 中国早期马克思主义思想运动的历史特点（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">中国早期马克思主义思想运动的历史特点</div>
+    <div class="answer">
+      <ol>
+        <li><strong>重视对马克思主义基本理论的学习</strong>，明确地同第二国际的社会民主主义划清界限。</li>
+        <li><strong>注意从中国的实际出发</strong>，学习、运用马克思主义。</li>
+        <li><strong>开始提出知识分子应当同劳动群众相结合</strong>的思想。</li>
+      </ol>
+      <div class="memorize"><span class="label">助记：</span>学理论、划界限，重实际、用马义，知劳结合是方向。</div>
+    </div>
+  </div>
+
+  <!-- 5. 中国共产党第一次全国代表大会（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">中国共产党第一次全国代表大会</div>
+    <div class="answer">
+      <p>1921年7月23日，中国共产党第一次全国代表大会在上海举行，标志着中国共产党的成立。</p>
+      <div class="point-box">
+        <ol>
+          <li><strong>纲领与决议：</strong>大会通过了《中国共产党第一个纲领》和《中国共产党第一个决议》。确定党的名称为<strong>中国共产党</strong>；党的纲领是：以无产阶级革命军队推翻资产阶级，采用无产阶级专政以达到阶级斗争的目的——消灭阶级、废除资本私有制以及联合共产国际等；规定了党员条件和党的纪律等；规定党成立后的<strong>中心任务是开展工人运动</strong>，以共产主义精神教育工人。</li>
+          <li><strong>领导机构：</strong>大会选举产生了由<strong>陈独秀、张国焘、李达</strong>三人组成的中央局作为党的领导机构，陈独秀担任中央局书记。</li>
+          <li><strong>历史意义：</strong>中共一大宣告了中国共产党的成立。</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 中国共产党成立的历史特点和意义（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags">
+        <span class="q-tag lun">论述</span>
+      </div>
+    </div>
+    <div class="q-text">中国共产党成立的历史特点和意义</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li><strong>它标志着中国革命终于有了一个坚强的领导核心。</strong><br>中国共产党不仅代表着中国工人阶级的利益，而且代表着中国人民和中华民族的利益。它的成立使中国革命有了可信赖的组织者和领导者，使中国工人阶级有了自己的司令部。</li>
+          <li><strong>中国革命从此有了一个科学的指导思想。</strong><br>中国共产党以马列主义基本原理观察和分析中国的问题，为中国人民指明了斗争的目标、革命的前途和走向胜利的道路。</li>
+          <li><strong>沟通了中国革命与世界革命的联系。</strong><br>把中华民族的解放运动同世界无产阶级社会主义革命运动相联结并成为其中的一部分，使中国革命有了新的前途。</li>
+        </ol>
+      </div>
+      <p>总之，正如毛泽东指出：<strong>自从有了中国共产党，中国革命的面目就焕然一新了。</strong></p>
+    </div>
+  </div>
+
+  <!-- 7. 反帝反封建革命纲领的制定（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">反帝反封建革命纲领的制定（中共二大）</div>
+    <div class="answer">
+      <p>1922年7月，中国共产党第二次全国代表大会在上海召开。</p>
+      <p style="margin-top:8px;"><strong>纲领内容：</strong></p>
+      <ul>
+        <li><strong>最高纲领：</strong>实现社会主义、共产主义。</li>
+        <li><strong>最低纲领（民主革命阶段纲领）：</strong>
+          <ol>
+            <li>消除内乱，打倒军阀，建设国内和平；</li>
+            <li>推翻国际帝国主义的压迫，达到中华民族完全独立；</li>
+            <li>统一中国为真正的民主共和国。</li>
+          </ol>
+        </li>
+      </ul>
+      <p style="margin-top:8px;">大会还提出了"到群众中去"，组成一个大的"群众党"的任务（群众路线）。</p>
+      <p><strong>意义：</strong>中共二大在中国近现代历史上<span class="highlight">第一次明确提出了反帝反封建的民主革命纲领</span>，解决了分清敌友这个革命的首要问题。</p>
+    </div>
+  </div>
+
+  <!-- 8. 中共三大（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">中共三大</div>
+    <div class="answer">
+      <p>1923年6月，中国共产党在<strong>广州</strong>召开第三次全国代表大会。</p>
+      <ul>
+        <li>会议集中讨论了<strong>建立革命统一战线的问题</strong>，决定全体共产党员以<strong>个人名义加入国民党</strong>。</li>
+        <li>同时强调党必须在<strong>政治上、思想上、组织上保持自己的独立性</strong>。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>意义：</strong>中共三大正确制定了建立革命统一战线的方针政策，有力推进了<strong>第一次国共合作</strong>的形成。</p>
+      <div class="memorize"><span class="label">补充：</span>1924年1月国民党一大，新三民主义成为国共合作的政治基础，标志着第一次国共合作正式形成。</div>
+    </div>
+  </div>
+
+  <!-- 9. 没有中国共产党，不会有这场大革命（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">9</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">没有中国共产党，不会有这场大革命。这是因为：</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li>大革命是在<strong>反对帝国主义、反对军阀</strong>的政治口号下进行的。而提出这个口号的，正是<strong>中国共产党</strong>。</li>
+          <li>大革命是在以<strong>国共合作为基础的统一战线</strong>的组织形式下进行的。而中国共产党正是<strong>国共合作的倡导者和统一战线的组织者</strong>。</li>
+          <li>大革命是近代中国历史上<strong>空前广泛而深刻的群众运动</strong>。而中国共产党正是<strong>人民群众的主要发动者和组织者</strong>。</li>
+        </ol>
+      </div>
+      <p>大革命的主要斗争形式是革命战争。共产党人不仅帮助和推动了国民革命军的建立，而且在军队中进行了卓有成效的政治工作，共产党员在战斗中更是身先士卒，起着先锋作用和表率作用。</p>
+    </div>
+  </div>
+
+  <!-- ==================== 第五章 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">第五章</div>
+    <h2>中国革命的新道路</h2>
+  </div>
+
+  <!-- 1. 国民党政府一党专政和军事独裁统治（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">国民党政府一党专政和军事独裁统治</div>
+    <div class="answer">
+      <p>国民党所实行的是代表<strong>地主阶级、买办性大资产阶级</strong>利益的一党专政和军事独裁统治。1928年10月通过《训政纲领》，彻底废除议会制度。具体表现：</p>
+      <ol>
+        <li><strong>军事上：</strong>建立庞大的军队和全国性特务系统，镇压人民和消灭异己力量。</li>
+        <li><strong>行政上：</strong>大力推行<strong>保甲制度</strong>，十户为甲，十甲为保，控制人民、禁止革命活动。</li>
+        <li><strong>文化上：</strong>厉行<strong>文化专制主义</strong>，控制舆论，剥夺人民的言论和出版自由。</li>
+      </ol>
+      <div class="memorize"><span class="label">助记：</span>军务保文</div>
+    </div>
+  </div>
+
+  <!-- 2. 南昌起义的意义（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">南昌起义的意义</div>
+    <div class="answer">
+      <p>1927年8月1日，在以周恩来为书记的前敌委员会领导下，贺龙、叶挺、朱德、刘伯承等率领部队在南昌起义。</p>
+      <div class="point-box">
+        <ol>
+          <li>打响了<strong>武装反抗国民党反动统治的第一枪</strong>，体现了中国共产党人前赴后继的革命精神。</li>
+          <li>成为共产党<strong>独立领导革命战争、创建人民军队和武装夺取政权</strong>的伟大开端。</li>
+          <li>揭开了<strong>土地革命战争</strong>的序幕。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">口诀：</span>第一枪、开端、序幕</div>
+    </div>
+  </div>
+
+  <!-- 3. 三湾改编（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">三湾改编</div>
+    <div class="answer">
+      <p>1927年9月29日，毛泽东在江西永新县三湾村对秋收起义部队进行改编。</p>
+      <div class="point-box">
+        <ol>
+          <li>确立<strong>党对军队的绝对领导</strong>：将党的<strong>支部建在连上</strong>。</li>
+          <li>将原有的一个师缩编为一个团。</li>
+          <li>成立各级士兵委员会，部队内部实行<strong>民主管理</strong>。</li>
+        </ol>
+      </div>
+      <p>三湾改编是<strong>建设无产阶级领导的新型人民军队的重要开端</strong>。</p>
+    </div>
+  </div>
+
+  <!-- 4. 井冈山农村革命根据地创建的意义（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">井冈山农村革命根据地创建的意义</div>
+    <div class="answer">
+      <p>1927年10月，毛泽东率领部队抵达江西宁冈县茅坪，开始了创建井冈山农村革命根据地的斗争。</p>
+      <div class="point-box">
+        <ol>
+          <li>点燃了<strong>"工农武装割据"的星星之火</strong>，为共产党领导的其他各地起义武装树立了榜样。</li>
+          <li>从实践上开辟了一条在敌我力量十分悬殊的情况下，共产党深入农村<strong>保存和发展革命力量的正确道路</strong>。这条道路代表了1927年革命失败后中国革命发展的正确方向。</li>
+          <li>开辟了<strong>农村包围城市、武装夺取政权</strong>这条前人没走过的正确道路。</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 古田会议（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">古田会议</div>
+    <div class="answer">
+      <p>1929年12月，红四军党的第九次代表大会在福建上杭县古田村召开。</p>
+      <div class="point-box">
+        <ol>
+          <li>确立了<strong>思想建党、政治建军</strong>原则。</li>
+          <li>规定红军必须<strong>绝对服从共产党的领导</strong>，必须担负打仗、筹款和做群众工作的任务。</li>
+          <li>确立了<strong>马克思主义建党建军原则</strong>，创造性地解决了在农村环境中、以农民为主要成分的条件下，如何保持党的无产阶级先锋队性质和建设党领导的新型人民军队的重大问题。</li>
+        </ol>
+      </div>
+      <p>古田会议决议是<strong>中国共产党和红军建设的纲领性文献</strong>，是党和人民军队建设史上的<strong>重要里程碑</strong>。</p>
+    </div>
+  </div>
+
+  <!-- 6. 农村革命根据地的建设（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">农村革命根据地的建设</div>
+    <div class="answer">
+      <p>1931年11月，中华苏维埃第一次全国代表大会在江西省瑞金县叶坪村举行。</p>
+      <ul>
+        <li>通过了《<strong>中华苏维埃共和国宪法大纲</strong>》，宣告中华苏维埃共和国临时中央政府成立。毛泽东当选为中央执行委员会主席。</li>
+        <li>中华苏维埃共和国是中国历史上<strong>第一个全国性的工农民主政权</strong>，是中国共产党在局部地区执政的重要尝试。</li>
+        <li>实行<strong>工农兵代表大会制度</strong>，各级苏维埃政府广泛吸收工农群众代表参加政权管理。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. "左"倾错误的原因（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">20世纪30年代前期、中期中国共产党内屡次出现严重"左"倾错误的原因</div>
+    <div class="answer">
+      <p>在土地革命战争前中期，"左"倾错误先后三次在中央领导机关取得统治地位（盲动错误→李立三冒险主义→王明教条主义）。其原因：</p>
+      <div class="point-box">
+        <ol>
+          <li><strong>党的马克思主义理论准备不足</strong>。</li>
+          <li><strong>缺乏实践经验</strong>，对中国的历史状况和社会状况、中国革命的特点和规律不甚了解。</li>
+          <li><strong>不善于把马克思列宁主义与中国实际全面地、正确地结合起来</strong>（共产国际的错误指导也是重要原因）。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">三次错误：</span>1927盲动 → 1930李立三冒险 → 1931-1935王明教条</div>
+    </div>
+  </div>
+
+  <!-- 8. 遵义会议的召开及意义（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">遵义会议的召开及其意义</div>
+    <div class="answer">
+      <p>1935年1月15日至17日，中共中央政治局在遵义召开扩大会议。</p>
+      <p style="margin-top:6px;"><strong>主要内容：</strong></p>
+      <ul>
+        <li>集中全力解决了当时具有决定意义的<strong>军事和组织问题</strong>。</li>
+        <li>批评了博古、李德在第五次反"围剿"中的错误。</li>
+        <li>增选毛泽东为中央政治局常委，成立由<strong>毛泽东、周恩来、王稼祥</strong>组成的新的三人团，全权负责红军军事行动。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>历史意义：</strong></p>
+      <p>遵义会议是<strong>党的历史上一个生死攸关的转折点</strong>。会议<strong>事实上确立了毛泽东在党中央和红军的领导地位</strong>，开始确立以毛泽东为主要代表的马克思主义正确路线在党中央的领导地位，开始形成以毛泽东同志为核心的<strong>第一代中央领导集体</strong>，在最危急关头挽救了党、挽救了红军、挽救了中国革命。</p>
+    </div>
+  </div>
+
+  <!-- 9. 长征的伟大意义（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">9</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">长征的伟大意义</div>
+    <div class="answer">
+      <p>中国工农红军长征是一次<strong>理想信念的伟大远征</strong>，是一次<strong>检验真理的伟大远征</strong>，是一次<strong>唤醒民众的伟大远征</strong>，是一次<strong>开创新局的伟大远征</strong>。</p>
+      <div class="point-box">
+        <ol>
+          <li>长征的胜利，极大地促进了党在<strong>政治上和思想上的成熟</strong>。</li>
+          <li>长征的胜利，是<strong>中国革命转危为安的关键</strong>。毛泽东形象地指出："长征是历史纪录上的第一次，长征是宣言书，长征是宣传队，长征是播种机。"</li>
+          <li>长征宣告了<strong>国民党反动派消灭中国共产党和红军的图谋彻底失败</strong>。</li>
+          <li>宣告了中国共产党和红军肩负民族希望胜利实现了<strong>北上抗日的战略转移</strong>，实现了中国共产党和中国革命事业从挫折走向胜利的伟大转折，开启了为实现民族独立、人民解放而斗争的新的伟大进军。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">助记：</span>党成熟转危安，碎图谋北抗日，大转折大进军</div>
+    </div>
+  </div>
+
   <!-- 底部 -->
   <div style="text-align:center; padding: 48px 0 24px; color: var(--text-secondary); font-size: 13px;">
     <p>—— 简答区 · 中国近现代史纲要 ——</p>
@@ -932,22 +1339,16 @@
 
 <script>
 (function() {
-  // 为每道题注入 — 展开答案 — 按钮，答案默认隐藏
+  // ===== 为每道题注入 — 展开答案 — 按钮 =====
   var cards = document.querySelectorAll('.question-card');
   cards.forEach(function(card) {
     var qText = card.querySelector('.q-text');
     var answer = card.querySelector('.answer');
     if (!qText || !answer) return;
-
-    // 创建按钮
     var btn = document.createElement('button');
     btn.className = 'toggle-btn';
     btn.innerHTML = '— 展开答案 —';
-
-    // 插入到 q-text 之后、answer 之前
     qText.insertAdjacentElement('afterend', btn);
-
-    // 点击切换
     btn.addEventListener('click', function() {
       var isOpen = answer.classList.toggle('show');
       btn.classList.toggle('open', isOpen);
@@ -955,7 +1356,35 @@
     });
   });
 
-  // Toast
+  // ===== 浮动章节指示器 =====
+  var chapterTitles = document.querySelectorAll('.chapter-title');
+  var indicator = document.getElementById('chapterIndicator');
+
+  function updateChapterIndicator() {
+    var currentChapter = null;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    chapterTitles.forEach(function(ct) {
+      if (ct.getBoundingClientRect().top <= 60) {
+        currentChapter = ct;
+      }
+    });
+    if (currentChapter && scrollTop > 200) {
+      var chNum = currentChapter.querySelector('.ch-num');
+      var h2 = currentChapter.querySelector('h2');
+      var text = '';
+      if (chNum) text += chNum.textContent.trim();
+      if (h2) text += '  ' + h2.textContent.trim();
+      indicator.textContent = text;
+      indicator.classList.add('show');
+    } else {
+      indicator.classList.remove('show');
+    }
+  }
+
+  window.addEventListener('scroll', updateChapterIndicator, { passive: true });
+  updateChapterIndicator();
+
+  // ===== Toast =====
   window.showToast = function(msg) {
     var t = document.getElementById('toast');
     t.textContent = msg;
@@ -966,7 +1395,6 @@
   // Keyboard: shift+数字 跳转章节
   document.addEventListener('keydown', function(e) {
     if (e.shiftKey && e.key >= '1' && e.key <= '9') {
-      var chapterTitles = document.querySelectorAll('.chapter-title');
       var ch = parseInt(e.key);
       if (ch <= chapterTitles.length) {
         chapterTitles[ch - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });

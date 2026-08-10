@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>马克思主义基本原理 —— 简答</title>
+<style>
+  :root {
+    --bg: #f5f7fa;
+    --card-bg: #fff;
+    --text: #2c3e50;
+    --text-secondary: #5a6c7d;
+    --border: #d6dde5;
+    --accent: #1a5c8a;
+    --accent-light: #5b9bd5;
+    --tag-jian: #e8f0e0;
+    --tag-jian-text: #4a7c3f;
+    --tag-lun: #f0e6e0;
+    --tag-lun-text: #8b4513;
+    --chapter-bg: linear-gradient(135deg, #1a5c8a 0%, #2e7db5 50%, #13466b 100%);
+    --divider: #ccd5de;
+    --point-bg: #f0f4f8;
+    --point-border: #d6dde5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  .header {
+    text-align: center; padding: 48px 24px 36px;
+    margin-bottom: 40px; border-bottom: 2px solid var(--divider);
+  }
+  .header h1 { font-size: 28px; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
+  .header .subtitle { margin-top: 8px; font-size: 15px; color: var(--text-secondary); letter-spacing: 1px; }
+  .chapter-title {
+    position: relative; margin: 48px 0 28px; padding: 20px 28px;
+    background: var(--chapter-bg); border-radius: 10px; color: #fff;
+    box-shadow: 0 4px 16px rgba(26,92,138,0.25);
+  }
+  .chapter-title .ch-num { font-size: 13px; font-weight: 500; opacity: 0.85; letter-spacing: 2px; }
+  .chapter-title h2 { font-size: 22px; font-weight: 700; margin-top: 4px; letter-spacing: 1px; }
+  .question-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px 30px; margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: box-shadow 0.2s;
+  }
+  .question-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .q-index {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .q-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .q-tag {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    padding: 2px 10px; border-radius: 4px; letter-spacing: 1px;
+  }
+  .q-tag.jian { background: var(--tag-jian); color: var(--tag-jian-text); }
+  .q-tag.lun { background: var(--tag-lun); color: var(--tag-lun-text); }
+  .q-text { font-size: 17px; font-weight: 600; color: var(--accent); line-height: 1.6; margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .toggle-btn {
+    display: inline-flex; align-items: center; gap: 6px; margin: 14px 0 0 0;
+    padding: 7px 18px; font-size: 13px; font-weight: 600; color: var(--accent);
+    background: #f0f4f8; border: 1px solid var(--point-border); border-radius: 6px;
+    cursor: pointer; transition: all 0.15s; user-select: none;
+  }
+  .toggle-btn:hover { background: #e0e8f0; border-color: var(--accent-light); }
+  .answer {
+    display: none; font-size: 15px; color: var(--text);
+    margin-top: 14px; padding-top: 16px; border-top: 1px dashed var(--divider);
+  }
+  .answer.show { display: block; }
+  .answer p { margin-bottom: 10px; }
+  .answer ul, .answer ol { padding-left: 20px; margin-bottom: 10px; }
+  .answer li { margin-bottom: 8px; }
+  .answer li::marker { color: var(--accent-light); font-weight: 700; }
+  .answer .highlight { font-weight: 600; color: var(--accent); }
+  .answer .point-box {
+    background: var(--point-bg); border: 1px solid var(--point-border);
+    border-radius: 6px; padding: 14px 18px; margin: 10px 0;
+  }
+  .answer .point-box ol, .answer .point-box ul { margin-bottom: 0; }
+  .answer .point-box li { margin-bottom: 6px; }
+  .answer .point-box li:last-child { margin-bottom: 0; }
+  .answer .memorize {
+    display: inline-block; margin-top: 8px; font-size: 13px;
+    color: var(--text-secondary); background: #eef1f5;
+    padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border);
+  }
+  .answer .memorize .label { font-weight: 600; color: var(--accent); margin-right: 4px; }
+  .answer strong { color: var(--accent); }
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: #1a5c8a; color: #fff; padding: 10px 28px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(26,92,138,0.3); z-index: 999; display: none;
+  }
+
+  /* ===== 浮动章节指示器 ===== */
+  .chapter-indicator {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: rgba(26,92,138,0.92);
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 16px rgba(26,92,138,0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    white-space: nowrap;
+  }
+  .chapter-indicator.show {
+    opacity: 1;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px; color: var(--accent);
+    text-decoration: none; font-size: 14px; font-weight: 600; padding: 8px 16px;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg);
+    transition: all 0.15s; margin-bottom: 12px;
+  }
+  .back-link:hover { background: #e8ecf2; border-color: var(--accent-light); transform: translateX(-3px); }
+  .back-link .arrow { font-size: 18px; }
+  .card-table {
+    width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0;
+  }
+  .card-table th, .card-table td {
+    border: 1px solid var(--border); padding: 8px 12px; text-align: left;
+  }
+  .card-table th { background: var(--point-bg); color: var(--accent); font-weight: 600; }
+  @media (max-width: 640px) {
+    body { padding: 20px 12px 60px; }
+    .question-card { padding: 20px 18px; }
+    .chapter-title { padding: 16px 20px; }
+    .chapter-title h2 { font-size: 19px; }
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="chapter-indicator" id="chapterIndicator"></div>
+<div class="container">
+
+  <a class="back-link" href="index.html"><span class="arrow">←</span> 返回简答区</a>
+
+  <div class="header">
+    <h1>马克思主义基本原理</h1>
+    <div class="subtitle">简答题 · 复习笔记</div>
+  </div>
+
+  <!-- ==================== 导论 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">导 论</div>
+    <h2>马克思主义基本原理</h2>
+  </div>
+
+  <!-- 1. 马克思主义的科学内涵 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义的科学内涵</div>
+    <div class="answer">
+      <p>马克思主义是由<strong>马克思、恩格斯创立</strong>并为他们的后继者所不断发展的理论体系，</p>
+      <ul>
+        <li>是关于<strong>自然、社会和人类思维发展一般规律</strong>的学说。</li>
+        <li>是关于<strong>社会主义必然代替资本主义、最终实现共产主义</strong>的学说。</li>
+        <li>是关于<strong>无产阶级解放和每个人自由而全面发展</strong>的学说。</li>
+        <li>是<strong>无产阶级政党和社会主义国家的指导思想</strong>。</li>
+        <li>是<strong>指引人民创造美好生活的行动指南</strong>。</li>
+      </ul>
+      <div class="memorize"><span class="label">口诀：</span>马恩创立、三学说、指导思想、行动指南</div>
+      <div class="memorize" style="margin-left:6px;"><span class="label">体系：</span>马哲（科学世界观和方法论）· 马政经（揭示资本主义发展规律）· 科社（核心地位）</div>
+      <div class="memorize" style="margin-left:6px;"><span class="label">口诀：</span>哲观、金鬼、核心科学</div>
+    </div>
+  </div>
+
+  <!-- 2. 马克思主义理论体系 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义理论体系</div>
+    <div class="answer">
+      <p>马克思主义理论体系由三个主要组成部分构成：</p>
+      <ol>
+        <li><strong>马克思主义哲学</strong>——科学的世界观和方法论。</li>
+        <li><strong>马克思主义政治经济学</strong>——揭示了资本主义的发展规律。</li>
+        <li><strong>科学社会主义</strong>——处于<strong>核心地位</strong>。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 3. 马克思主义基本原理 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义基本原理</div>
+    <div class="answer">
+      <p>马克思主义基本原理是对马克思主义<strong>立场、观点、方法</strong>的集中概括，是马克思主义在其形成、发展和运用过程中经过<strong>实践反复检验</strong>而确立起来的具有<strong>普遍真理性</strong>的理论。</p>
+      <p style="margin-top:8px;">具体包括：</p>
+      <ul>
+        <li><strong>基本立场：</strong>根本立足点和出发点。</li>
+        <li><strong>基本观点：</strong>关于自然、社会和人类思维发展一般规律的科学认识；对资本主义社会和社会主义社会发展规律的科学认识；对人类思想成果和社会实践经验的科学总结。</li>
+        <li><strong>基本方法：</strong>实事求是、辩证分析、社会基本矛盾和主要矛盾分析、历史分析、阶级分析、群众路线等方法。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. 直接理论来源 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags">
+        <span class="q-tag jian">重点简答</span>
+      </div>
+    </div>
+    <div class="q-text">马克思主义的直接理论来源</div>
+    <div class="answer">
+      <table class="card-table">
+        <tr><th>组成部分</th><th>理论来源</th><th>代表人物</th><th>助记</th></tr>
+        <tr><td>马克思主义哲学</td><td><strong>德国古典哲学</strong></td><td>黑格尔（辩证法）、费尔巴哈（唯物主义）</td><td>"嘿哈"</td></tr>
+        <tr><td>马克思主义政治经济学</td><td><strong>英国古典政治经济学</strong></td><td>威廉·配第、亚当·斯密、大卫·李嘉图</td><td>"陪思密达"</td></tr>
+        <tr><td>科学社会主义</td><td><strong>英法空想社会主义</strong></td><td>圣西门、傅立叶、欧文</td><td>"胜利哦"</td></tr>
+      </table>
+      <div class="memorize" style="margin-top:8px;"><span class="label">创立条件：</span>客观条件=资本主义经济发展；阶级基础=无产阶级走向自觉（三大工人运动）；主观条件=马恩革命实践与创新</div>
+      <div class="memorize" style="margin-left:6px;"><span class="label">自然科学前提：</span>细胞学说、生物进化论、能量守恒与转化定律 → "细能生""转学生"</div>
+      <div class="memorize" style="margin-left:6px;"><span class="label">三大工人运动：</span>法国里昂工人起义 · 英国宪章运动 · 德国西里西亚纺织工人起义 → 标志无产阶级登台</div>
+    </div>
+  </div>
+
+  <!-- 5. 马克思主义的发展 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义的发展</div>
+    <div class="answer">
+      <p><strong>列宁阶段：</strong></p>
+      <ul>
+        <li>列宁深刻分析了19世纪末20世纪初世界历史条件的变化，指出<strong>经济政治发展的不平衡已成为资本主义发展的绝对规律</strong>。</li>
+        <li>提出<strong>社会主义革命可能在一国或数国首先发生并取得胜利</strong>的论断。</li>
+        <li>1917年领导俄国十月社会主义革命胜利，使社会主义从理想变为现实，<strong>创立了列宁主义</strong>，把马克思主义发展到了新的历史阶段。</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>著作梳理：</strong></p>
+      <div class="point-box">
+        <ul>
+          <li>《德法年鉴》→ 完成从唯心到唯物、从民主到共产的转变</li>
+          <li>《神圣家族》→ 马恩第一部合著</li>
+          <li>《德意志意识形态》→ 首次系统阐述历史唯物主义</li>
+          <li>《共产党宣言》→ <strong>标志着马克思主义公开问世</strong></li>
+          <li>《资本论》→ 马克思</li>
+          <li>《反杜林论》→ 恩格斯全面阐述马克思主义理论体系</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 马克思主义中国化时代化 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags">
+        <span class="q-tag jian">重点简答</span>
+      </div>
+    </div>
+    <div class="q-text">马克思主义中国化时代化</div>
+    <div class="answer">
+      <p>十月革命一声炮响，给中国送来了马克思列宁主义。</p>
+      <ul>
+        <li>1921年中国共产党成立，从成立起就把<strong>马克思列宁主义确立为指导思想</strong>。</li>
+        <li>在不断探索中把马克思主义基本原理同<strong>中国具体实际</strong>相结合、同<strong>中华优秀传统文化</strong>相结合（"两个结合"）。</li>
+        <li>不断推进马克思主义中国化时代化，不断丰富了马克思主义。</li>
+      </ul>
+      <div class="memorize"><span class="label">基本路径：</span>中国化时代化是马克思主义创新发展的基本路径。</div>
+    </div>
+  </div>
+
+  <!-- 7. 马克思主义的理论特征 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags">
+        <span class="q-tag jian">简答</span>
+      </div>
+    </div>
+    <div class="q-text">马克思主义的理论特征</div>
+    <div class="answer">
+      <p>马克思主义具有鲜明的<strong>科学性、人民性、实践性、发展性</strong>，用一句话概括就是<strong>科学性与革命性的统一</strong>。</p>
+      <div class="point-box">
+        <ol>
+          <li><strong>科学性：</strong>本质和规律的正确反映，以辩证唯物主义和历史唯物主义为基础，是马克思主义的突出特征和理论优势。</li>
+          <li><strong>人民性：</strong>人民性是马克思主义的本质属性，人民至上是马克思主义的政治立场。以阶级性为深刻基础。</li>
+          <li><strong>实践性：</strong>从实践中来、到实践中去、在实践中接受检验，实践观点是马克思主义<strong>首要的和基本的观点</strong>。</li>
+          <li><strong>发展性：</strong>马克思主义是不断发展的开放的学说，具有<strong>与时俱进</strong>的理论品质。</li>
+        </ol>
+      </div>
+      <p>其中<strong>革命性</strong>是马克思主义的内在品质，是人民性、实践性和发展性的应有之义和必然要求。</p>
+    </div>
+  </div>
+
+  <!-- 8. 马克思主义的当代价值 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义的当代价值</div>
+    <div class="answer">
+      <p><strong>一、观察当代世界变化的认识工具：</strong></p>
+      <ul>
+        <li>给予我们观察当代世界的<strong>宏大视野</strong></li>
+        <li>给予我们透视时代风云的<strong>锐利目光</strong></li>
+        <li>给予我们展望未来世界的<strong>长远眼光和战略定力</strong></li>
+      </ul>
+      <p style="margin-top:8px;"><strong>二、指引当代中国发展的行动指南：</strong></p>
+      <ul>
+        <li>精神旗帜 · 精神动力 · 行动指南 · 正确思想指引</li>
+        <li>马克思主义不是教条，不提供对一切问题的现成答案，应从客观实际出发，解决我国改革开放和现代化建设中的实际问题。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>三、引领人类社会进步的科学真理：</strong></p>
+      <ul>
+        <li>马克思主义仍然是当今时代的真理</li>
+        <li>人类的未来仍然需要马克思主义的指引</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. 自觉学习和运用马克思主义 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">9</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">自觉学习和运用马克思主义</div>
+    <div class="answer">
+      <p>学习马克思主义理论有助于青年坚定理想信念，树立科学的世界观、人生观和价值观，提高分析和解决问题的能力。</p>
+      <div class="point-box">
+        <ol>
+          <li>努力学习和掌握马克思主义的<strong>基本立场观点方法</strong>。</li>
+          <li>努力学习和掌握马克思主义<strong>中国化时代化的理论成果</strong>。</li>
+          <li>坚持<strong>理论联系实际</strong>的马克思主义学风。</li>
+          <li>自觉将马克思主义<strong>内化于心、外化于行</strong>。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">学习方法：</span>理论联系实际是学习马克思主义的<strong>根本方法</strong>。</div>
+    </div>
+  </div>
+
+  <!-- 10. 学习马克思主义的目的 -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">10</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">学习马克思主义的目的</div>
+    <div class="answer">
+      <ol>
+        <li>树立正确的<strong>世界观、人生观、价值观</strong>。</li>
+        <li>掌握<strong>认识世界和改造世界</strong>的伟大工具。</li>
+        <li>全面提高人的<strong>素质</strong>。</li>
+        <li>指导<strong>中国特色社会主义</strong>伟大实践。</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ==================== 第一章 ==================== -->
+  <div class="chapter-title">
+    <div class="ch-num">第一章</div>
+    <h2>世界的物质性及发展规律</h2>
+  </div>
+
+  <!-- 1. 马克思主义的物质范畴的理论意义（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">1</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">马克思主义的物质范畴具有丰富而深刻的理论意义</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li>坚持了<strong>唯物主义一元论</strong>，同唯心主义一元论和二元论划清了界限。</li>
+          <li>坚持了<strong>能动的反映论和可知论</strong>，批判了不可知论。</li>
+          <li>体现了<strong>唯物论和辩证法的统一</strong>，克服了形而上学唯物主义的缺陷。</li>
+          <li>体现了<strong>唯物主义自然观与唯物主义历史观的统一</strong>，为彻底的唯物主义奠定了理论基础。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">补充：</span>物质的唯一特性是客观实在性；物质的根本属性是运动；时间是一维性，空间是三维性。</div>
+    </div>
+  </div>
+
+  <!-- 2. 意识对物质具有反作用（简答 重点） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">2</div>
+      <div class="q-tags"><span class="q-tag jian">重点简答</span></div>
+    </div>
+    <div class="q-text">意识对物质具有反作用（意识的能动作用）</div>
+    <div class="answer">
+      <p>物质决定意识，意识对物质具有反作用，这种反作用就是<strong>意识的能动作用</strong>。主要表现在：</p>
+      <div class="point-box">
+        <ol>
+          <li>意识活动具有<strong>目的性和计划性</strong>。</li>
+          <li>意识活动具有<strong>创造性</strong>。</li>
+          <li>意识活动具有<strong>指导实践改造客观世界</strong>的作用。（<span class="highlight">最突出的表现</span>）</li>
+          <li>意识具有<strong>调控人的行为和生理活动</strong>的作用。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">助记：</span>三个性；指导实践改造世界；调控行为生理活动</div>
+    </div>
+  </div>
+
+  <!-- 3. 主观能动性和客观规律性的辩证统一（简答 重点） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">3</div>
+      <div class="q-tags"><span class="q-tag jian">重点简答</span></div>
+    </div>
+    <div class="q-text">主观能动性和客观规律性的辩证统一</div>
+    <div class="answer">
+      <ol>
+        <li><strong>尊重客观规律是正确发挥主观能动性的前提。</strong></li>
+        <li><strong>只有正确发挥主观能动性，才能正确认识和利用客观规律。</strong></li>
+        <li><strong>实践是基础。</strong></li>
+      </ol>
+      <div class="memorize"><span class="label">助记：</span>尊客是前提，主能才认规，实践是基础</div>
+    </div>
+  </div>
+
+  <!-- 4. 正确发挥人的主观能动性的前提和条件（论述 重点） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">4</div>
+      <div class="q-tags"><span class="q-tag lun">重点论述</span></div>
+    </div>
+    <div class="q-text">正确发挥人的主观能动性的前提和条件</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li><strong>从实际出发</strong>是正确发挥人的主观能动性的<strong>前提</strong>。</li>
+          <li><strong>实践</strong>是正确发挥人的主观能动性的<strong>根本途径</strong>。</li>
+          <li>正确发挥人的主观能动性，还需要一定的<strong>物质条件和物质手段</strong>。</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 意识与人工智能（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">5</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">意识与人工智能</div>
+    <div class="answer">
+      <div class="point-box">
+        <ol>
+          <li>人类意识是<strong>知情意的统一体</strong>，而人工智能只是对大脑的机械模拟。</li>
+          <li><strong>社会性</strong>是人的意识所固有的本质属性，人工智能不具备社会性。</li>
+          <li>人类的<strong>自然语言</strong>是思维的物质外壳和意识的现实形式，人工智能只能处理形式化符号。</li>
+          <li>人工智能能获得人类意识中可以化约为<strong>数字信号</strong>的内容，但人脑中总有许多东西是无法被化约的（如潜意识）。</li>
+        </ol>
+      </div>
+      <div class="memorize"><span class="label">助记：</span>知情意、社会性、自然语言、数字信号</div>
+    </div>
+  </div>
+
+  <!-- 6. 事物的普遍联系（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">6</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">事物的普遍联系</div>
+    <div class="answer">
+      <p>联系是指事物内部各要素之间和事物之间<strong>相互影响、相互制约、相互作用</strong>的关系。</p>
+      <p style="margin-top:6px;">联系具有一系列特点：</p>
+      <ul>
+        <li><strong>客观性</strong></li>
+        <li><strong>普遍性</strong></li>
+        <li><strong>多样性</strong></li>
+        <li><strong>条件性</strong></li>
+      </ul>
+      <div class="memorize"><span class="label">助记：</span>制（制约）作（作用）影（影响）→ 客观普多条件</div>
+      <div class="memorize" style="margin-left:6px;"><span class="label">补充：</span>唯物辩证法的总特征是联系的观点和发展的观点。发展的实质是新事物产生、旧事物灭亡。</div>
+    </div>
+  </div>
+
+  <!-- 7. 对立统一规律是唯物辩证法的实质和核心（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">7</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">对立统一规律是唯物辩证法的实质和核心</div>
+    <div class="answer">
+      <ol>
+        <li>对立统一规律揭示了事物<strong>普遍联系的根本内容</strong>和<strong>变化发展的内在动力</strong>。</li>
+        <li>对立统一规律是贯穿量变质变规律、否定之否定规律以及唯物辩证法基本范畴的<strong>中心线索</strong>。</li>
+        <li>对立统一规律提供了人们认识世界和改造世界的根本方法——<strong>矛盾分析法</strong>。</li>
+      </ol>
+      <div class="memorize"><span class="label">三个规律：</span>对立统一规律（根本规律）、量变质变规律、否定之否定规律</div>
+    </div>
+  </div>
+
+  <!-- 8. 矛盾的同一性和斗争性及其在事物发展中的作用（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">8</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">矛盾的同一性和斗争性及其在事物发展中的作用</div>
+    <div class="answer">
+      <p><strong>含义：</strong></p>
+      <ul>
+        <li><strong>同一性：</strong>矛盾着的对立面<strong>相互依存、相互贯通</strong>的性质和趋势。同一性是<strong>有条件的、相对的</strong>。</li>
+        <li><strong>斗争性：</strong>矛盾着的对立面<strong>相互排斥、相互分离</strong>的性质和趋势。斗争性是<strong>无条件的、绝对的</strong>。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>关系：</strong></p>
+      <p>矛盾的同一性和斗争性<strong>相互联结、相辅相成</strong>。同一性和斗争性相结合，构成了事物的矛盾运动，推动着事物的变化发展。</p>
+      <p style="margin-top:8px;"><strong>意义：</strong></p>
+      <p>要求我们在观察和处理问题时，必须善于把两者结合起来，在<strong>斗争性中把握同一性</strong>，在<strong>同一性中把握斗争性</strong>。要正确把握<strong>和谐</strong>对事物发展的作用，还要大力发扬<strong>斗争精神</strong>。</p>
+    </div>
+  </div>
+
+  <!-- 9. 内因和外因辩证关系原理（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">9</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">内因和外因辩证关系原理</div>
+    <div class="answer">
+      <p><strong>含义：</strong></p>
+      <ul>
+        <li><strong>内因：</strong>事物的内部矛盾。</li>
+        <li><strong>外因：</strong>事物与其他事物的相互影响和相互作用，即外部矛盾。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>关系：</strong></p>
+      <div class="point-box">
+        <ol>
+          <li>内因是事物发展变化的<strong>根据</strong>，是<strong>第一位原因</strong>。</li>
+          <li>外因是事物发展变化的<strong>条件</strong>，是<strong>第二位原因</strong>。</li>
+          <li>外因<strong>通过内因而起作用</strong>。</li>
+        </ol>
+      </div>
+      <p><strong>意义：</strong>内因和外因辩证关系原理是我国坚持<strong>独立自主、自力更生</strong>和<strong>对外开放</strong>方针的理论基础。</p>
+      <div class="memorize"><span class="label">助记：</span>内因根据第一位，外因条件第二位，由内而外起作用</div>
+    </div>
+  </div>
+
+  <!-- 10. 矛盾的普遍性和特殊性/普特原理（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">10</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">矛盾的普遍性和特殊性及其相互关系的原理（普特原理）</div>
+    <div class="answer">
+      <p><strong>含义：</strong></p>
+      <ul>
+        <li><strong>普遍性（共性）：</strong>矛盾存在于一切事物中，存在于一切事物发展过程中。矛盾无处不在，无时不有。</li>
+        <li><strong>特殊性（个性）：</strong>各个具体事物的矛盾、每一个矛盾的各个方面在发展的不同阶段上各有其特点。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>关系：</strong></p>
+      <div class="point-box">
+        <ul>
+          <li>矛盾的共性是无条件的、<strong>绝对的</strong>，矛盾的个性是有条件的、<strong>相对的</strong>。</li>
+          <li>任何现实存在的事物的矛盾都是<strong>共性和个性的有机统一</strong>。</li>
+          <li>共性<strong>寓于</strong>个性之中，没有离开个性的共性，也没有离开共性的个性。</li>
+        </ul>
+      </div>
+      <p><strong>意义：</strong>矛盾的普遍性和特殊性辩证关系的原理是<strong>马克思主义基本原理同各国实际相结合</strong>的哲学基础。中国共产党坚持把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合。</p>
+    </div>
+  </div>
+
+  <!-- 11. 量变质变规律（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">11</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">量变质变规律</div>
+    <div class="answer">
+      <p><strong>含义：</strong></p>
+      <ul>
+        <li><strong>量变：</strong>事物数量的增减和组成要素排列次序的变动，是保持事物的质的相对稳定性的不显著变化，体现了事物发展过程的<strong>连续性</strong>。</li>
+        <li><strong>质变：</strong>事物性质的根本变化，是事物由一种质态向另一种质态的飞跃，体现了事物发展渐进过程和<strong>连续性的中断</strong>。</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>关系：</strong></p>
+      <div class="point-box">
+        <ol>
+          <li>量变是质变的<strong>必要准备</strong>。</li>
+          <li>质变是量变的<strong>必然结果</strong>。</li>
+          <li>量变和质变是<strong>相互渗透</strong>的。</li>
+          <li>量变和质变是<strong>相互依存、相互贯通</strong>的。</li>
+        </ol>
+      </div>
+      <p>量变质变规律体现了事物发展的<strong>渐进性和飞跃性的统一</strong>。</p>
+      <p><strong>意义：</strong>当量变阶段时要踏实做好日常工作；当质变来临时要果断抓住机遇促成质变。</p>
+    </div>
+  </div>
+
+  <!-- 12. 否定之否定规律（论述） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">12</div>
+      <div class="q-tags"><span class="q-tag lun">论述</span></div>
+    </div>
+    <div class="q-text">否定之否定规律</div>
+    <div class="answer">
+      <p><strong>含义：</strong>否定之否定规律揭示事物自己发展自己的完整过程及本质。</p>
+      <div class="point-box">
+        <ol>
+          <li>否定是事物的<strong>自我否定、自我发展</strong>。</li>
+          <li>否定是事物<strong>发展的环节</strong>。</li>
+          <li>否定是<strong>新旧事物联系的环节</strong>。</li>
+          <li>辩证否定的实质是<strong>"扬弃"</strong>（既克服又保留）。</li>
+        </ol>
+      </div>
+      <p>否定之否定规律使事物的发展呈现出<strong>周期性</strong>，不同周期的交替使事物的发展呈现出<strong>波浪式前进</strong>或<strong>螺旋式上升</strong>的总趋势。</p>
+    </div>
+  </div>
+
+  <!-- 13. 五大范畴（简答） -->
+  <div class="question-card">
+    <div class="q-header">
+      <div class="q-index">13</div>
+      <div class="q-tags"><span class="q-tag jian">简答</span></div>
+    </div>
+    <div class="q-text">唯物辩证法的五大范畴</div>
+    <div class="answer">
+      <table class="card-table">
+        <tr><th>范畴</th><th>核心关系</th></tr>
+        <tr><td><strong>原因和结果</strong></td><td>相互区别，又相互依存和相互转化</td></tr>
+        <tr><td><strong>必然性和偶然性</strong></td><td>相互区别，又相互转化</td></tr>
+        <tr><td><strong>可能性和现实性</strong></td><td>相互区别，又相互转化</td></tr>
+        <tr><td><strong>内容和形式</strong></td><td>内容决定形式，形式反作用于内容</td></tr>
+        <tr><td><strong>现象和本质</strong></td><td>相互区别，又相互依存</td></tr>
+      </table>
+      <div class="memorize" style="margin-top:6px;"><span class="label">补充：</span>唯物辩证法本质是批判的和革命的。学习唯物辩证法不断增强辩证思维、历史思维、系统思维、战略思维、底线思维和创新思维能力。</div>
+    </div>
+  </div>
+
+  <!-- 底部 -->
+  <div style="text-align:center; padding: 48px 0 24px; color: var(--text-secondary); font-size: 13px;">
+    <p>—— 简答区 · 马克思主义基本原理 ——</p>
+    <a class="back-link" href="index.html" style="margin-top:12px; display:inline-flex;">
+      <span class="arrow">←</span> 返回简答区
+    </a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+(function() {
+  var cards = document.querySelectorAll('.question-card');
+  cards.forEach(function(card) {
+    var qText = card.querySelector('.q-text');
+    var answer = card.querySelector('.answer');
+    if (!qText || !answer) return;
+    var btn = document.createElement('button');
+    btn.className = 'toggle-btn';
+    btn.innerHTML = '— 展开答案 —';
+    qText.insertAdjacentElement('afterend', btn);
+    btn.addEventListener('click', function() {
+      var isOpen = answer.classList.toggle('show');
+      btn.classList.toggle('open', isOpen);
+      btn.innerHTML = isOpen ? '— 收起答案 —' : '— 展开答案 —';
+    });
+  });
+
+  // ===== 浮动章节指示器 =====
+  var chapterTitles = document.querySelectorAll('.chapter-title');
+  var indicator = document.getElementById('chapterIndicator');
+
+  function updateChapterIndicator() {
+    var currentChapter = null;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    chapterTitles.forEach(function(ct) {
+      if (ct.getBoundingClientRect().top <= 60) {
+        currentChapter = ct;
+      }
+    });
+    if (currentChapter && scrollTop > 200) {
+      var chNum = currentChapter.querySelector('.ch-num');
+      var h2 = currentChapter.querySelector('h2');
+      var text = '';
+      if (chNum) text += chNum.textContent.trim();
+      if (h2) text += '  ' + h2.textContent.trim();
+      indicator.textContent = text;
+      indicator.classList.add('show');
+    } else {
+      indicator.classList.remove('show');
+    }
+  }
+
+  window.addEventListener('scroll', updateChapterIndicator, { passive: true });
+  updateChapterIndicator();
+
+  window.showToast = function(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function(){ t.style.display = 'none'; }, 1800);
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.shiftKey && e.key >= '1' && e.key <= '9') {
+      var ch = parseInt(e.key);
+      if (ch <= chapterTitles.length) {
+        chapterTitles[ch - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('跳转至第' + ch + '章');
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
