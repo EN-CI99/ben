@@ -239,8 +239,21 @@
     border-color: var(--danger);
     color: #7f1d1d;
   }
+  .options li.correct:hover {
+    background: var(--success-light);
+    border-color: var(--success);
+    color: #14532d;
+  }
+  .options li.wrong:hover {
+    background: var(--danger-light);
+    border-color: var(--danger);
+    color: #7f1d1d;
+  }
   .options li.disabled { cursor: default; }
-  .options li.disabled:hover { background: var(--panel-2); border-color: var(--border); }
+  .options li.disabled:not(.correct):not(.wrong):hover {
+    background: var(--panel-2);
+    border-color: var(--border);
+  }
 
   /* 答案按钮 */
   .reveal-btn {
