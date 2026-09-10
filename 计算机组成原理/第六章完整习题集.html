@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="DoEcFqY0cViUT85YmsCTcT">
+<head data-page-node-id="5zFulToVjaV4q1wJ7dDngO">
+<meta charset="UTF-8" data-page-node-id="PpHCS8yTMKo6DXS2khOD5e" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="4BwYqMj7FFwdmOYAnCDuve" />
+<title>第六章 程序中 I/O 操作的实现 · 习题集</title>
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-2: #4b5563;
+    --text-3: #6b7280;
+    --brand: #2563eb;
+    --brand-light: #dbeafe;
+    --brand-dark: #1e40af;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7; font-size: 15px;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+  .top-bar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 16px 20px; background: var(--panel);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .top-bar h1 { margin: 0; font-size: 20px; color: var(--brand-dark); }
+  .top-bar .meta { color: var(--text-3); font-size: 13px; }
+  .top-bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--brand-light); color: var(--brand-dark);
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    border: 1px solid transparent; cursor: pointer; transition: all .15s;
+  }
+  .btn:hover { background: var(--brand); color: #fff; }
+  .btn.secondary { background: var(--panel-2); color: var(--text-2); border-color: var(--border); }
+  .btn.secondary:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .stat-card .label { color: var(--text-3); font-size: 12px; }
+  .stat-card .value { font-size: 22px; font-weight: 600; color: var(--brand-dark); margin-top: 4px; }
+  .stat-card .sub { color: var(--text-2); font-size: 12px; margin-top: 2px; }
+
+  .chapter-nav {
+    position: sticky; top: 12px; z-index: 20;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 10px 14px; background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(8px); border: 1px solid var(--border);
+    border-radius: 999px; box-shadow: var(--shadow); margin-bottom: 20px;
+  }
+  .chapter-nav .nav-title { font-size: 12px; color: var(--text-3); align-self: center; margin-right: 4px; font-weight: 500; }
+  .pill {
+    padding: 5px 14px; border-radius: 999px;
+    background: var(--panel-2); color: var(--text-2);
+    text-decoration: none; font-size: 12.5px;
+    border: 1px solid var(--border); transition: all .15s; cursor: pointer;
+  }
+  .pill:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .pill.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .section-block { margin-bottom: 28px; scroll-margin-top: 80px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--brand); color: #fff;
+    border-radius: var(--radius); margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .section-header .num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .section-header h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .section-header .count {
+    margin-left: auto; background: rgba(255, 255, 255, .2);
+    padding: 2px 10px; border-radius: 999px; font-size: 12px;
+  }
+
+  .type-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; margin-right: 8px; font-weight: 500; }
+  .type-single { background: var(--brand-light); color: var(--brand-dark); }
+  .type-fill { background: var(--warning-light); color: var(--warning); }
+  .type-term { background: #ede9fe; color: #6d28d9; }
+  .type-comp { background: #fce7f3; color: #be185d; }
+
+  .question {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .question .q-title { font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.6; }
+  .question .q-title .q-num { color: var(--brand); margin-right: 6px; }
+  .question .q-body { color: var(--text-2); margin-bottom: 10px; }
+  .question .q-body code, .question code {
+    background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    font-size: 13px; color: var(--brand-dark);
+  }
+
+  .options { list-style: none; padding: 0; margin: 8px 0 10px; }
+  .options li {
+    padding: 8px 12px; margin-bottom: 6px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; transition: all .15s; font-size: 14px;
+  }
+  .options li:hover { background: var(--brand-light); border-color: var(--brand); }
+  .options li.correct { background: var(--success-light); border-color: var(--success); color: #14532d; }
+  .options li.wrong { background: var(--danger-light); border-color: var(--danger); color: #7f1d1d; }
+  .options li.disabled { cursor: default; }
+  .options li.disabled:hover { background: var(--panel-2); border-color: var(--border); }
+
+  .reveal-btn {
+    margin-top: 8px; padding: 5px 14px;
+    background: var(--panel-2); color: var(--text-2);
+    border: 1px solid var(--border); border-radius: 999px;
+    cursor: pointer; font-size: 13px; transition: all .15s;
+  }
+  .reveal-btn:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .answer-box {
+    display: none; margin-top: 10px; padding: 12px 14px;
+    background: var(--success-light); border-left: 3px solid var(--success);
+    border-radius: 6px; color: #14532d; font-size: 14px; line-height: 1.7;
+  }
+  .answer-box.show { display: block; }
+  .answer-box strong { color: #166534; }
+  .answer-box .analysis { margin-top: 6px; color: #166534; }
+
+  .comp-q .answer-box { background: #fdf4ff; border-left-color: #be185d; color: #831843; }
+  .comp-q .answer-box strong { color: #9d174d; }
+  .comp-q .answer-box .analysis { color: #9d174d; }
+
+  .footer-stats {
+    margin-top: 32px; padding: 20px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .footer-stats h3 { margin: 0 0 12px; font-size: 15px; color: var(--brand-dark); }
+  .footer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .footer-table th, .footer-table td {
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .footer-table th { color: var(--text-3); font-weight: 500; background: var(--panel-2); }
+  .footer-table td:first-child { color: var(--text); font-weight: 500; }
+  .footer-table tr:last-child td { border-bottom: none; font-weight: 600; background: var(--panel-2); }
+
+  .back-nav {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 16px; padding: 8px 16px;
+    background: var(--panel); color: var(--brand);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    text-decoration: none; font-size: 14px; transition: all .15s;
+  }
+  .back-nav:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  @media (max-width: 640px) {
+    .container { padding: 14px; }
+    .chapter-nav { border-radius: var(--radius); }
+    .top-bar h1 { font-size: 17px; }
+    .question { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body data-page-node-id="PhCQ6MJvmIsNIAqMzMRZLw">
+<div class="container" data-page-node-id="U7Q5uGUWTRUpX4HicfgG5n">
+
+  <div class="top-bar" data-page-node-id="zowLEr2ioNWj1AXhDenAwz">
+    <div data-page-node-id="0pfQhqTZoZEVllIbAkRIHc">
+      <h1 data-page-node-id="Ej5sWovu2KIelTQ5HJAmd6">第六章 程序中 I/O 操作的实现</h1>
+      <div class="meta" data-page-node-id="nscV4TmtFQTnLZz2LtwpOl">计算机组成原理 · 习题集 · 共 <strong id="totalCount" data-page-node-id="LFFkh1XTs1RwYeHN7l2kCV">0</strong> 题</div>
+    </div>
+    <div class="actions" data-page-node-id="0KH7iWLr0GBdsVRXBCZDEF">
+      <a class="btn secondary" href="index.html" data-page-node-id="hewWM16V2C55UeXCDAaSxJ">← 章节导航</a>
+      <a class="btn secondary" href="../index.html" data-page-node-id="bCcerALf3BIiqnbgXAbVkf">↑ 考研复习总目录</a>
+    </div>
+  </div>
+
+  <div class="stats-bar" data-page-node-id="h4HLGsgYjdof8mRMbOLQrz">
+    <div class="stat-card" data-page-node-id="rwzQGYUDQYo2GjwaUufsIl">
+      <div class="label" data-page-node-id="UYVuhp2oYBQwFp53HLCiIn">单选题</div>
+      <div class="value" id="singleCount" data-page-node-id="gHTRNET99oBTOsLUxdMWFN">—</div>
+      <div class="sub" data-page-node-id="ypwmB8yjt0GTkQs3GCPVQk">即点即判</div>
+    </div>
+    <div class="stat-card" data-page-node-id="WOpwIZuigouSNJ5ga2VUdJ">
+      <div class="label" data-page-node-id="BOHVwhwL5JnlCKteNwIQCH">填空题</div>
+      <div class="value" id="fillCount" data-page-node-id="CcbOYUcJqUUaDZaKal1alS">—</div>
+      <div class="sub" data-page-node-id="KosIZwzNxqSDcFgoDqpkle">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="2HHx9h98344Ggc9yjBFkFY">
+      <div class="label" data-page-node-id="snCQG3YujnrVOyq1Q3rYMU">名词解释</div>
+      <div class="value" id="termCount" data-page-node-id="m2AGrdu6IVYh4A0i2FDPA4">—</div>
+      <div class="sub" data-page-node-id="8YRrxPxTQ9lnCakhU0eY2K">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="tjrIe7y41GqJ9P2Cuawgva">
+      <div class="label" data-page-node-id="TgWFUTYDDVnVBw9lT3C1dK">综合题</div>
+      <div class="value" id="compCount" data-page-node-id="FS1tKEOzRSxUQec7SYxcRK">—</div>
+      <div class="sub" data-page-node-id="m9bFvCOIgmEGhHHRLCTZvC">点击展开答案</div>
+    </div>
+  </div>
+
+  <nav class="chapter-nav" id="chapterNav" data-page-node-id="nUmgLsik1F7uYolO7mYXXs">
+    <span class="nav-title" data-page-node-id="jUDX77KsrbrdyNanauDP6U">节导航</span>
+    <a class="pill" href="#sec1" data-page-node-id="EyYIXc0ofOyO2t5sD1Z3b8">① I/O 子系统概述</a>
+    <a class="pill" href="#sec2" data-page-node-id="5YTvzKkHhHE9y4uFlvcC8C">② 用户空间 I/O</a>
+    <a class="pill" href="#sec3" data-page-node-id="1qJXhax9ZyyFhzOKMhVUFX">③ 内核空间 I/O</a>
+    <a class="pill" href="#sec4" data-page-node-id="ASTMXKexYAvEayV0BgFkyA">④ I/O 硬件与软件接口</a>
+  </nav>
+
+  <!-- ========== 第一节 ========== -->
+  <section class="section-block" id="sec1" data-page-node-id="Umm1lFY0twqZrjGgDB4sAS">
+    <div class="section-header" data-page-node-id="zZNgrr60bP1AOCUF7TX8NJ">
+      <div class="num" data-page-node-id="SGyMqf84UWiAk6irUrhHw5">1</div>
+      <h2 data-page-node-id="MFSEISGe6dfaAHdS9fEDqf">第一节 I/O 子系统概述</h2>
+      <span class="count" data-page-node-id="NxRw6OaU3VbBhYFFRgO0cm">14 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="nB96iy0JhHvUSN9yqNDtyA">
+      <div class="q-title" data-page-node-id="CxT4Oo7ibyvkAzxMWtPDLJ"><span class="q-num" data-page-node-id="yWGmw5EthZO86Wes97492o">1.</span><span class="type-tag type-single" data-page-node-id="G13e57emYBLVHcJSn4kBqc">单选</span>I/O 子系统主要解决？</div>
+      <ul class="options" data-answer="B" data-page-node-id="nAUXbV05OHaxw4k9SD5wh9">
+        <li data-val="A" data-page-node-id="lFqDQHsPjNloAfbL1qv0Tq">A. CPU 与主存的速度匹配</li>
+        <li data-val="B" data-page-node-id="kf5PE2sF8yIF4baTG5yqqn">B. 信息的输入/输出，即如何通过外设将信息输入计算机或从计算机输出给用户</li>
+        <li data-val="C" data-page-node-id="I7XnRW8SYHVY9hMLZsKyfy">C. 程序的链接与加载</li>
+        <li data-val="D" data-page-node-id="90YBA2ap1rTh0bM6kBHGQz">D. 指令译码与执行</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="6nK4HyWwwoPB3qsAUzVDTA">查看解析</button>
+      <div class="answer-box" data-page-node-id="AmjwknLwy8sY5qTzrScbcV"><strong data-page-node-id="JVavRSeNxcIiQCd9vitZS3">答案：B</strong><div class="analysis" data-page-node-id="1Su5jmeAee0nRAlmW6WV7D">I/O 子系统解决信息输入/输出问题，包含 I/O 软件与 I/O 硬件两大部分。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="zdv5NtHCG1zTXRXUAco2pw">
+      <div class="q-title" data-page-node-id="S4i7cGR9XxobjaKpRSbcrf"><span class="q-num" data-page-node-id="p0viDZwdYdlNuxHPqKko8n">2.</span><span class="type-tag type-single" data-page-node-id="oAPB7smYuBzftXyPWanEzI">单选</span>I/O 软件的两个层次是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="jFUaQ2nfnzPGmH280PYrlc">
+        <li data-val="A" data-page-node-id="ecZsEv8Civa3nC3LUaKcuM">A. 应用层 + 驱动层</li>
+        <li data-val="B" data-page-node-id="FlSHnBUi37IUGJnniatyxT">B. 系统层 + 硬件层</li>
+        <li data-val="C" data-page-node-id="aFn3PbXr7BOI6w6KryIkxj">C. 用户空间 I/O 软件 + 内核空间 I/O 软件（系统 I/O 软件）</li>
+        <li data-val="D" data-page-node-id="eq83qShYpDWKJoNGVxj6E8">D. 字符设备 + 块设备</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="511gUSJOAbLZUEqBlcdJA6">查看解析</button>
+      <div class="answer-box" data-page-node-id="0fVVqdYL8XhXUjNdbtePqd"><strong data-page-node-id="9AGLEEmDme9EyENBXWISBz">答案：C</strong><div class="analysis" data-page-node-id="RIUSbNv01kHECgGADjpcBm">用户空间 I/O 软件（用户态，向上层用户程序提供 I/O 请求接口）+ 内核空间 I/O 软件（系统 I/O 软件，分三层：与设备无关层、设备驱动层、中断服务程序层）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="1t52TUbbSvkHECHYID7czI">
+      <div class="q-title" data-page-node-id="AnIGSvKbpow16ma5r1SffS"><span class="q-num" data-page-node-id="LNOe4pJsH0nwdV3Nhve6YU">3.</span><span class="type-tag type-single" data-page-node-id="hB4KOS54II4PQAtY0zwzgB">单选</span>系统 I/O 软件（内核空间 I/O 软件）分为哪三个层次？</div>
+      <ul class="options" data-answer="A" data-page-node-id="Hwxcub4AE4YEdbe4MNtisP">
+        <li data-val="A" data-page-node-id="j0lnBHwepF5DPPEbJ9Vfnx">A. 与设备无关 I/O 软件层 + 设备驱动程序层 + 中断服务程序层</li>
+        <li data-val="B" data-page-node-id="83qDf525cCMarfxXFgrBKW">B. 用户 I/O + 系统 I/O + 硬件 I/O</li>
+        <li data-val="C" data-page-node-id="kJQ6HfjDdDT8U7euO73fv3">C. 文件系统 + 缓存层 + 通用块设备层</li>
+        <li data-val="D" data-page-node-id="hAzVcpO8O0z3mzjNjhVpaA">D. 字符设备 + 块设备 + 网络设备</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="q0CaqUnwLYQYIED4OCbhjl">查看解析</button>
+      <div class="answer-box" data-page-node-id="29ZZKUgCxYpOxoztOjdzx4"><strong data-page-node-id="znk4MDx882YQ0l8mrJ7fx3">答案：A</strong><div class="analysis" data-page-node-id="LHDvmgCysfOkWVFppAL2X6">系统 I/O 软件三层：①与设备无关 I/O 软件层；②设备驱动程序层；③中断服务程序层。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="aqQtKDxvkFf05fD8sF5Gfn">
+      <div class="q-title" data-page-node-id="SiZ2B9l5rUJVAYP5LLt1n5"><span class="q-num" data-page-node-id="mw8UZoSecpsDBeNTJ9sTwm">4.</span><span class="type-tag type-single" data-page-node-id="HhTOLwFcYSYjymlhppJo9V">单选</span>用户进程通过「陷阱指令」陷入内核态后，CPU 根据哪个寄存器中的「系统调用号」选择相应服务例程？</div>
+      <ul class="options" data-answer="D" data-page-node-id="cNApgVANZrQW9vHfK3JCbc">
+        <li data-val="A" data-page-node-id="8fTHrBRSf33q02GuXbK7D1">A. EBX</li>
+        <li data-val="B" data-page-node-id="7YDCKbSshNgjFtuj2GCuDA">B. ECX</li>
+        <li data-val="C" data-page-node-id="JZKGsOyQtumhAl61mkt5bp">C. EDX</li>
+        <li data-val="D" data-page-node-id="RunNk7yetvG8cThHE5S9fK">D. EAX</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="qpgIbuO1kEcHlAWyWnX8es">查看解析</button>
+      <div class="answer-box" data-page-node-id="4TtrfiAN7jAPHGzL84HrzW"><strong data-page-node-id="jyNkFzNg00OnQSj43hpExE">答案：D</strong><div class="analysis" data-page-node-id="yXcNAbrqPqKG3M8WHb4xH3">Linux 系统调用约定：系统调用号放在 EAX 中，参数依次为 EBX/ECX/EDX/ESI/EDI。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FsnLV8xAQCHlsaDXSkL4h1">
+      <div class="q-title" data-page-node-id="7aDDjyKhvEwLzhAb21vLp8"><span class="q-num" data-page-node-id="HcfyVgkuxeRg0i1a0oZ2Hq">5.</span><span class="type-tag type-single" data-page-node-id="2Y3IQwGoQONCocsutvaVwA">单选</span>Linux 中 <code data-page-node-id="o8UgPeBAyqMZznfPDCEqlN">write(fd, buf, n)</code> 函数的返回类型为何是 <code data-page-node-id="7ISULKNtbP1gbEutlicQvI">ssize_t</code> 而不是 <code data-page-node-id="eCxn9IMsO5MAb5jFhotQTK">size_t</code>？</div>
+      <ul class="options" data-answer="B" data-page-node-id="5z9PjDwTmW51pyLwgk7ueG">
+        <li data-val="A" data-page-node-id="NCRXBaHHQX4h05Y6UIcWv3">A. 因为返回字节数可能为负</li>
+        <li data-val="B" data-page-node-id="EjfFmdSO1XW2u4O2yQbHYe">B. 因为正常返回实际写入字节数（≥0），错误时返回 -1，需要带符号 int</li>
+        <li data-val="C" data-page-node-id="7yUCsnYk5DEpCQTIreC6pW">C. 因为系统调用开销太大</li>
+        <li data-val="D" data-page-node-id="VL6sgx3HfJd0Of9H1lBmZU">D. 因为历史遗留</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="j6sJA2qOAYALfwcGlgUYIt">查看解析</button>
+      <div class="answer-box" data-page-node-id="4XyHC4YqlEYLDTB1VNBUW4"><strong data-page-node-id="HqjeIHRTqkpEWBBt4RGiXg">答案：B</strong><div class="analysis" data-page-node-id="hHZjCUgzEhIBxtx4d8KsVh">返回值 = 实际写入字节数（非负）或 -1（出错），必须用带符号 int（ssize_t）才能表示 -1。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="de8IyCy28b8CtTizyvSvsZ">
+      <div class="q-title" data-page-node-id="EeddsxGNMvuTL4cAVcIRbj"><span class="q-num" data-page-node-id="cesjkuvO7apT4D0hk0o1VT">6.</span><span class="type-tag type-single" data-page-node-id="tlMK80Db6NrDTDScVERPAf">单选</span>I/O 操作完成后由外设触发，CPU 接下来调出哪个程序执行以完成数据交换？</div>
+      <ul class="options" data-answer="C" data-page-node-id="AGzE2ljip6ZI2jlRiE6ayP">
+        <li data-val="A" data-page-node-id="BKvFXmV5t9K3hBsOpRNiYf">A. 应用程序本身</li>
+        <li data-val="B" data-page-node-id="pupoAunBid2vPPBOBCWEMR">B. 系统调用服务例程</li>
+        <li data-val="C" data-page-node-id="egmrADWzTdSEBTxEpsoUXf">C. 中断服务程序</li>
+        <li data-val="D" data-page-node-id="CoqMCn3w7IzDLyoydQ6CnR">D. 引导程序</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="aH99C3JY1jX4kKC8RiBpug">查看解析</button>
+      <div class="answer-box" data-page-node-id="7zgEcDiABSNvTtGylebpKW"><strong data-page-node-id="uAsApuIhwwAwRst7Dex3Wx">答案：C</strong><div class="analysis" data-page-node-id="A3C7H0Rgw8Xp3PCK3d5EoT">外设就绪后发中断请求，CPU 响应中断并调出对应的中断服务程序，在中断服务程序中完成数据交换。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="StqkSWyl4t5sF18YPfqAbb">
+      <div class="q-title" data-page-node-id="1RBGcr3Dt3H6wLZ0RdcWBx"><span class="q-num" data-page-node-id="v52Fqb8riU3zE9pBC05Tco">7.</span><span class="type-tag type-fill" data-page-node-id="u8ruuRz5KkHF8DzYEW0gkb">填空</span>I/O 软件包括最上层提出 I/O 请求的「用户 I/O 软件」和底层操作系统对 I/O 进行具体管理和控制的「____ I/O 软件」。</div>
+      <button class="reveal-btn" data-page-node-id="9jdvVj7wFQlkyLC6zXZhj5">查看答案</button>
+      <div class="answer-box" data-page-node-id="si2voy11ZmM7VmqSInk7VD"><strong data-page-node-id="qHbOHBdUjEht6Lnx5ZvTfc">答案：</strong>系统</div>
+    </div>
+
+    <div class="question" data-page-node-id="DytG4bqVsWYQgFvQWo505p">
+      <div class="q-title" data-page-node-id="QB0wLkWpENkKgeVFC2G2Ex"><span class="q-num" data-page-node-id="8m9iT3hvj7GFChdv8FNq2O">8.</span><span class="type-tag type-fill" data-page-node-id="Q8pxgGr5IbbEjNbWt3E7Z6">填空</span>Linux 中 <code data-page-node-id="1paG8Vh2L9X9B5CNpHhJpz">write(fd, buf, n)</code> 函数中的参数 n 表示要写的 ____。</div>
+      <button class="reveal-btn" data-page-node-id="DCf8GTkpm7pE9fxoFpzu2b">查看答案</button>
+      <div class="answer-box" data-page-node-id="3MRwdANuNe7GREQ0tpoEsT"><strong data-page-node-id="rqoD9FvFAHGxUHAfFAexu4">答案：</strong>字节数</div>
+    </div>
+
+    <div class="question" data-page-node-id="2zyKGp0ACa3fhLKkYfGNe4">
+      <div class="q-title" data-page-node-id="0728KVy8xvIYuIhwdhVmB4"><span class="q-num" data-page-node-id="qr8D4pFGTw8SbI3MoE8tJP">9.</span><span class="type-tag type-fill" data-page-node-id="4JhuAOHRZmFwmkfaRWtEgU">填空</span>CPU 在用户态执行到系统调用封装函数对应的指令序列中的 ____ 指令时，会从用户态陷入内核态。</div>
+      <button class="reveal-btn" data-page-node-id="SqIAD3cR1xk8984EEqcnUP">查看答案</button>
+      <div class="answer-box" data-page-node-id="Cud7x330Q6K887S3N4hdov"><strong data-page-node-id="OtRSygY5CFntqm3GEE9RPo">答案：</strong>陷阱</div>
+    </div>
+
+    <div class="question" data-page-node-id="6BdPG3GiTPkr166nbDeAsZ">
+      <div class="q-title" data-page-node-id="5WV7WBACv98fEyAz2jQLWj"><span class="q-num" data-page-node-id="tXaY2c20Vz0RY2tAZxHtmG">10.</span><span class="type-tag type-fill" data-page-node-id="z6emAZLZSw8loLJCxRGIcK">填空</span>系统 I/O 软件分三个层次：与设备无关的 I/O 软件层、____ 层、中断服务程序层。</div>
+      <button class="reveal-btn" data-page-node-id="GvnP0bvnUdO9FSAFSYt7lO">查看答案</button>
+      <div class="answer-box" data-page-node-id="A5RlWgqZ8Vuu19qO5ciiEH"><strong data-page-node-id="ijLlqJzXzq3ldxFUkFtVTm">答案：</strong>设备驱动程序</div>
+    </div>
+
+    <div class="question" data-page-node-id="ddPK0FJjWkE8BDWJh65xKe">
+      <div class="q-title" data-page-node-id="uoWYaZI0koKVtpCkjCAh1N"><span class="q-num" data-page-node-id="mh5PJGFF35Z77T2qozjLHD">11.</span><span class="type-tag type-term" data-page-node-id="R71j4sOuYy0qiBtaOB3DGb">名词解释</span>I/O 子系统</div>
+      <button class="reveal-btn" data-page-node-id="JxdiBKDE1Jw6GICmaNKWis">查看答案</button>
+      <div class="answer-box" data-page-node-id="ey7VCjcWImhtusUgOHYvRM">计算机系统中负责信息输入/输出的部分，由 I/O 软件（用户空间 I/O 软件 + 内核空间 I/O 软件）和 I/O 硬件（外设与设备控制器）组成，采用层次结构实现对外设的统一管理与控制。</div>
+    </div>
+
+    <div class="question" data-page-node-id="vQEQ8vNo7tzbW77c1BYJkD">
+      <div class="q-title" data-page-node-id="9Fo12rBGHSNOcPzAJ79fTe"><span class="q-num" data-page-node-id="A8AUMUk1RUbXaj6OsWJ3Gy">12.</span><span class="type-tag type-term" data-page-node-id="rDrNY4bJERdlPzaEqiOfkj">名词解释</span>系统调用（System Call）</div>
+      <button class="reveal-btn" data-page-node-id="NfhybiIhw1mItlKJGdx0Cz">查看答案</button>
+      <div class="answer-box" data-page-node-id="aFfjz7LnjEWkdrlbh9TXxQ">用户进程通过陷阱指令进入内核态，请求操作系统内核提供服务的接口机制；用户态与内核态之间通过系统调用实现受控的切换，每次系统调用涉及两次上下文切换，开销较高。</div>
+    </div>
+
+    <div class="question" data-page-node-id="2FTSkQXItM3CbsdV1oW6qT">
+      <div class="q-title" data-page-node-id="rkJpuZrOSqgcs17QFcUlQ7"><span class="q-num" data-page-node-id="mIxXsjNI42YUeGYz7q7Xaj">13.</span><span class="type-tag type-term" data-page-node-id="kjAHQ7tllZXNMbPgPq8DhD">名词解释</span>设备控制器（Device Controller）</div>
+      <button class="reveal-btn" data-page-node-id="NDaHhspje7D4RITwHE2WEg">查看答案</button>
+      <div class="answer-box" data-page-node-id="HCBtECdDA6EFSjUHs8J3LZ">位于 I/O 设备与系统总线之间的硬件部件，负责接收主机的命令并控制外设完成具体 I/O 操作；提供数据缓冲、错误/就绪检测、控制/定时、数据格式转换等功能。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="gRhC3MNisvsMvRqq52QhYu">
+      <div class="q-title" data-page-node-id="JCFHCFG4OnsqmyFbPFXJ8n"><span class="q-num" data-page-node-id="ppUip7kmlXhXs4hSGvKAuA">14.</span><span class="type-tag type-comp" data-page-node-id="svkFRZ1A6qZD0Mi7XKlBRn">综合题</span>简述一次 I/O 操作中从用户进程发起 write 调用到数据最终写入外设的完整过程（贯穿 I/O 软件与硬件各层）。</div>
+      <button class="reveal-btn" data-page-node-id="G35H8eym59dcPvpiS9Hkoa">查看答案</button>
+      <div class="answer-box" data-page-node-id="Od5QrCI0yWOpVNcwfXuGAc"><strong data-page-node-id="bK09asJrykO1ZP5lve82Ps">答案：</strong>
+        <div class="analysis" data-page-node-id="2UBlMGMSlPv54vud2fOq5N">
+          ① 用户进程在用户态调用 write 库函数/封装函数；<br data-page-node-id="3GzIgUij81773tlaDCsMc0">
+          ② 封装函数执行陷阱指令，CPU 从用户态陷入内核态，根据 EAX 中的系统调用号选择 write 服务例程；<br data-page-node-id="1DF5c0iByeAmHHX9KSlTyg">
+          ③ 内核中与设备无关的 I/O 软件层检查参数、定位文件描述符对应的设备；<br data-page-node-id="kNTBwEAr9YMUsBVxgDegyd">
+          ④ 调用具体设备的驱动程序，驱动程序初始化设备控制器并启动外设；<br data-page-node-id="IXokGZEYu1S2GmKXLUGDOM">
+          ⑤ 外设准备好接收数据后发出中断请求；<br data-page-node-id="iSOVod8qsmKmkvAuxUhaDn">
+          ⑥ CPU 响应中断调出对应的中断服务程序，在其中完成与外设的数据交换；<br data-page-node-id="b5UZzFe8zRSGU5Uls7KtP8">
+          ⑦ 中断返回，write 服务例程返回写入字节数，CPU 切回用户态，进程继续执行。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第二节 ========== -->
+  <section class="section-block" id="sec2" data-page-node-id="OUOMx2f3FlrlLLIGOS1L8c">
+    <div class="section-header" data-page-node-id="NFP6eJZtuRHMsxwNTJBAXv">
+      <div class="num" data-page-node-id="q2cDVDnmpzHxAOzihwCpLN">2</div>
+      <h2 data-page-node-id="Pqj3npmgbwX2i4zmuVshQt">第二节 用户空间 I/O 软件</h2>
+      <span class="count" data-page-node-id="1dmSJiQFcC63YPNi4gz5am">25 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="3XkNLky0AffKFpEntXkCW3">
+      <div class="q-title" data-page-node-id="Rzi9EJEOmKbQNcQHgSCybA"><span class="q-num" data-page-node-id="UKun3WBl6L3rLc7x7CC4zN">15.</span><span class="type-tag type-single" data-page-node-id="YUWhhfp5A44XKyJRuCwaQL">单选</span>在 UNIX/Linux 中，对「所有 I/O 操作」的设计哲学是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="IWWypaKe1UUnN8KCXUZEiq">
+        <li data-val="A" data-page-node-id="X5KszJ9xJRCBCtl959mMR6">A. 所有 I/O 操作都通过读写文件实现，所有外设都被视为文件</li>
+        <li data-val="B" data-page-node-id="g0vdZrSeHD2CHCu3di2QAD">B. 只有磁盘文件才是文件</li>
+        <li data-val="C" data-page-node-id="taWifLPqjdJXwGdFnZnhdX">C. 网络设备单独管理</li>
+        <li data-val="D" data-page-node-id="LWuSyZE0ihztA4aKQ16JqX">D. 字符设备与块设备分开管理</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="EkFlJMv2dbKUgf331Gr5k3">查看解析</button>
+      <div class="answer-box" data-page-node-id="jMvZeB4nOz9tjVBMFXOIDW"><strong data-page-node-id="GJQDZGVMB7PAR53dCRRJ2S">答案：A</strong><div class="analysis" data-page-node-id="3VyK9jz2ElLkSzL1PL6ZMn">UNIX 中所有 I/O 都通过读写文件实现，socket、终端等都被视为文件；「一切皆文件」。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="bux3ypCl5snFTJFkwSyDeP">
+      <div class="q-title" data-page-node-id="9XZY5olCq3MlkA2Qtgad1r"><span class="q-num" data-page-node-id="UhhR88Dzp5VwIPg4pGsgen">16.</span><span class="type-tag type-single" data-page-node-id="Ycny72TtupxfCc32U3VXFv">单选</span>UNIX 中「文件」的抽象定义是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="GNeZhzBSaF3WUMlyzSp5o0">
+        <li data-val="A" data-page-node-id="ePDSZ1ZMlDh6REOhQdVMS6">A. 一组有结构的数据记录</li>
+        <li data-val="B" data-page-node-id="Ue7qwDj334qLztB4fQ5hN4">B. 磁盘上的目录项</li>
+        <li data-val="C" data-page-node-id="ZjDRz7u5RSLbaYfkpFcE0W">C. 一组磁盘块</li>
+        <li data-val="D" data-page-node-id="dkOsAeBa7KTiEfhfNwGNDG">D. 一个字节序列</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="2RcWQIxNAq0AXm4mMdviL7">查看解析</button>
+      <div class="answer-box" data-page-node-id="WiIqLt2mJmeRgoLBAkhgCJ"><strong data-page-node-id="885TjpecAGLJfhhR6wGx0C">答案：D</strong><div class="analysis" data-page-node-id="daf0HxI6D0W9bGNoPeyy4u">UNIX 把文件定义为一个字节序列（byte sequence），对所有 I/O 设备统一为字节流接口。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="oS7PkjcQaUBF8TmmNHDcVz">
+      <div class="q-title" data-page-node-id="jZAXbPiaB8vjw0yXk0EBg3"><span class="q-num" data-page-node-id="VCib32DQ8Db7frHHOeeYxR">17.</span><span class="type-tag type-single" data-page-node-id="XGKn7zlESo3NegxqAjbc90">单选</span>下列哪种「不是」ASCII 文件（文本文件）？</div>
+      <ul class="options" data-answer="C" data-page-node-id="IBsxOlQa2MCGijmmDlHa3F">
+        <li data-val="A" data-page-node-id="QSas4owej4HDtmCSFBgSbw">A. C 源程序文件</li>
+        <li data-val="B" data-page-node-id="PuScQAA4rHN2Y4HL2oJLRm">B. 终端标准输入文件</li>
+        <li data-val="C" data-page-node-id="PMpeAhy5EIkS2KBo4WbWz8">C. 可重定位目标文件（.o）</li>
+        <li data-val="D" data-page-node-id="FInwCsSg1OEnaGIsG4ZD44">D. 标准输出文件</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="wkQ43VUoUf3SYmrAX5zNTy">查看解析</button>
+      <div class="answer-box" data-page-node-id="NVTeDjfLMthYC14IZNqFv9"><strong data-page-node-id="zV8JbEFTJgEGmq8E366F51">答案：C</strong><div class="analysis" data-page-node-id="55d0ZojbLfzkuVpzszWd09">.o 可重定位文件是二进制文件；源程序 .c、终端 stdin/stdout 是 ASCII 文本文件。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="WDQYRybbfAWmR4pv10G6ER">
+      <div class="q-title" data-page-node-id="b4GDksCDowPWdObDQ7PZxs"><span class="q-num" data-page-node-id="LrYzeVU0Hibud2YfEpktnG">18.</span><span class="type-tag type-single" data-page-node-id="xKFlvKXHfWjc608RKPvO76">单选</span>open 函数成功打开文件时返回？</div>
+      <ul class="options" data-answer="B" data-page-node-id="IBw3CKPppDjPz683yLFmPR">
+        <li data-val="A" data-page-node-id="2Of4xuSPV0BGR5CEKGsHkF">A. 文件首地址</li>
+        <li data-val="B" data-page-node-id="Q4gH73bvZrbrZVF9IoXSdi">B. 一个非负整数文件描述符</li>
+        <li data-val="C" data-page-node-id="QQ0HnzYUMh0cEACotKFcH4">C. -1</li>
+        <li data-val="D" data-page-node-id="kEbCAzmQFEGK4R0Yik5DZX">D. 0</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="mXaTI6FyXTSzyCDNcG92NW">查看解析</button>
+      <div class="answer-box" data-page-node-id="h7sqdJHMlneFO0yBJNhYFP"><strong data-page-node-id="vYkLrH38puJh1r5ZDaCC5W">答案：B</strong><div class="analysis" data-page-node-id="Ax1Ppe29uXi1wpOkITvk5r">成功返回非负整数（文件描述符 fd），失败返回 -1。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="4RpADLnAblsEWDm2P1KZyg">
+      <div class="q-title" data-page-node-id="W83ULgjQsHs6RGFdQGzt1y"><span class="q-num" data-page-node-id="e4RSe4AMAji4EjZyVZw2El">19.</span><span class="type-tag type-single" data-page-node-id="BC2sNi4t0EscVWMsh48gCi">单选</span>C 标准 I/O 库函数中「全缓冲 _IOFBF」的特点是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="j8NG1E0oox9rXrtqPeEl5Z">
+        <li data-val="A" data-page-node-id="L3mTT3iBnEvVOhuJAewrNF">A. 遇换行符也不写文件，只有缓冲区满时才真正写入</li>
+        <li data-val="B" data-page-node-id="bmA0siouDifYBw28ipb1Vv">B. 遇换行符即写入文件</li>
+        <li data-val="C" data-page-node-id="Buq2JauNvBB1UQnXcXLvYT">C. 不经过缓冲直接写入</li>
+        <li data-val="D" data-page-node-id="1mghIxJzDfEzce1myIrTpw">D. 写完一个字节即刷新</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="FlkWV914evE7l7qqigxZaY">查看解析</button>
+      <div class="answer-box" data-page-node-id="sneETXurzGGAt1PeWyOi9W"><strong data-page-node-id="xOsKA1naPZIREIALBYARTB">答案：A</strong><div class="analysis" data-page-node-id="brkOBF5PCT3drQqCT9BVHE">全缓冲：仅在缓冲区满时刷新；行缓冲：遇换行符或缓冲区满刷新；非缓冲：直接写文件。普通文件默认为全缓冲。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="BiUHtASRpdEBB40rOpOvSJ">
+      <div class="q-title" data-page-node-id="PqhwyhpZluDbyYJR2YHo7g"><span class="q-num" data-page-node-id="mFeG6czxLe2qmMPLJBKyrc">20.</span><span class="type-tag type-single" data-page-node-id="H67mqI2BUIqJfhUVdf2w5Z">单选</span>C 标准 I/O 库函数中「流缓冲区」的主要目的是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="GyM2ByNobVNB9DPTpAw4Ug">
+        <li data-val="A" data-page-node-id="lXSzDM4hfQUPrPiUBZiqEj">A. 让程序运行更快</li>
+        <li data-val="B" data-page-node-id="ZXRjat99GZ5zlyUITOxkKe">B. 简化文件操作</li>
+        <li data-val="C" data-page-node-id="9kcYs18vhPe2gPErbTtlNk">C. 减少系统调用次数</li>
+        <li data-val="D" data-page-node-id="UPjCEfeSfDUoNNjMJGYEAE">D. 增加安全性</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="MgTCbqR1meBunzNRsFbgVH">查看解析</button>
+      <div class="answer-box" data-page-node-id="87TGoCcfFywHVJqKxYpmwi"><strong data-page-node-id="7A39S38oxNbSPP35Fc32b8">答案：C</strong><div class="analysis" data-page-node-id="Jtnklb8XkaCpGoGv0cfXmZ">流缓冲区使得多次小数据 read/write 可合并为一次底层系统调用，从而显著减少开销。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="2KcPmypM26QAdJPfOdVilt">
+      <div class="q-title" data-page-node-id="3HZjnd83WtWqD7Qt9mdys9"><span class="q-num" data-page-node-id="ztSWIX3TRsD1cjCLhB1vKX">21.</span><span class="type-tag type-single" data-page-node-id="GvHFJwIizwFQ45cZe9INNd">单选</span>stdin、stdout、stderr 对应的文件描述符 fd 分别为？</div>
+      <ul class="options" data-answer="A" data-page-node-id="nBMWHNPSwFjxRc3xDOBOg0">
+        <li data-val="A" data-page-node-id="7YvcvCqqvZIJmknDBewmb8">A. 0、1、2</li>
+        <li data-val="B" data-page-node-id="cgkPYtf0JTSIOptALWGOVe">B. 1、2、3</li>
+        <li data-val="C" data-page-node-id="cUfjtKgKpLjBg2xCsOB2r6">C. 0、1、3</li>
+        <li data-val="D" data-page-node-id="QrUCczW2FGURCCwAumQCYP">D. 1、0、2</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="eBAaddeT04LwFHF6WAD9x5">查看解析</button>
+      <div class="answer-box" data-page-node-id="Ut96BWeVbEC8Ai2MCn8hGc"><strong data-page-node-id="sM9CiktjYRELe2BFBfItJD">答案：A</strong><div class="analysis" data-page-node-id="PmblAGqxXk4vTMmkxYjdx4">stdin=0, stdout=1, stderr=2，对应 _iob 数组前 3 项。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="TAuhaxgXqE7ILyv9nSdF7e">
+      <div class="q-title" data-page-node-id="Ej85LNOICXJctSUC5VXQNH"><span class="q-num" data-page-node-id="j9YG9Ulm2wPnQ429uKuylH">22.</span><span class="type-tag type-single" data-page-node-id="BXAjRAnSrqcL6xhh1m14ib">单选</span>getc 宏只在何种情况下会调用 <code data-page-node-id="ftTuhtdBco5i01oLAr5AD7">_fillbuf</code> 填充缓冲区？</div>
+      <ul class="options" data-answer="D" data-page-node-id="HtMNtojfq0dOkGOSJjcmQa">
+        <li data-val="A" data-page-node-id="Sc3qY3TEnhzRToyhy2eoMZ">A. 每次都调用</li>
+        <li data-val="B" data-page-node-id="s74ACN01P3zelcTfmGmXDl">B. 每 1024 次调用一次</li>
+        <li data-val="C" data-page-node-id="wXzEmGQrEJY41ztWwPIIj7">C. cnt=0 时</li>
+        <li data-val="D" data-page-node-id="yyHaXfuexS1intxrL1KSXw">D. cnt 减 1 后为负数（缓冲区已空）时</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="AWkWwiVBP2qy03F9fbp8Fb">查看解析</button>
+      <div class="answer-box" data-page-node-id="zeogrRa9cDZMGSQVZMtp5V"><strong data-page-node-id="ZH2WP0L53yYZkyYv1wwdGA">答案：D</strong><div class="analysis" data-page-node-id="0U1VSDqVOeEZGu0k4jIxxD">getc 多数情况只改 cnt 与 ptr；只有 cnt-- 后为负，才调用 _fillbuf 触发一次 read 系统调用填充缓冲区。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="c8UDkQrDEWVzH3NYqBBi6E">
+      <div class="q-title" data-page-node-id="1OvJ8fknThk1Qu77rugoyE"><span class="q-num" data-page-node-id="EKeqRjkUDrfBGMMrIEMAVY">23.</span><span class="type-tag type-single" data-page-node-id="CKD6gDqVYOZcspB9Takvnh">单选</span>关于标准 I/O 库函数「不足」的描述，错误的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="R4PPNLjA9uEfZa8uimVBGm">
+        <li data-val="A" data-page-node-id="xEtTGTEigT6A40WEQYcDjz">A. I/O 为同步操作，程序必须等待 I/O 完成</li>
+        <li data-val="B" data-page-node-id="fxAzae0B0hZRD3B0vC1kGd">B. C 标准库不提供读取文件元数据的函数</li>
+        <li data-val="C" data-page-node-id="GFPMMXatvXpl6x7HGaEWFf">C. 网络编程中容易出现缓冲区溢出</li>
+        <li data-val="D" data-page-node-id="vIiU1HWgIeaWgqp0bzBoXm">D. 标准 I/O 库函数在所有平台上都不可移植</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="JyZgEl2A68Bjv3KAVNUe3U">查看解析</button>
+      <div class="answer-box" data-page-node-id="OeVtk4csCHp1EmNSYcWu79"><strong data-page-node-id="vUSEgdXeVVDyr9DSYL3aXV">答案：D</strong><div class="analysis" data-page-node-id="vwoWAoDDi9XZB7eufUayus">标准 I/O 库函数反而「移植性好」；不足是同步、缺元数据、网络风险、不支持加锁等。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="gG0De9eHBch4HCpmclKDWA">
+      <div class="q-title" data-page-node-id="HGhT843SGNy0y9BNhLq1xR"><span class="q-num" data-page-node-id="8AMLjHjf0YS2mwMhEnPgBA">24.</span><span class="type-tag type-fill" data-page-node-id="446Fe1WJ2I4L44n5AUEIqF">填空</span>ASCII 文件也称为 ____ 文件，由多个正文行组成，每行以 '\n' 结束。</div>
+      <button class="reveal-btn" data-page-node-id="sqAmwDo5XtBymNAX38Paac">查看答案</button>
+      <div class="answer-box" data-page-node-id="poO2VgngB7ofedByuLRQ2V"><strong data-page-node-id="mFfHhwqf8IzPpRoYdH6qTk">答案：</strong>文本</div>
+    </div>
+
+    <div class="question" data-page-node-id="OMoeMH3e2FzdWloPrF115Z">
+      <div class="q-title" data-page-node-id="YXlJYGNkAW6jdQxTR3Akme"><span class="q-num" data-page-node-id="B4VfIe3X20TSRzof3oYyfG">25.</span><span class="type-tag type-fill" data-page-node-id="oByigSkyqUFGfKLllelgyN">填空</span>在 UNIX 系统中，文件就是一个 ____ 序列。</div>
+      <button class="reveal-btn" data-page-node-id="apEzpayZvhvXcbkKNeC3EJ">查看答案</button>
+      <div class="answer-box" data-page-node-id="SvIfTv4QIbl2WcIWMPlUlW"><strong data-page-node-id="TxYTjJZ8C6Gx4FAb5hTJZa">答案：</strong>字节</div>
+    </div>
+
+    <div class="question" data-page-node-id="XKGVqLYdFJcIQTUpF4iGHn">
+      <div class="q-title" data-page-node-id="KBZNOZSCSnfhZcDTEvXgjT"><span class="q-num" data-page-node-id="OUmg37GNIhaCsqPMPwxw4n">26.</span><span class="type-tag type-fill" data-page-node-id="xvUJY5FEE46yczqfMtzDRg">填空</span>UNIX 中使用 <code data-page-node-id="h7012PGPf2GGlDeyM7kK7e">lseek</code> 函数设置文件的 ____ 位置，初始为 0。</div>
+      <button class="reveal-btn" data-page-node-id="vOE3gZYpAUHQLYIrewOxHh">查看答案</button>
+      <div class="answer-box" data-page-node-id="ps8BwVGKC4zofmZt3Vca8M"><strong data-page-node-id="iPo4iDcqwphd2PSD3ECnOp">答案：</strong>读写</div>
+    </div>
+
+    <div class="question" data-page-node-id="87V2Zm1tzJlVsHXk5SVE1v">
+      <div class="q-title" data-page-node-id="OoMujAjWBGy8iuFaIc2rDM"><span class="q-num" data-page-node-id="sYDd9WAVWd6JBysD7KDroB">27.</span><span class="type-tag type-fill" data-page-node-id="uMqFHKlZW5PQ2vnUdOyR2J">填空</span>关闭文件时系统会释放文件相关数据结构所在的存储区并回收 ____。</div>
+      <button class="reveal-btn" data-page-node-id="91Xly8dPFMfaMSuE5BrsCB">查看答案</button>
+      <div class="answer-box" data-page-node-id="ZOD37GUuOa9wJbNLi0OlYV"><strong data-page-node-id="aN40r5QzRA9sSpQa8X17TE">答案：</strong>文件描述符（fd）</div>
+    </div>
+
+    <div class="question" data-page-node-id="H3vUd3T5Y1HC6U09n7nmwY">
+      <div class="q-title" data-page-node-id="vTQLrKK19U42yf2zab8WLZ"><span class="q-num" data-page-node-id="IpLwBcSbQU3qfu3AzxtSHL">28.</span><span class="type-tag type-fill" data-page-node-id="7PKYeUHCfB5A9yrxPqUbDE">填空</span>系统级 I/O 函数中对文件的标识是 ____，而 C 标准 I/O 库函数中对文件的标识是 FILE 结构指针 fp。</div>
+      <button class="reveal-btn" data-page-node-id="cVNZ6ab0XDTZPduESQ2hl9">查看答案</button>
+      <div class="answer-box" data-page-node-id="KJU7lyHozOCo1sKiPPCyos"><strong data-page-node-id="Xuja8HmvW4vDazTkW0sW1t">答案：</strong>文件描述符（fd）</div>
+    </div>
+
+    <div class="question" data-page-node-id="o3wcnvj7qJPh3iBbQAAje4">
+      <div class="q-title" data-page-node-id="juwSu30CKSV5q0sUacWL22"><span class="q-num" data-page-node-id="9EVxaZmgcZACHuDIduxQjA">29.</span><span class="type-tag type-fill" data-page-node-id="teNylFFWxAFTNqKM5AQHAj">填空</span>C 标准 I/O 库函数默认 BUFSIZ 大小为 ____ 字节。</div>
+      <button class="reveal-btn" data-page-node-id="amyqjrRgPxRBh5ljqaqMyw">查看答案</button>
+      <div class="answer-box" data-page-node-id="HsBNb7bTmr20XJcyVGe7PB"><strong data-page-node-id="wFEVhkEoCp3sztcpzByujc">答案：</strong>1024</div>
+    </div>
+
+    <div class="question" data-page-node-id="HGsIpFP8UVQraIS1uv38ah">
+      <div class="q-title" data-page-node-id="BP8NChyJWN4HKa2hBahcD1"><span class="q-num" data-page-node-id="H2e3JGKBImvyAM6Ct4CxYQ">30.</span><span class="type-tag type-fill" data-page-node-id="seSJrdLx6SjNHXqxwATvXb">填空</span>每次系统调用都要进行两次上下文切换，先从用户态切到内核态，处理后再从内核态切回 ____ 态。</div>
+      <button class="reveal-btn" data-page-node-id="RK5SEI2hjX07qLBpHPfkfh">查看答案</button>
+      <div class="answer-box" data-page-node-id="LJSOvmWtyXdfkwzdjCkheI"><strong data-page-node-id="Pq1iQH1BJGC02OFOUdceYv">答案：</strong>用户</div>
+    </div>
+
+    <div class="question" data-page-node-id="30P72cvsjiBXb6nqp84BLM">
+      <div class="q-title" data-page-node-id="jBoiIldIjuw2Te4ShLHfrr"><span class="q-num" data-page-node-id="N9hpkp32PUj1AQ81Ns5Y5q">31.</span><span class="type-tag type-fill" data-page-node-id="1tLrK3RbNebusZBC97GTrY">填空</span>普通文件的流缓冲区属性默认为 ____ 缓冲。</div>
+      <button class="reveal-btn" data-page-node-id="KFOn1d5IEqFHhE9AXSGv5c">查看答案</button>
+      <div class="answer-box" data-page-node-id="1f3fBXA3A5wNetmWFRUhME"><strong data-page-node-id="7gQ7DqSlWFdkyn5ElGxFTc">答案：</strong>全（_IOFBF）</div>
+    </div>
+
+    <div class="question" data-page-node-id="utBuQJaZ3esHki0dfHr6lH">
+      <div class="q-title" data-page-node-id="VTNbp042K1i0lHvXUBEHnf"><span class="q-num" data-page-node-id="SIVBvQwspb1EPn8Sd1d2ai">32.</span><span class="type-tag type-fill" data-page-node-id="7C1kcsrNISKn5KaUafxBKM">填空</span>Windows 中文件 I/O API 函数包括 <code data-page-node-id="S8GHkoopFacNIfuw42pAzG">CreateFile</code>、<code data-page-node-id="dDaH6FdzeYF7LfgOvGT3wy">ReadFile</code>、<code data-page-node-id="ZZlhJZH0ROWba26VdfR0qe">WriteFile</code>、<code data-page-node-id="63WQjuFPLijagszkZZOAzO">CloseHandle</code> 等。</div>
+      <button class="reveal-btn" data-page-node-id="d7j4GGj9oww9MUZX9YTIyT">查看答案</button>
+      <div class="answer-box" data-page-node-id="uxVV9UTSQcKB98A6Agm9yH"><strong data-page-node-id="iVfobCGMZU1dhgcxaWRTBm">答案：</strong>CloseHandle（关闭文件句柄）</div>
+    </div>
+
+    <div class="question" data-page-node-id="QvVr3XTJ4ZswPlT0b88iFC">
+      <div class="q-title" data-page-node-id="tVw3zz3esgdfQB2HDyrZsf"><span class="q-num" data-page-node-id="qEoAlH8SjAhuSN1G11n1hr">33.</span><span class="type-tag type-term" data-page-node-id="xkABlzfhqXsT3xHTKozVBr">名词解释</span>文件描述符（fd）</div>
+      <button class="reveal-btn" data-page-node-id="zPQignyvq8a1oKxLswQrZ1">查看答案</button>
+      <div class="answer-box" data-page-node-id="4zBPnhB0JDlrcEF8gb8FnQ">操作系统为每个被打开的文件分配的一个非负整数标识，用于在系统级 I/O 函数中指代该文件；stdin/stdout/stderr 默认为 0/1/2。</div>
+    </div>
+
+    <div class="question" data-page-node-id="E10SE8cpzcHo0wwtA0DvET">
+      <div class="q-title" data-page-node-id="eo6YTCLjXLRwRiA7QHGNRb"><span class="q-num" data-page-node-id="C3KJ1Jt4hLlbUh57qlhqo8">34.</span><span class="type-tag type-term" data-page-node-id="oun1rHLmc7r6bGh5NN9fct">名词解释</span>流（Stream）</div>
+      <button class="reveal-btn" data-page-node-id="Ht28GO09sqBVgWaAk4byRV">查看答案</button>
+      <div class="answer-box" data-page-node-id="EEQ8MWPqZMXDomv62PMGw1">C 标准 I/O 库中对已打开文件的抽象，用 FILE 结构体描述；包括流缓冲区、当前读写位置、文件描述符等状态。</div>
+    </div>
+
+    <div class="question" data-page-node-id="GIqy6K6GFC82uxg2UEzSVw">
+      <div class="q-title" data-page-node-id="akK45bAG2BpjiEtHtgjdnM"><span class="q-num" data-page-node-id="kAgpTgNNrZhiszuasigAuC">35.</span><span class="type-tag type-term" data-page-node-id="AZ1aWgIWX3gvlXw8Dt2y4t">名词解释</span>ASCII 文件</div>
+      <button class="reveal-btn" data-page-node-id="D7cTiV1g1O4jmEuSUdKGWm">查看答案</button>
+      <div class="answer-box" data-page-node-id="eZZCvEagQ9UdjfhYZoctWy">由多个以换行符 '\n' 结束的正文行组成、每个字节是一个可读 ASCII 字符的文本文件；与可重定位/可执行文件等二进制文件相对。</div>
+    </div>
+
+    <div class="question" data-page-node-id="3Aes0neYBW8hf2egSnNJbz">
+      <div class="q-title" data-page-node-id="rjbbLT9qLprEjVPBQK1b72"><span class="q-num" data-page-node-id="cEsDwnvaQWQr0SWXAnuXdW">36.</span><span class="type-tag type-term" data-page-node-id="EV3beAOW2oZWPgFBwQnjAF">名词解释</span>全缓冲（_IOFBF）</div>
+      <button class="reveal-btn" data-page-node-id="SJNsPjtrSPOHwpLyhyZPbN">查看答案</button>
+      <div class="answer-box" data-page-node-id="7g8EGyF2RFnQvDPYHN9lWT">C 标准 I/O 的一种缓冲属性：仅当缓冲区满时才将缓冲内容真正写入文件；即使遇到换行符也不立即刷新；普通文件默认采用全缓冲。</div>
+    </div>
+
+    <div class="question" data-page-node-id="Vr4JtwpgW8MpNz908ASycb">
+      <div class="q-title" data-page-node-id="XDJg7yGTAQpP7XlFg12CBA"><span class="q-num" data-page-node-id="lL0wV09NO0sq68uGrGhm1F">37.</span><span class="type-tag type-term" data-page-node-id="m8P6cH6b5NzDe3NN1KuCMY">名词解释</span>行缓冲（_IOLBF）</div>
+      <button class="reveal-btn" data-page-node-id="H1cLvMxepEg96WcY5XHONv">查看答案</button>
+      <div class="answer-box" data-page-node-id="Bm0DTAciN5Qp0LGuZJ0LTE">C 标准 I/O 的一种缓冲属性：遇换行符或缓冲区满时立即将缓冲内容写入文件；通常用于终端等交互设备。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="dpPsCYsldtz5qprSlKIIxz">
+      <div class="q-title" data-page-node-id="5DViCz1UseImQ104Z29Nng"><span class="q-num" data-page-node-id="0MwbmzkvS0R9hNoB43Wvt2">38.</span><span class="type-tag type-comp" data-page-node-id="4xJht5dnVE4USMfswNyQal">综合题</span>说明 C 标准 I/O 库函数如何利用流缓冲区显著减少 read 系统调用次数。</div>
+      <button class="reveal-btn" data-page-node-id="wGdqgld3sXrnWhG1biJIXG">查看答案</button>
+      <div class="answer-box" data-page-node-id="pNDRZz0CJJFBNASA454jSX"><strong data-page-node-id="MG6IZAbyZTQKfAdY3A3bRd">答案：</strong>
+        <div class="analysis" data-page-node-id="WaVbHZmLEQ7Qv3Um38HniI">
+          ① 第一次调用 getc 时触发 _fillbuf，通过 malloc 建立 1024B 缓冲区，并执行 1 次 read 系统调用读入最多 1024 字节；<br data-page-node-id="OIisZmWztVF2uauw8HbVql">
+          ② 后续 1023 次 getc 调用仅修改缓冲区指针 ptr 和剩余计数 cnt，不再触发系统调用；<br data-page-node-id="ycncfmZRE3qlLCdLNpvT0F">
+          ③ 当 cnt 减为 0/负时再次调用 _fillbuf 填充下一批 1024 字节；<br data-page-node-id="JAb9qleDTOTvUIcQ6dj5yU">
+          ④ 对 n 次连续 getc 操作：使用 C 标准 I/O 仅约 ⌈n/1024⌉ 次系统调用，而直接调用 read 每次读 1 字节则需 n 次系统调用；<br data-page-node-id="7guHjbRh159fKYKcZfA9lN">
+          ⑤ 通过流缓冲把多个用户态 I/O 合并为少量系统调用，显著降低了用户态/内核态切换开销。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="sqkhksyAd9f4BkwCtv9F4b">
+      <div class="q-title" data-page-node-id="ZLtaSDjFHsWmROkVJpBdKS"><span class="q-num" data-page-node-id="LHiR8ZGgqHZ8Ue9N4ubafE">39.</span><span class="type-tag type-comp" data-page-node-id="6aUfwN8fOMhK0BPFpZiPEn">综合题</span>比较「系统级 I/O 函数」与「C 标准 I/O 库函数」在标识方式、调用开销、移植性、I/O 同步性、缓冲机制上的差异。</div>
+      <button class="reveal-btn" data-page-node-id="jFW1SjVAaPHYvqxO5WvKGM">查看答案</button>
+      <div class="answer-box" data-page-node-id="aqc4kuaFzHBYfvp2bOqJ70"><strong data-page-node-id="ovgQWHeVinZRgALwHgyb9E">答案：</strong>
+        <div class="analysis" data-page-node-id="gQXuUDdtY6Hc6vNCuTHIZQ">
+          ① 标识：系统级用 fd（int），标准库用 FILE* 指针；<br data-page-node-id="aBCbMK4Exwurmr92jh2pqp">
+          ② 开销：系统级每次都是一次系统调用（两次上下文切换），开销大；标准库通过流缓冲减少系统调用次数；<br data-page-node-id="S8CpSyTSWoy5fUQtG5qb7S">
+          ③ 移植性：系统级函数因平台而异（如 Windows 没有 creat/read/write 等），标准库函数跨平台；<br data-page-node-id="6wiZSpprkqqwtpo7guAmwk">
+          ④ 同步性：两者都是同步 I/O，必须等待 I/O 完成；<br data-page-node-id="UxUbBHbNRODvltC3qvYWbr">
+          ⑤ 缓冲：系统级无用户态缓冲（仅有内核缓冲），标准库有用户态流缓冲区（全/行/非）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第三节 ========== -->
+  <section class="section-block" id="sec3" data-page-node-id="Y7AVYOtzl9ED9z9W4QwMHM">
+    <div class="section-header" data-page-node-id="aavMAqXCTUn8YLL6ec7r6F">
+      <div class="num" data-page-node-id="v91yIjFSrzZ6hTcA0KHli1">3</div>
+      <h2 data-page-node-id="c4MmVnJdYv2TbwP1lZYxcO">第三节 内核空间 I/O 软件</h2>
+      <span class="count" data-page-node-id="vGGuMstbJYIAgDgB2ut6MJ">18 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="VKsVQvTrwyPvQPELcUqMRm">
+      <div class="q-title" data-page-node-id="hnVisGYIn2YGKYWJJdhyZv"><span class="q-num" data-page-node-id="LVu8CmMFeQdiD0jDh0IEBW">40.</span><span class="type-tag type-single" data-page-node-id="xOkKbjuMPCgKrxrtT1HBHz">单选</span>关于「程序直接控制 I/O 方式」描述错误的是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="tB7EhrloFetPqaoVUzhFmG">
+        <li data-val="A" data-page-node-id="S17w30th28QTda5CQYq0tb">A. CPU 与外设可完全并行工作</li>
+        <li data-val="B" data-page-node-id="uyk42HsKbq8XqKDtEVAvYq">B. 实现简单，设备控制电路简单</li>
+        <li data-val="C" data-page-node-id="6eZdfveKwZ0iOAGoQ8BQ9x">C. CPU 需要不断查询设备状态寄存器</li>
+        <li data-val="D" data-page-node-id="8I7Eh6KHFvR641uPgiRulS">D. 外设速度远慢于 CPU 时 CPU 时间被严重浪费</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="RIBHnApZ6pYZi9VCJCq1tG">查看解析</button>
+      <div class="answer-box" data-page-node-id="GVHHaEKGJSE2vpkvhKU2r4"><strong data-page-node-id="Xp8q5ycI3IUse7y7mjiR7G">答案：A</strong><div class="analysis" data-page-node-id="Bm0mpQ3EtwLYK1cLZgmfOW">程序直接控制下 CPU 必须忙等待（轮询设备状态寄存器），不能并行工作；选项 A 错。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="c5Vw0On1fEqPLAvboZlHlA">
+      <div class="q-title" data-page-node-id="Phpc1sr3Kjpddemknyux9a"><span class="q-num" data-page-node-id="b37t77NF2jCnmwqJpSxbwx">41.</span><span class="type-tag type-single" data-page-node-id="3jVKqBbMLBWXXYSYTsUyxU">单选</span>「中断控制 I/O 方式」下，CPU 启动外设后？</div>
+      <ul class="options" data-answer="B" data-page-node-id="w1qj78qKeonBWWgltzHAdC">
+        <li data-val="A" data-page-node-id="lmimGHH4lz5JLZdbDUtvUo">A. 阻塞等待外设完成</li>
+        <li data-val="B" data-page-node-id="rO0BnJ3mFeCPMLHXHxuDiz">B. 可调度其他进程运行，外设完成后通过中断通知 CPU</li>
+        <li data-val="C" data-page-node-id="OfXBBakkVVdQzXUPlY4rLG">C. 直接进行数据传送</li>
+        <li data-val="D" data-page-node-id="rTRRqudXtmbWnfW4LOL42f">D. 关闭中断</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="m0p7bTubBqEh9w6zHsFksb">查看解析</button>
+      <div class="answer-box" data-page-node-id="cw9LueG5hguuv3DfcvxShL"><strong data-page-node-id="fYCcbO5VXFqOeQqwSTyolv">答案：B</strong><div class="analysis" data-page-node-id="iM8bJyxFaqJTiXFs8ZQD1D">中断方式：CPU 启动外设后调度其他进程执行，外设就绪后发中断请求，CPU 响应中断再处理 I/O。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="37veQGgIZCiUY6y7eVbBA2">
+      <div class="q-title" data-page-node-id="Q6UyZ7072JgGy0kUfQKl8P"><span class="q-num" data-page-node-id="lRwN73Aj3sdDKOa9CtKoCv">42.</span><span class="type-tag type-single" data-page-node-id="idbmQW3HzIXZCyMEZ06hy2">单选</span>DMA 控制器每完成一个数据的传送后？</div>
+      <ul class="options" data-answer="C" data-page-node-id="4Pa0Hb95aTBGul3Ubn9RZk">
+        <li data-val="A" data-page-node-id="MneoYkjeGckz41QmWM4dJ1">A. 立即终止传送</li>
+        <li data-val="B" data-page-node-id="GUflHgLbBmsFYhvzWgEkmk">B. 给 CPU 发送数据中断</li>
+        <li data-val="C" data-page-node-id="qMJEsAtdpmvB4kwLgIYqyb">C. 字计数器减 1 并更新主存地址</li>
+        <li data-val="D" data-page-node-id="mLnWAa0BbA4MhkO7MxwDFM">D. 不做任何事</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="SE5wombPVjy43iOxqU89ru">查看解析</button>
+      <div class="answer-box" data-page-node-id="KB7BKqgwEpVTF5fwLt7BaN"><strong data-page-node-id="wTajqecXipPqzsuyCCkyod">答案：C</strong><div class="analysis" data-page-node-id="IHuJD0plcEjsWX6k3vXHxF">DMA 控制器每完成 1 个数据：字计数器 -1、主存地址 +数据宽度；全部完成时发「DMA 结束」中断。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="QtyMB3QpLaFs0w48WrzKa3">
+      <div class="q-title" data-page-node-id="7LjOfC6a382eNOZOGIqVwV"><span class="q-num" data-page-node-id="ZGrNTWG7p6eQLG52t0p8Op">43.</span><span class="type-tag type-single" data-page-node-id="PQn4q2xTC3suGZdE6nvIvq">单选</span>DMA 控制 I/O 方式下，CPU 介入 I/O 的时机是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="9HupHBhf8Sdqvq8Ew6h4lL">
+        <li data-val="A" data-page-node-id="SUkAOEeo8FO1t9BsHALwV7">A. 每个数据传送时</li>
+        <li data-val="B" data-page-node-id="pTTOhvL4yhRbGP4AyR8J4i">B. 不介入</li>
+        <li data-val="C" data-page-node-id="w9hHiT0NfXiyoi60gbAbmu">C. 仅在数据传送结束</li>
+        <li data-val="D" data-page-node-id="GxGawzqhLg0EHukUSeEjuz">D. 仅在 DMA 初始化阶段和「DMA 结束」中断处理时</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ui9kBfQsrv8Q1HbLBTaHrm">查看解析</button>
+      <div class="answer-box" data-page-node-id="P8Ly1GTVgzRWgUD48SQBMT"><strong data-page-node-id="yYlpE0Bss0JccueC4X0DvL">答案：D</strong><div class="analysis" data-page-node-id="U7eHvwkN6orW067OeYpnhk">DMA 方式下数据传送过程完全由 DMA 控制器在硬件中完成，CPU 仅介入初始化与结束中断两次，开销极小。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="R6vFCdUzdXw97oYvfCqrCT">
+      <div class="q-title" data-page-node-id="D1DDumhlbnLg4k0818qtSU"><span class="q-num" data-page-node-id="tfOF1C7mtoZNusFXDdGDyB">44.</span><span class="type-tag type-single" data-page-node-id="9VZKklRvYHW9Eh7egtKIFB">单选</span>中断服务程序通常分几个阶段？</div>
+      <ul class="options" data-answer="A" data-page-node-id="HL3FkpMzS8XFA3ZcAmDC5y">
+        <li data-val="A" data-page-node-id="xEff0vDSCAb9WfboCF0rGs">A. 3 阶段：准备阶段、处理阶段、恢复阶段</li>
+        <li data-val="B" data-page-node-id="ygMwoltCbQ8UFuaNGBBpyD">B. 2 阶段：响应阶段、处理阶段</li>
+        <li data-val="C" data-page-node-id="8aqwDsrQS0DSLa3WCjUT6E">C. 4 阶段：响应、保护、处理、返回</li>
+        <li data-val="D" data-page-node-id="0jMAn3jR6B8rGx3yDgU7zs">D. 5 阶段</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="AToljQZwSuqzDHTPCFnzAO">查看解析</button>
+      <div class="answer-box" data-page-node-id="RLLRozDJ866kdZmFsZdCxT"><strong data-page-node-id="zqyNK1chcyAXhVslZb4a4v">答案：A</strong><div class="analysis" data-page-node-id="OjeiVoolgRnmmBJlgi3a34">中断服务程序三阶段：①准备（保存现场、新屏蔽字、开中断）；②处理（读中断号、调用具体服务、通知设备、清除中断）；③恢复（关中断、恢复现场/旧屏蔽字、iret 返回）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="pM3vzJxqFUP7xulou2KATd">
+      <div class="q-title" data-page-node-id="CABOOO7WxMPOU9466b0h9z"><span class="q-num" data-page-node-id="N295Ic2RjpqFiPcs97hC6s">45.</span><span class="type-tag type-single" data-page-node-id="5XdPTQDIvbZLFl2oTdMfS2">单选</span>「中断屏蔽字」通常存放在？</div>
+      <ul class="options" data-answer="B" data-page-node-id="CYtS9D1IDfElh6qWr0ENzn">
+        <li data-val="A" data-page-node-id="EoYKAUJ15EZakWz9GqA1SO">A. CPU 通用寄存器</li>
+        <li data-val="B" data-page-node-id="1xKTkyHmbBs3EQOK82raEo">B. 中断控制器中的一个 I/O 端口</li>
+        <li data-val="C" data-page-node-id="2eB7EawazHYlfyWM4MmQUK">C. 主存固定区域</li>
+        <li data-val="D" data-page-node-id="PWo5fznKnFVf7B4avpKFI0">D. 高速缓存</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="dm3va0zn6kCHCBGkgG4cMq">查看解析</button>
+      <div class="answer-box" data-page-node-id="ErUyNxnAZlWUYXWN0LEOGN"><strong data-page-node-id="BzLJtVpmgpd8JIMnYwsAv3">答案：B</strong><div class="analysis" data-page-node-id="iEu0Y6rlbsFhBwN7rJ7V8F">中断屏蔽字寄存器是中断控制器中的一个 I/O 端口，由 CPU 通过 I/O 指令设置；每位对应一个中断源。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FeBAhU9mCcuraiUeGgLQPp">
+      <div class="q-title" data-page-node-id="S2sVaeJ1cBHDOnzHPWx1YS"><span class="q-num" data-page-node-id="IZMdPTHhLHaSzA44MET2WW">46.</span><span class="type-tag type-single" data-page-node-id="R35EpQCXFFtIWDgkzahZt6">单选</span>「通用块设备 I/O 层」的主要作用是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="ruwFR2oXGi6q4lzlUfLPEc">
+        <li data-val="A" data-page-node-id="OcHD4Dqnzt8DXIcb9jlsRv">A. 屏蔽所有 I/O 设备</li>
+        <li data-val="B" data-page-node-id="CDDSFC266d7xjidMtsInje">B. 直接控制字符设备</li>
+        <li data-val="C" data-page-node-id="tZJ52GJs9pd5UTCsgnMWpn">C. 为所有块设备（磁盘/SSD/光盘）提供统一抽象（统一逻辑块大小）</li>
+        <li data-val="D" data-page-node-id="AiC85y0voIOCo793eF4OnY">D. 实现 DMA 传送</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="sgu3D2VSI3gFT50NM6dz4s">查看解析</button>
+      <div class="answer-box" data-page-node-id="i3FnfZozh5nMDcjrox2wdX"><strong data-page-node-id="jTcNSQs7sXQvPDWG0FmpDx">答案：C</strong><div class="analysis" data-page-node-id="M7ZknpHn8Dd7PgFTNeCUeQ">通用块设备层把磁盘/SSD/光盘等块设备的扇区大小差异屏蔽，对上层文件系统呈现统一的逻辑块大小。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="JOXaMXstJh895UV04wzvgo">
+      <div class="q-title" data-page-node-id="JrYjUVJo7PUIQGBeHJ9Lv9"><span class="q-num" data-page-node-id="hSYpy2OIJCxY1LZaZlPeqA">47.</span><span class="type-tag type-fill" data-page-node-id="pRheEU2cLlHlra1djFBXdU">填空</span>三种 I/O 控制方式为：程序直接控制 I/O、____ 控制 I/O、DMA 控制 I/O。</div>
+      <button class="reveal-btn" data-page-node-id="gBTqkYhsRMzVZwEzrrgP6z">查看答案</button>
+      <div class="answer-box" data-page-node-id="LQ64Z9p5n6snjNmnVL1LCt"><strong data-page-node-id="lWNYPj5MLFAKDQdRvdpOMP">答案：</strong>中断</div>
+    </div>
+
+    <div class="question" data-page-node-id="l9NY5GJxKRuWmjUxFO42lo">
+      <div class="q-title" data-page-node-id="DnVQF08wAbiqrqamPTC3Hh"><span class="q-num" data-page-node-id="9BMNiwPbWvIzBawHyopk13">48.</span><span class="type-tag type-fill" data-page-node-id="nGKkuj5MJ4DlB5zp5vyfYb">填空</span>DMA 控制器每完成 1 个数据传送后将字计数器 ____ 并更新主存地址。</div>
+      <button class="reveal-btn" data-page-node-id="NYFAKSV2l55shFqQqLzYOp">查看答案</button>
+      <div class="answer-box" data-page-node-id="6kvf3YvwCZoNbRlMF9NyFC"><strong data-page-node-id="CCBl8W8n4bH0D04snUMqWe">答案：</strong>减 1</div>
+    </div>
+
+    <div class="question" data-page-node-id="pAuhbzZG7Y0gLWdbghqSXf">
+      <div class="q-title" data-page-node-id="TuDdOL4EgGFRAy04FSsR7H"><span class="q-num" data-page-node-id="NUlzseGutc6UVnEiKZheuh">49.</span><span class="type-tag type-fill" data-page-node-id="MwOTLHHvTLpOg2jqS1LxuN">填空</span>中断服务程序中若允许后续处理中响应其他中断，则在准备阶段应：保存旧屏蔽字、设置新屏蔽字、并 ____ 中断。</div>
+      <button class="reveal-btn" data-page-node-id="l7CZ1hWDsi8iXTMQ7MIGzz">查看答案</button>
+      <div class="answer-box" data-page-node-id="cyw1FNnmoqsRrEAvsRGbbP"><strong data-page-node-id="YWIAQl4LfmXWTVNmorPNR5">答案：</strong>开（打开）</div>
+    </div>
+
+    <div class="question" data-page-node-id="b2sbRGqxONeZXALIonw2Ms">
+      <div class="q-title" data-page-node-id="QgCQm0npAwEcwweOCuuVEN"><span class="q-num" data-page-node-id="Sf7dQ4vnlnZUmsoXKDlo2E">50.</span><span class="type-tag type-fill" data-page-node-id="nXBGhdCLcgQvnRGURG6ZYz">填空</span>CPU 在中断处理过程中被新的更高优先级中断请求打断并转去处理新中断的现象称为 ____ 中断（也称中断嵌套）。</div>
+      <button class="reveal-btn" data-page-node-id="pdnttVJJeE6cxX2yvd5mCr">查看答案</button>
+      <div class="answer-box" data-page-node-id="coOPEJriG8vgbBezBNPTdA"><strong data-page-node-id="Tsa7OhMJbPd8hwY3dJ5Yl3">答案：</strong>多重</div>
+    </div>
+
+    <div class="question" data-page-node-id="ssxDxfxhRvJGpx7XVItGvC">
+      <div class="q-title" data-page-node-id="qxWsKTgUUCPDUZXWHH5upi"><span class="q-num" data-page-node-id="OXqvYdxeHhLgpMrewN2Ed6">51.</span><span class="type-tag type-fill" data-page-node-id="1gTAdIoVHffC3DTDBbInkC">填空</span>与设备无关的 I/O 软件层包含三个组件：文件系统、缓存层、____ I/O 层。</div>
+      <button class="reveal-btn" data-page-node-id="2BZJ7VZK0mJ5vjOlkveVE5">查看答案</button>
+      <div class="answer-box" data-page-node-id="EHZxGJVhIJLHysJpHeosmf"><strong data-page-node-id="IE8lfeAJJIEj1cigeFveq5">答案：</strong>通用块设备</div>
+    </div>
+
+    <div class="question" data-page-node-id="GdFHh0JgUd0qJ6DHKcHJXw">
+      <div class="q-title" data-page-node-id="76Zf7Jp0a5WL5B1aeFesZV"><span class="q-num" data-page-node-id="GAkMHxxvn2MHD9Nk1PVBm4">52.</span><span class="type-tag type-fill" data-page-node-id="at4GNZ6yWymuxJybwJGOgG">填空</span>设备驱动程序在初始化时会向操作系统注册相应的中断服务，并把 ____ 号作为参数指示中断服务绑定。</div>
+      <button class="reveal-btn" data-page-node-id="E49QHut9er2hSgkjJMbrC5">查看答案</button>
+      <div class="answer-box" data-page-node-id="wM7ldYAZmoDnp9Q1ZtYuES"><strong data-page-node-id="2lRMqRcPUCw80oOEuiZEOA">答案：</strong>中断</div>
+    </div>
+
+    <div class="question" data-page-node-id="szVGsXyEc3mDuJ3qOuoHEd">
+      <div class="q-title" data-page-node-id="m8BuK2jElllv7ejsjWJGlu"><span class="q-num" data-page-node-id="bFsn3CmPqDuBITK6SEs6NZ">53.</span><span class="type-tag type-term" data-page-node-id="HNfwJOhbzYC1tUdw2eaJWd">名词解释</span>设备驱动程序（Device Driver）</div>
+      <button class="reveal-btn" data-page-node-id="v2VxnRyT2rXSr4aPHAckjf">查看答案</button>
+      <div class="answer-box" data-page-node-id="2TKk0ms9FxPxAzYlkfDQGD">操作系统内核中负责控制具体 I/O 设备工作的软件，包含设备初始化、I/O 启动、状态查询、中断服务注册等；其实现与具体设备的 I/O 控制方式（程序查询/中断/DMA）紧密相关。</div>
+    </div>
+
+    <div class="question" data-page-node-id="FAFYKWHrIEVds0AvaZetga">
+      <div class="q-title" data-page-node-id="KAwvxCEgcxMvMC9hyOwcsu"><span class="q-num" data-page-node-id="SsqKytHx0l7SDWoqHrdG7c">54.</span><span class="type-tag type-term" data-page-node-id="qMC2bFXGna2TVm5XLYv43d">名词解释</span>DMA 控制器</div>
+      <button class="reveal-btn" data-page-node-id="psj1OPB1hOkj8Hw45hXYEm">查看答案</button>
+      <div class="answer-box" data-page-node-id="PfpXHtYbcuRsSTjbZ2tTQ4">专门用于在外设与主存之间直接进行批量数据传送的硬件接口，数据不经过 CPU；内部有字计数器和地址寄存器，每传送 1 个数据自动减 1 并更新地址，全部完成时发 DMA 结束中断。</div>
+    </div>
+
+    <div class="question" data-page-node-id="sUoLNfVCKllHNMC6uVipis">
+      <div class="q-title" data-page-node-id="DGmkLvUqV4O8eBprPLDkxA"><span class="q-num" data-page-node-id="47lvlSkry3LQgZCYAsrCJJ">55.</span><span class="type-tag type-term" data-page-node-id="wxjtAVgzhyGdlZargAJOO8">名词解释</span>中断屏蔽字</div>
+      <button class="reveal-btn" data-page-node-id="wFUx7jyWNjDQcwwHQhjQwm">查看答案</button>
+      <div class="answer-box" data-page-node-id="nP1IgMSgw3hkZau3QPdGcw">存放在中断控制器中的一位一字位串，每位对应一个外设中断源；通常 1 表示允许该中断源打断当前中断处理，0 表示屏蔽；软件可通过指令修改屏蔽字，动态改变中断处理次序。</div>
+    </div>
+
+    <div class="question" data-page-node-id="4Q2tVSIyJDUhumJQQUb4Wa">
+      <div class="q-title" data-page-node-id="n4LC7kzG8kntXp2vzNsjYD"><span class="q-num" data-page-node-id="JFfPekwVgmclk9CAwZpv2r">56.</span><span class="type-tag type-term" data-page-node-id="Wb5ItLbvV41Dwt7Sk6JmK8">名词解释</span>多重中断（中断嵌套）</div>
+      <button class="reveal-btn" data-page-node-id="TqQt1NIwlshGm3y7h7xvtY">查看答案</button>
+      <div class="answer-box" data-page-node-id="EoE7S3m89AmsF4frOTI5ED">CPU 在执行某中断服务程序时，被新的（通常更高优先级）中断请求打断并转去处理新中断的现象；通过中断屏蔽字实现允许/禁止哪些中断可打断当前处理。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="GIko171MqwrKuFzC19HJZ1">
+      <div class="q-title" data-page-node-id="8nFTgz3DGxgjGonJT31DuP"><span class="q-num" data-page-node-id="62AT4qmCXExFim070HnIqq">57.</span><span class="type-tag type-comp" data-page-node-id="FSBcvvFXVwWW4CcJoIk5Rw">综合题</span>比较程序直接控制、中断控制、DMA 控制三种 I/O 方式在「CPU 介入程度」「外设与 CPU 能否并行」「硬件复杂度」「适用场景」上的差异。</div>
+      <button class="reveal-btn" data-page-node-id="zlb6nqClM93FLp2eEwUvNi">查看答案</button>
+      <div class="answer-box" data-page-node-id="OPKyvnuyrwlHgb7sR9fouO"><strong data-page-node-id="zGj1Jpi59PVwyl5Nf4j0A6">答案：</strong>
+        <div class="analysis" data-page-node-id="jmlU5o2HDn2tPqDFuvMnzp">
+          ① 程序直接控制：CPU 全程忙等待；外设与 CPU 不能并行；硬件最简单（仅状态/数据端口）；适用于简单嵌入式/极低速外设；<br data-page-node-id="kpyFU2tEX7GSbQ9TQciEcr">
+          ② 中断控制：CPU 仅在中断时介入；外设与 CPU 可并行；硬件中等（需中断控制器）；适用于一般字符设备/中低速块设备；<br data-page-node-id="8y0C2gpiqy1jxrJLtUwTWC">
+          ③ DMA 控制：CPU 仅在初始化与结束中断时介入；外设与 CPU 完全并行；硬件最复杂（DMA 控制器）；适用于磁盘/高速块设备。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第四节 ========== -->
+  <section class="section-block" id="sec4" data-page-node-id="nfxTAFPRkqJDKpR5c0eZql">
+    <div class="section-header" data-page-node-id="IUN6vuOQFHVnfAIJOcm25n">
+      <div class="num" data-page-node-id="B8FuPZt2F87DFXeBgJDuzQ">4</div>
+      <h2 data-page-node-id="mOkNYiowWA3QXOntMMHbXU">第四节 I/O 硬件与软件的接口</h2>
+      <span class="count" data-page-node-id="cfuqjbcWqygthxlP8MeJAE">21 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="txxei0nZ4oxQ2t8rpMUBib">
+      <div class="q-title" data-page-node-id="wyrcpV683VQesrriVTrU1e"><span class="q-num" data-page-node-id="f7kcjBx2x1Tx65svX0UGyg">58.</span><span class="type-tag type-single" data-page-node-id="q5rGMulYhD3Fv8sueAzePr">单选</span>下列哪类「不是」块设备？</div>
+      <ul class="options" data-answer="B" data-page-node-id="JOpp6XNc1NW4nqrFGj0yeT">
+        <li data-val="A" data-page-node-id="s7dKqq7MHSvlqz2HNi9OR0">A. 磁盘驱动器</li>
+        <li data-val="B" data-page-node-id="ArbTDdut36wib92mNCJ4z7">B. 键盘</li>
+        <li data-val="C" data-page-node-id="JHI1hyHU44lMDFEKp6DitY">C. 固态硬盘（SSD）</li>
+        <li data-val="D" data-page-node-id="Ac8E44UyMUFH4BEkgkmr0R">D. 光盘</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Lv5bQ9PIPYTEUJ5cckc19S">查看解析</button>
+      <div class="answer-box" data-page-node-id="5lLphFynr8mZ71zA5jIueD"><strong data-page-node-id="UPu8CU8altjxCbOseNEhU5">答案：B</strong><div class="analysis" data-page-node-id="6QvkJ9tFpAm8VGla2LNYm5">键盘是字符设备（按字符流传送）；磁盘/SSD/光盘都是块设备（按固定大小数据块寻址）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="jqWCntWtj3BUFaDF2suJRi">
+      <div class="q-title" data-page-node-id="QoEgWy5bUUOyw4gfETlcCJ"><span class="q-num" data-page-node-id="dxLskQGIfyzxYXVxXCcRL6">59.</span><span class="type-tag type-single" data-page-node-id="ZMFhAwiOOAn5vGMCTThvje">单选</span>块设备的核心特征是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="V9Usx6AC3z6VBgFUBFJQoY">
+        <li data-val="A" data-page-node-id="Lz0hbG2Us8NNbePRG19VSy">A. 按字符流传输</li>
+        <li data-val="B" data-page-node-id="FBFWMIwGq0pK7dDKcQpE9z">B. 不可寻址</li>
+        <li data-val="C" data-page-node-id="XcH53AlCaCEljrf6gbZ66W">C. 以固定大小数据块为单位与主机交换信息且可寻址</li>
+        <li data-val="D" data-page-node-id="lkQQBmY8YgFZzRwKT2YHYC">D. 只能顺序访问</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="KsmihNpF8b8FeazJmBKjnb">查看解析</button>
+      <div class="answer-box" data-page-node-id="h8oNLeEnixg7Rng7CXUHdP"><strong data-page-node-id="PEKGFBTdMHExB7639kmWmO">答案：C</strong><div class="analysis" data-page-node-id="qc9XNhVJKWBQJUb1airXQZ">块设备：固定大小数据块（≥512B）、按块寻址、可随机访问；典型如磁盘/SSD。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="fx2EL9HKRFcJhbEMWq7xuF">
+      <div class="q-title" data-page-node-id="tFUjWyICd9iVT9hv4ZSEEp"><span class="q-num" data-page-node-id="QtwHTzFtDmCwcR6oTvb2Vh">60.</span><span class="type-tag type-single" data-page-node-id="6VEDood9HfE8DJ2Cymm9QB">单选</span>QPI 总线带宽计算公式「每秒传输次数 × 每次传输有效数据 × 2」中「×2」的原因是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="04uw89BdBWUPikDF9Er0Ei">
+        <li data-val="A" data-page-node-id="UlSDk5EGosNSb9D9ZqKBnm">A. QPI 链路同时支持双向传输（发送+接收）</li>
+        <li data-val="B" data-page-node-id="B4kHtBObfuqFhTHIG7yJnZ">B. 每次传输 2 个字节</li>
+        <li data-val="C" data-page-node-id="AMph621zErYAOOppnanaeP">C. 频率翻倍</li>
+        <li data-val="D" data-page-node-id="6O1c9jmghLZNpRqaMZT8Wq">D. 双倍冗余</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="OwVjLoPdpmDJGOjgePh2Rq">查看解析</button>
+      <div class="answer-box" data-page-node-id="dEP6E4cdhQGH4RgsMDBt0Z"><strong data-page-node-id="wxJw1NyKfaXI9obh8TY7fb">答案：A</strong><div class="analysis" data-page-node-id="EkjzaFqr5HQz7ShjsZUabQ">QPI 是高速点对点双向连接，同时支持发送与接收两个方向，因此总带宽按 2 倍计算。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="wYV9fLmg7M9L6mNNnqddjq">
+      <div class="q-title" data-page-node-id="EqUtKwMXFR69KtZKmIhGCj"><span class="q-num" data-page-node-id="AljLl5BfQggufAbd3Hoknm">61.</span><span class="type-tag type-single" data-page-node-id="LVYUzIi7LX1oQ68ixyhQqN">单选</span>PCI-e 1.0 规范下「每方向」发送/接收速率为？</div>
+      <ul class="options" data-answer="D" data-page-node-id="yqSB8AHyLl7g6pQdjnHfuc">
+        <li data-val="A" data-page-node-id="lK1vQljRiHETnHwXE7ICyj">A. 1.25 Gb/s</li>
+        <li data-val="B" data-page-node-id="SzQ1wr7nT3HKF3bZ4acfTB">B. 2 Gb/s</li>
+        <li data-val="C" data-page-node-id="tkRSTZBOlxEIPOVd7NY65e">C. 2.5 Gb/s × 2</li>
+        <li data-val="D" data-page-node-id="ZjNgjVlQjBsFn0POl9ivRG">D. 2.5 Gb/s</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="auDbraWLOoIAIGegjn2jij">查看解析</button>
+      <div class="answer-box" data-page-node-id="iRM0sbxkl7rmMPG8L9hruX"><strong data-page-node-id="GOzfERAEOKhhMnOZa0XprX">答案：D</strong><div class="analysis" data-page-node-id="Z9KDFE8htxDFTGyh0nFlN5">PCI-e 1.0 每方向 2.5 Gb/s；总带宽 = 2.5 Gb/s × 2 × 通路数 / 10（GB/s）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="lZj39wmMdpsAwDqKgdJp2g">
+      <div class="q-title" data-page-node-id="5TLO2oeDAIZqyfljmE7Hvb"><span class="q-num" data-page-node-id="qriATvivVZBluayLfDM2qa">62.</span><span class="type-tag type-single" data-page-node-id="55eARGpr3fRmVBNvqKWE3h">单选</span>「独立编址方式」下，CPU 访问 I/O 端口需要？</div>
+      <ul class="options" data-answer="B" data-page-node-id="Vu7UziLkTJRx6gP8ZKkJKA">
+        <li data-val="A" data-page-node-id="vYcO7NPm10znL3HBFsv1VL">A. 用普通访存指令</li>
+        <li data-val="B" data-page-node-id="szrv71klKKsMvNQFZA54eo">B. 专门的 I/O 指令</li>
+        <li data-val="C" data-page-node-id="5yUxiOCPU2SZcIfTyWQiCW">C. DMA 控制器</li>
+        <li data-val="D" data-page-node-id="pAsYLgsFKE0EuQqXHllr7x">D. 中断服务程序</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="L77Gef2XTjDZZEwFsUnzT7">查看解析</button>
+      <div class="answer-box" data-page-node-id="xOGJMVaSSsoBS9A4QIMJPA"><strong data-page-node-id="22QPpHRmoowyLo1FA54MaA">答案：B</strong><div class="analysis" data-page-node-id="dRgCuqiWJ8YVmn8bBaRbqY">独立编址：I/O 地址空间与主存地址空间分开，CPU 必须用专门的 IN/OUT 等 I/O 指令访问 I/O 端口。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="CFRskW3jyXhe6MLOeHWSb7">
+      <div class="q-title" data-page-node-id="0qeFo0ADPd1DReMjuVcXsE"><span class="q-num" data-page-node-id="SDdOXZwSSL1tKDDpAnYTOK">63.</span><span class="type-tag type-single" data-page-node-id="qeKUGVO3BPmnc1D6tERf8S">单选</span>「统一编址（存储器映射）」方式下，CPU 访问 I/O 端口用？</div>
+      <ul class="options" data-answer="A" data-page-node-id="lXUvdpntjNOLPwQ9mIzUQ2">
+        <li data-val="A" data-page-node-id="xBxSTMNrNZAk4XRbXAuxTc">A. 普通访存指令</li>
+        <li data-val="B" data-page-node-id="RZdyCtLIVI9AYcybyqVziP">B. 专门的 I/O 指令</li>
+        <li data-val="C" data-page-node-id="V9KoehS1N828BG544OEiW6">C. 缓存旁路指令</li>
+        <li data-val="D" data-page-node-id="nfmLaeqeI7hyOAHLCjWrD7">D. 特权指令</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="F1EQJzrxjJxWZmz475Uw52">查看解析</button>
+      <div class="answer-box" data-page-node-id="Ur0PWx83vR9cvEu5ouxZ4k"><strong data-page-node-id="wXDJVDLVwEespjNHjk2mTB">答案：A</strong><div class="analysis" data-page-node-id="MU1riPL3yojOYRLQDPdPd3">统一编址：I/O 端口与主存共用地址空间，按地址范围区分；普通访存指令即可访问 I/O 端口；大多数 RISC 采用。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="v2jYdHH40HiMohXrlvLET3">
+      <div class="q-title" data-page-node-id="UNWBF2tM6n29FAUAJEtuE3"><span class="q-num" data-page-node-id="DDDOTZfojF4Hz77Y0UmNq3">64.</span><span class="type-tag type-single" data-page-node-id="kA1houj5EAQbXwZnBhGeDs">单选</span>下列哪项「不属于」I/O 接口（设备控制器）的主要功能？</div>
+      <ul class="options" data-answer="C" data-page-node-id="RnHYzteYntGxf4d6ENIWtE">
+        <li data-val="A" data-page-node-id="xauLaW0rKZfRKITjzbeIQq">A. 数据缓冲</li>
+        <li data-val="B" data-page-node-id="NNtjgmHdgVRNAIQvmRCByQ">B. 错误和就绪检测</li>
+        <li data-val="C" data-page-node-id="TZLrBv2a83vuftsRs6399g">C. 虚拟地址到物理地址的转换</li>
+        <li data-val="D" data-page-node-id="0Da2WTUbZYy1GOgilDuNVE">D. 数据格式转换</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="b4AcSGbEmFgRmdXLKsY8Dt">查看解析</button>
+      <div class="answer-box" data-page-node-id="sX2vZlMUq0A6kyBYSDB7a9"><strong data-page-node-id="5MEDw0kGqcK4PTFafZGnzi">答案：C</strong><div class="analysis" data-page-node-id="ysGvyfIXRbSJhf5lCPJgZw">I/O 接口四大功能：数据缓冲、错误/就绪检测、控制/定时、数据格式转换；地址转换由 MMU 负责，与 I/O 接口无关。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="TKTBmCUOK2KyCRWclUWHJl">
+      <div class="q-title" data-page-node-id="JsjaBch05b2q9CAXKgA7q1"><span class="q-num" data-page-node-id="Gc1rFFueOswmhTgu3Bq3Du">65.</span><span class="type-tag type-single" data-page-node-id="BuUkPQKqDFrQ1zhzdzZTAK">单选</span>CPU 响应中断请求后保存的「断点」是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="FODJgnh0iqqiobRzCRMO5o">
+        <li data-val="A" data-page-node-id="NuJYoAaAoV5o7stFAAcP9k">A. 当前指令地址</li>
+        <li data-val="B" data-page-node-id="hMo6IXAAYHM84aq6z8sdr2">B. 中断向量</li>
+        <li data-val="C" data-page-node-id="aaDoocd8854aKxkBJ5OAoV">C. 中断服务程序首地址</li>
+        <li data-val="D" data-page-node-id="aRmdeNXiXmiSOimaoqU7eV">D. 下一条指令地址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="rjEX0i7xizACLd8XdW2ygI">查看解析</button>
+      <div class="answer-box" data-page-node-id="LnV2nfEUHQbS9YkKG77UuG"><strong data-page-node-id="GjcpYrUPuG2pZxINDMWqMd">答案：D</strong><div class="analysis" data-page-node-id="oqUI301NxHfsEgJuZzr1wR">CPU 在一条指令执行完才检测中断请求，因此断点 = 下一条指令地址；现场 = 通用寄存器等被中断时的状态。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="uMXkt7wfGqVE0GiAP6u5MF">
+      <div class="q-title" data-page-node-id="NImlzTulYfrdLDwvFy6ack"><span class="q-num" data-page-node-id="GkrGtDeuLDaFpKVWyGCz8Y">66.</span><span class="type-tag type-fill" data-page-node-id="V3ElTJ7G0fMgAiZrTGtULC">填空</span>I/O 设备分为 ____ 设备和块设备两大类。</div>
+      <button class="reveal-btn" data-page-node-id="1QMPSnoTVVEAyY9BakjsUk">查看答案</button>
+      <div class="answer-box" data-page-node-id="qYc251mGr0TAQc38ErMBCs"><strong data-page-node-id="KQy14bMA6HTscA1YRbvFjq">答案：</strong>字符</div>
+    </div>
+
+    <div class="question" data-page-node-id="5N1eJWEh5UAnGi492vA3xA">
+      <div class="q-title" data-page-node-id="hQ98K14BLXFEOr6dDR6Onq"><span class="q-num" data-page-node-id="0EQjo7Bv2mTHHAOzC4DWqN">67.</span><span class="type-tag type-fill" data-page-node-id="8EDN6M1bqxzvxaZZsgi9s7">填空</span>早期 Intel 处理器的处理器总线称为 ____ 总线（FSB），是主板上最快的总线。</div>
+      <button class="reveal-btn" data-page-node-id="bclZfvUYR5r7TiWmcKZctk">查看答案</button>
+      <div class="answer-box" data-page-node-id="qwopSR4Im5aBmqklwxtqBY"><strong data-page-node-id="1AKh3ZXwCpPyqMTJLKj5PD">答案：</strong>前端</div>
+    </div>
+
+    <div class="question" data-page-node-id="dbVnPmjSGwbnrOH5dgkYKM">
+      <div class="q-title" data-page-node-id="CFEaZSiNqRl1FeakzT7KdO"><span class="q-num" data-page-node-id="8WkGx56jjW4QJYJXwxPwL9">68.</span><span class="type-tag type-fill" data-page-node-id="XYKUoIYPpmIAs9KHtDkbcv">填空</span>第三代的 I/O 总线是 ____（可简写为 PCI-e）。</div>
+      <button class="reveal-btn" data-page-node-id="eZ1rXHXHA54gZUGZVC9eIl">查看答案</button>
+      <div class="answer-box" data-page-node-id="2oREnmk7d5cGumxTUcVqXG"><strong data-page-node-id="dfcZnJJ3d9FijzLsoAAFj3">答案：</strong>PCI-Express</div>
+    </div>
+
+    <div class="question" data-page-node-id="6joBeYu7FmNhbxtisQZdQt">
+      <div class="q-title" data-page-node-id="sb5AsGv1rJVYae2cv5OY2s"><span class="q-num" data-page-node-id="bQpycIC4ETkG6PAgo8f4uh">69.</span><span class="type-tag type-fill" data-page-node-id="xzdRBq0AdbSeWygS5S4Viz">填空</span>I/O 接口（设备控制器）内用于暂时存放与主机交换的数据的寄存器称为数据 ____ 寄存器。</div>
+      <button class="reveal-btn" data-page-node-id="ATtGzR9VuHauE6FR90ZAU8">查看答案</button>
+      <div class="answer-box" data-page-node-id="8h3jrWhRgyAZvwFB42VkBV"><strong data-page-node-id="ATHQQDuOGJGLDjook1rlNN">答案：</strong>缓冲</div>
+    </div>
+
+    <div class="question" data-page-node-id="VD91xbwVOWejaUPVk6HEHz">
+      <div class="q-title" data-page-node-id="LTihZkNymjMl40DtUxeG5m"><span class="q-num" data-page-node-id="9gJJL93TwlRo0tL2T2faEr">70.</span><span class="type-tag type-fill" data-page-node-id="ZNXxh345arqfaEbI6y9EBB">填空</span>I/O 端口的两种编址方式是：独立编址方式和 ____ 编址方式。</div>
+      <button class="reveal-btn" data-page-node-id="g5kkxYspZlOtzTGJ9slxEh">查看答案</button>
+      <div class="answer-box" data-page-node-id="qwbkebqKo681C9qo77vtcW"><strong data-page-node-id="jASVHeXDIrIFQse27rL7z5">答案：</strong>统一（存储器映射）</div>
+    </div>
+
+    <div class="question" data-page-node-id="mR7Ua3ZEUE0hz4g3mfJj2l">
+      <div class="q-title" data-page-node-id="f5CWRtu91jVGONkhQMI0SM"><span class="q-num" data-page-node-id="FDuyTIjYIxwlyIFTrCquAM">71.</span><span class="type-tag type-fill" data-page-node-id="G8jNhfs41m92usdyEpatNO">填空</span>统一编址将 I/O 端口映射到主存空间的某段地址，因此也称为 ____ 映射方式。</div>
+      <button class="reveal-btn" data-page-node-id="x0GlcccjmQ60VaWeFHQdct">查看答案</button>
+      <div class="answer-box" data-page-node-id="uJ1gNrG5riVn4g8BfAInSO"><strong data-page-node-id="pnOUbOnvJuHRJ5axQI5FbK">答案：</strong>存储器（内存）</div>
+    </div>
+
+    <div class="question" data-page-node-id="K9FFhG399EmI4vFofOI6hC">
+      <div class="q-title" data-page-node-id="trf56WFAbpblrAdJa8dplY"><span class="q-num" data-page-node-id="lgyiIFKxlZjr2MjB9eefx5">72.</span><span class="type-tag type-fill" data-page-node-id="ndDeqpzkgd0mfXIyhJAPB1">填空</span>中断屏蔽字中每一位对应一个外设中断源，通常 ____ 表示允许中断，0 表示屏蔽。</div>
+      <button class="reveal-btn" data-page-node-id="cnZ1v1nAOIMTrxEsv189Re">查看答案</button>
+      <div class="answer-box" data-page-node-id="IEO9gHEXg6zuahyYoV6wE8"><strong data-page-node-id="aBfTtPVYUqDVOKWQr6uGUU">答案：</strong>1</div>
+    </div>
+
+    <div class="question" data-page-node-id="WC1qdnh4O7ARUbqoX5Uwnr">
+      <div class="q-title" data-page-node-id="Xnlc0NWSGbYz7aTfaMVGrC"><span class="q-num" data-page-node-id="hDGQmuMJ3VfBBDxFryHqkX">73.</span><span class="type-tag type-term" data-page-node-id="ie7pqy8oepEYtWyNxTsJOb">名词解释</span>I/O 端口</div>
+      <button class="reveal-btn" data-page-node-id="3JOkgSlG0Dwd0m6rS0adNq">查看答案</button>
+      <div class="answer-box" data-page-node-id="uNXcUUVJu5vT5z1iXZKl6F">设备控制器中可被 CPU 寻址访问的寄存器，包括数据缓冲寄存器（数据端口）、状态/控制寄存器（状态/控制端口）；所有 I/O 端口编号组成 I/O 地址空间。</div>
+    </div>
+
+    <div class="question" data-page-node-id="CG1oRDzxWrA4vBP9kjLBGz">
+      <div class="q-title" data-page-node-id="Z1w5lRFSAgiJwVFDqnD5UH"><span class="q-num" data-page-node-id="NcL670fjl7fXSGTCnEd61V">74.</span><span class="type-tag type-term" data-page-node-id="78xuG3lxEgFeACE7yMKj9H">名词解释</span>独立编址</div>
+      <button class="reveal-btn" data-page-node-id="NW3GDEzsKnW6dg2t30L5MB">查看答案</button>
+      <div class="answer-box" data-page-node-id="1ucTwb6Kw3bYJCi7anaqMv">I/O 端口单独编号形成与主存地址空间独立的 I/O 地址空间；CPU 访问 I/O 端口需要专门的 I/O 指令（如 x86 的 IN/OUT）；x86 采用该方式。</div>
+    </div>
+
+    <div class="question" data-page-node-id="ZyoqeXTFfRIolURN8u1T3G">
+      <div class="q-title" data-page-node-id="0U8eDHk7fpWuhDoimA4PkN"><span class="q-num" data-page-node-id="WH2b3oLKYH2YOq5Djw6STd">75.</span><span class="type-tag type-term" data-page-node-id="EBVmaGBVntLKo5ewQgATvy">名词解释</span>统一编址（存储器映射 I/O）</div>
+      <button class="reveal-btn" data-page-node-id="DPd9rzogi9AsokCXHsG50a">查看答案</button>
+      <div class="answer-box" data-page-node-id="xQX4KXxjDkY9K9VsbyweMf">将 I/O 端口与主存单元在同一个地址空间中统一编址，主存地址空间分出一部分给 I/O 端口；CPU 用普通访存指令即可访问 I/O 端口；大多数 RISC 架构采用。</div>
+    </div>
+
+    <div class="question" data-page-node-id="S5YQkbKOzvS8GUd3ScaH67">
+      <div class="q-title" data-page-node-id="TLgwlP23QwUCdWREgBfgK0"><span class="q-num" data-page-node-id="RtX92VwZBasxDvhQKwa4ak">76.</span><span class="type-tag type-term" data-page-node-id="utKYLYU4fGP2uyJc0OTkUr">名词解释</span>QPI 总线</div>
+      <button class="reveal-btn" data-page-node-id="al28nNUNTxxSESLJPzpHWF">查看答案</button>
+      <div class="answer-box" data-page-node-id="YLhwqkuNZ5Xw7N1bSPX9Z1">QuickPath Interconnect，Intel 处理器之间的点对点高速互连协议，基于包传输、差分信号与专用时钟；带宽 = 每秒传输次数 × 每次传输有效数据 × 2（双向）。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="3YYIVqlZ8F2NIB5aSAhZp9">
+      <div class="q-title" data-page-node-id="jQUpnhp0w3cc9nbEyB8mzb"><span class="q-num" data-page-node-id="5KhcDQFuTugeit8npuZlq9">77.</span><span class="type-tag type-comp" data-page-node-id="VFovMjjShTKYyKcxkqlwwE">综合题</span>比较「独立编址」与「统一编址」在「地址空间」「指令需求」「地址区分方式」「典型架构」「优缺点」上的差异。</div>
+      <button class="reveal-btn" data-page-node-id="kYccHPZFhNQxlbDr07DnW3">查看答案</button>
+      <div class="answer-box" data-page-node-id="sxL7vUzWX8yVoM4SkzTgg8"><strong data-page-node-id="yuJmUDaWgC3khLaNUytpdU">答案：</strong>
+        <div class="analysis" data-page-node-id="BxGMGGMIS7NpB9chgCX6s3">
+          ① 地址空间：独立=独立 I/O 空间；统一=与主存共用；<br data-page-node-id="YPDievMEI4eO6wiEmbtrjT">
+          ② 指令：独立=需专用 I/O 指令；统一=普通访存指令即可；<br data-page-node-id="6YjjWzqWnUP6t5h8GFKLtG">
+          ③ 区分：独立=靠指令类型区分；统一=靠地址范围区分；<br data-page-node-id="8J2Abzx0ckL3G3P3gegN0t">
+          ④ 典型架构：独立=x86；统一=大多数 RISC（MIPS/ARM/RISC-V）；<br data-page-node-id="36DSYwB2LDxjnA2xiSubbW">
+          ⑤ 优缺点：独立可同时使用全部主存空间但需专门指令；统一编程简单但占用部分主存地址空间。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="K9nocV0y2e0ZCkFTIx1Dql">
+      <div class="q-title" data-page-node-id="T9LR5wQZMpYt2lSzLKqd7l"><span class="q-num" data-page-node-id="5WE3MGtJFG03yWw1U8WEZL">78.</span><span class="type-tag type-comp" data-page-node-id="YHxrF6tz0Y772MArmFBbFD">综合题</span>若某系统采用 PCI-e 1.0 ×4 通路，按规范计算其总带宽（GB/s）。</div>
+      <button class="reveal-btn" data-page-node-id="FsMRgD0dGDXOCnN4wiekg8">查看答案</button>
+      <div class="answer-box" data-page-node-id="yaVH9N37EyhjQQWX5aPnRs"><strong data-page-node-id="4FXD0RFhJioUe1hOBKMMQi">答案：</strong>
+        <div class="analysis" data-page-node-id="MDM2nr4NNYFXT8UbX1QyM7">
+          总带宽 = 2.5 Gb/s × 2（双向） × 4（通路数） / 10 = 2 GB/s。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾统计 -->
+  <div class="footer-stats" data-page-node-id="7reoNGexJB7QZ8BHF50Qvl">
+    <h3 data-page-node-id="SgLLP96mHk3HvZDFAiB36k">📊 第六章题量统计</h3>
+    <table class="footer-table" data-page-node-id="EA2hO1SAHo7KvhoYHKW5td">
+      <thead data-page-node-id="uY3LfrpTiHRTFUAt0DjC16">
+        <tr data-page-node-id="TaSIqAXHfeAmMkYY2SBqZl">
+          <th data-page-node-id="WcDwOtR7yduU81HGnC58fd">板块 / 节</th>
+          <th data-page-node-id="eH1Hwe18x63JuVXNXD7iUw">单选</th>
+          <th data-page-node-id="elhh83A343dx28O98u7mvN">填空</th>
+          <th data-page-node-id="IAptO4owCrYCZa6hEgqlOG">名词解释</th>
+          <th data-page-node-id="wqwxMY3Lzaiwj5Rp7ZaUIK">综合题</th>
+          <th data-page-node-id="lR42OGVhFzUGNSF2mSduAQ">小计</th>
+        </tr>
+      </thead>
+      <tbody data-page-node-id="8GEciaFUIHN2LL2yHGXDSe">
+        <tr data-page-node-id="oHVVzHEDRzBuubkbGGhzop"><td data-page-node-id="gXYXvWpwEVugPLOk6VXtoq">第一节 I/O 子系统概述</td><td data-page-node-id="VIxOMmGXygPDhr5Iu9BV5y">6</td><td data-page-node-id="S5OKrGoMVXUqef02lqGmj7">4</td><td data-page-node-id="YjYCiR3Tm63iCvhRd7PS75">3</td><td data-page-node-id="DkgFwOAmiWuYcdX5SNpP9K">1</td><td data-page-node-id="4wuT8E10qApuKSC8bowSw7">14</td></tr>
+        <tr data-page-node-id="YC6TSqFdOFD0L9VwwtlNyD"><td data-page-node-id="dMwN0pXS7P9qiA1kQgAWO1">第二节 用户空间 I/O</td><td data-page-node-id="MUrGjD2McRKsVLGUVXDHMi">9</td><td data-page-node-id="QpwiSfb7wYCAlYFSTNvz41">9</td><td data-page-node-id="YXRnvHzI4pbXDCQZ4fmXyH">5</td><td data-page-node-id="Zgbu5DTXFKoJHWdKSMDAGh">2</td><td data-page-node-id="9PErwgMFsY9n5BdnmPK2zz">25</td></tr>
+        <tr data-page-node-id="KbWZgvBUgabZ2GetEI0PCx"><td data-page-node-id="eYCsu5X6pUPT0iVuEBhf8Y">第三节 内核空间 I/O</td><td data-page-node-id="lfLeitySe7hNIXFGk0AOyX">8</td><td data-page-node-id="pbqwkesWxYF2A7EvlXFIs9">6</td><td data-page-node-id="O0zmdavgXmqJrUh71VHW4X">4</td><td data-page-node-id="GBLZ7c7cbNfHweOPhvXW9V">1</td><td data-page-node-id="bIEw9FTtsH4eO060qXqB7H">19</td></tr>
+        <tr data-page-node-id="b5XjKqok14AirTZKFnzYU5"><td data-page-node-id="JSdLh1ZNw4AFiOvkp2E775">第四节 I/O 硬件与软件接口</td><td data-page-node-id="Eweec0oAI3ekFQ6AjGSRUP">8</td><td data-page-node-id="HtvuqNEUjRqffgQiOAG2xY">7</td><td data-page-node-id="HuAmqVr0Fyr3Sm8vUwVwLi">4</td><td data-page-node-id="32iwZSQhjWSWjBSajr8EFI">2</td><td data-page-node-id="d1th3bV7zf81hfgG0IUrIx">21</td></tr>
+        <tr data-page-node-id="TCIzfMjgxeZ1Y8rIrnWaDC"><td data-page-node-id="jng0vC6sgoci5NoVDHB0xw">合计</td><td data-page-node-id="HEM4GFFAcuL5FxG0kttpq8">31</td><td data-page-node-id="muB53gVFCRjwoE7EvQmuVv">26</td><td data-page-node-id="vkNln1uH0hNdXRGZn8FrQR">16</td><td data-page-node-id="UXHgf3HRYwHL6FV18u9idu">6</td><td data-page-node-id="aMglAwZzPtzAdkQVmWK5yT"><span id="sumTotal" data-page-node-id="6iSu1VdpR7jXBOGBAOR9ba">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a class="back-nav" href="index.html" data-page-node-id="jjNNGE1SonK5AN2HFPO3Vd">← 返回「计算机组成原理」章节导航</a>
+  <a class="back-nav" href="../index.html" data-page-node-id="lsvclisXR6EX6811rY82Nr">↑ 返回考研复习总目录</a>
+
+</div>
+
+<script>
+  const counts = { single: 31, fill: 26, term: 16, comp: 6 };
+  document.getElementById('singleCount').textContent = counts.single;
+  document.getElementById('fillCount').textContent = counts.fill;
+  document.getElementById('termCount').textContent = counts.term;
+  document.getElementById('compCount').textContent = counts.comp;
+  const total = counts.single + counts.fill + counts.term + counts.comp;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('sumTotal').textContent = total;
+
+  document.querySelectorAll('.options').forEach(ul => {
+    const correct = ul.getAttribute('data-answer');
+    ul.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', () => {
+        if (ul.classList.contains('answered')) return;
+        ul.classList.add('answered');
+        ul.querySelectorAll('li').forEach(x => {
+          x.classList.add('disabled');
+          if (x.getAttribute('data-val') === correct) x.classList.add('correct');
+        });
+        if (li.getAttribute('data-val') !== correct) li.classList.add('wrong');
+      });
+    });
+  });
+
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling;
+      box.classList.toggle('show');
+      btn.textContent = box.classList.contains('show') ? '收起答案' : '查看答案';
+    });
+  });
+
+  const sections = document.querySelectorAll('.section-block');
+  const pills = document.querySelectorAll('.pill');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id;
+        pills.forEach(p => p.classList.toggle('active', p.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

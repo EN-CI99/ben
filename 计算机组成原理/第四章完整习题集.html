@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="JQ9jjQ2erWOLrnMcZYSKGD">
+<head data-page-node-id="JxcTCYahLEStjCqJYCxmVX">
+<meta charset="UTF-8" data-page-node-id="kY8lARuPnpbOHBHDsJuVEE" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="lLuvuloLhxUC3M0mqnESoH" />
+<title>第四章 可执行文件的生成与加载执行 · 习题集</title>
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-2: #4b5563;
+    --text-3: #6b7280;
+    --brand: #2563eb;
+    --brand-light: #dbeafe;
+    --brand-dark: #1e40af;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+  /* 顶部条 */
+  .top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .top-bar h1 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--brand-dark);
+  }
+  .top-bar .meta {
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  .top-bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn:hover { background: var(--brand); color: #fff; }
+  .btn.secondary { background: var(--panel-2); color: var(--text-2); border-color: var(--border); }
+  .btn.secondary:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+
+  /* 统计条 */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card .label { color: var(--text-3); font-size: 12px; }
+  .stat-card .value {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--brand-dark);
+    margin-top: 4px;
+  }
+  .stat-card .sub { color: var(--text-2); font-size: 12px; margin-top: 2px; }
+
+  /* 章节胶囊指示器 */
+  .chapter-nav {
+    position: sticky;
+    top: 12px;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+  .chapter-nav .nav-title {
+    font-size: 12px;
+    color: var(--text-3);
+    align-self: center;
+    margin-right: 4px;
+    font-weight: 500;
+  }
+  .pill {
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--panel-2);
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 12.5px;
+    border: 1px solid var(--border);
+    transition: all .15s;
+    cursor: pointer;
+  }
+  .pill:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .pill.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  /* 节标题 */
+  .section-block { margin-bottom: 28px; scroll-margin-top: 80px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--brand);
+    color: #fff;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .section-header .num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .section-header h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .section-header .count {
+    margin-left: auto;
+    background: rgba(255, 255, 255, .2);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+
+  /* 题型标签 */
+  .type-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-right: 8px;
+    font-weight: 500;
+  }
+  .type-single { background: var(--brand-light); color: var(--brand-dark); }
+  .type-fill { background: var(--warning-light); color: var(--warning); }
+  .type-term { background: #ede9fe; color: #6d28d9; }
+  .type-comp { background: #fce7f3; color: #be185d; }
+
+  /* 题目卡片 */
+  .question {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .question .q-title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .question .q-title .q-num {
+    color: var(--brand);
+    margin-right: 6px;
+  }
+  .question .q-body { color: var(--text-2); margin-bottom: 10px; }
+  .question .q-body code, .question code {
+    background: var(--panel-2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    font-size: 13px;
+    color: var(--brand-dark);
+  }
+
+  /* 选项 */
+  .options { list-style: none; padding: 0; margin: 8px 0 10px; }
+  .options li {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .15s;
+    font-size: 14px;
+  }
+  .options li:hover { background: var(--brand-light); border-color: var(--brand); }
+  .options li.correct {
+    background: var(--success-light);
+    border-color: var(--success);
+    color: #14532d;
+  }
+  .options li.wrong {
+    background: var(--danger-light);
+    border-color: var(--danger);
+    color: #7f1d1d;
+  }
+  .options li.disabled { cursor: default; }
+  .options li.disabled:hover { background: var(--panel-2); border-color: var(--border); }
+
+  /* 答案按钮 */
+  .reveal-btn {
+    margin-top: 8px;
+    padding: 5px 14px;
+    background: var(--panel-2);
+    color: var(--text-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .15s;
+  }
+  .reveal-btn:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .answer-box {
+    display: none;
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: var(--success-light);
+    border-left: 3px solid var(--success);
+    border-radius: 6px;
+    color: #14532d;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .answer-box.show { display: block; }
+  .answer-box strong { color: #166534; }
+  .answer-box .analysis { margin-top: 6px; color: #166534; }
+
+  /* 综合题容器 */
+  .comp-q .answer-box { background: #fdf4ff; border-left-color: #be185d; color: #831843; }
+  .comp-q .answer-box strong { color: #9d174d; }
+  .comp-q .answer-box .analysis { color: #9d174d; }
+
+  /* 结尾统计 */
+  .footer-stats {
+    margin-top: 32px;
+    padding: 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .footer-stats h3 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    color: var(--brand-dark);
+  }
+  .footer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .footer-table th, .footer-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-table th { color: var(--text-3); font-weight: 500; background: var(--panel-2); }
+  .footer-table td:first-child { color: var(--text); font-weight: 500; }
+  .footer-table tr:last-child td { border-bottom: none; font-weight: 600; background: var(--panel-2); }
+
+  /* 返回按钮 */
+  .back-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    padding: 8px 16px;
+    background: var(--panel);
+    color: var(--brand);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all .15s;
+  }
+  .back-nav:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  @media (max-width: 640px) {
+    .container { padding: 14px; }
+    .chapter-nav { border-radius: var(--radius); }
+    .top-bar h1 { font-size: 17px; }
+    .question { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body data-page-node-id="anhTxT7Z5CX8XbqDomuaTk">
+<div class="container" data-page-node-id="2ia3OSAX8GE4F5RBkoYRDt">
+
+  <!-- 顶部条 -->
+  <div class="top-bar" data-page-node-id="3NK7VIHdNvZiRz70GaUK4Q">
+    <div data-page-node-id="WXgSCDK87FsWP4F85jzvI4">
+      <h1 data-page-node-id="Zd1eFb8ljcKmS9yKTlJSih">第四章 可执行文件的生成与加载执行</h1>
+      <div class="meta" data-page-node-id="nNA5rcB0dh0NaDJAbHI2FY">计算机组成原理 · 习题集 · 共 <strong id="totalCount" data-page-node-id="XkAtgKS2LE6gpEsAnnRC5O">0</strong> 题</div>
+    </div>
+    <div class="actions" data-page-node-id="viVavTDpjEFyIS8BJTmdlc">
+      <a class="btn secondary" href="index.html" data-page-node-id="yvQK4hKMKk4C8PeVFZxncX">← 章节导航</a>
+      <a class="btn secondary" href="../index.html" data-page-node-id="4PlznKbRxEOEGwLApL9wCl">↑ 考研复习总目录</a>
+    </div>
+  </div>
+
+  <!-- 统计条 -->
+  <div class="stats-bar" data-page-node-id="9V7Js9wJ0AtQfiX1xjZWRl">
+    <div class="stat-card" data-page-node-id="kQ3qwlvD8y3p7Qqvo2WXUi">
+      <div class="label" data-page-node-id="bK7PjZ4gKV5CqAOROYKB3V">单选题</div>
+      <div class="value" id="singleCount" data-page-node-id="y7TmQtJ0v7lp4H6gMRll7r">—</div>
+      <div class="sub" data-page-node-id="X5nJuvVHzkey5NsT9c5atf">即点即判</div>
+    </div>
+    <div class="stat-card" data-page-node-id="ZGoGvRPxVJ2mTmFBGubP6Q">
+      <div class="label" data-page-node-id="4HxDda11Ah1b5z7cM7zGhC">填空题</div>
+      <div class="value" id="fillCount" data-page-node-id="WH3HfGGJJwRTEDOecERAGi">—</div>
+      <div class="sub" data-page-node-id="XZuV3YT3ecscsMLa3bFCnF">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="cGYQm9BsX2GwRpspblU8z9">
+      <div class="label" data-page-node-id="EujHH0fp54xBnHCG4nPAqn">名词解释</div>
+      <div class="value" id="termCount" data-page-node-id="6ERthVuKGlyy2OJEV7TdPu">—</div>
+      <div class="sub" data-page-node-id="xCwKcXUO2SW8IGlLw6OdBX">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="AqQ7H4qOie2eMk4KWzhTiA">
+      <div class="label" data-page-node-id="jcjLaZ6L8M8GCHivBDBJCl">综合题</div>
+      <div class="value" id="compCount" data-page-node-id="yyEMCfXpJ2RKfzxqiCTWtm">—</div>
+      <div class="sub" data-page-node-id="M5mOks6rtMHBZxcgKPyBW1">点击展开答案</div>
+    </div>
+  </div>
+
+  <!-- 章节胶囊指示器 -->
+  <nav class="chapter-nav" id="chapterNav" data-page-node-id="pRXbt9UYHEKVhxLOtuMnld">
+    <span class="nav-title" data-page-node-id="TAimPFEGFkpWEOOnYCG5ed">节导航</span>
+    <a class="pill" href="#sec1" data-page-node-id="V6xzCZJKrtCj4nIgM4mVyv">① 概述</a>
+    <a class="pill" href="#sec2" data-page-node-id="GbEnqiLrBt1ixarxCK6KOA">② 目标文件格式</a>
+    <a class="pill" href="#sec3" data-page-node-id="P4g4P214P4FwvpXFRQSw9q">③ 符号解析与重定位</a>
+    <a class="pill" href="#sec4" data-page-node-id="d4Ji5ZNZ6Dr7GlAy2jw1oE">④ 可执行文件的加载</a>
+    <a class="pill" href="#sec5" data-page-node-id="ET5S1I6m0nMuPIXgnthpwl">⑤ 程序执行与 CPU</a>
+  </nav>
+
+  <!-- ========== 第一节 ========== -->
+  <section class="section-block" id="sec1" data-page-node-id="3whPK4nxoy7UtKGSQdE3sA">
+    <div class="section-header" data-page-node-id="aN6Z3L2QUakib3yWrg9KSk">
+      <div class="num" data-page-node-id="0FH1WCoLZbjhe25d4tknFR">1</div>
+      <h2 data-page-node-id="CDsZuVBnMcpPwLQBiYV928">第一节 可执行文件生成概述</h2>
+      <span class="count" data-page-node-id="MkseGKc0PXlZhvPrMFDj6x">17 题</span>
+    </div>
+
+    <!-- 单选 -->
+    <div class="question" data-page-node-id="5JT56O1rqXKub1ApDVlcXE">
+      <div class="q-title" data-page-node-id="kAWLJNhb9z9AYgezF5a9MO"><span class="q-num" data-page-node-id="7oCjo5ecVuCUQqX3F1rdIM">1.</span><span class="type-tag type-single" data-page-node-id="bhfXBiv5ICbP9kKFI8rUuu">单选</span>将 C 源程序转换为可执行文件的过程中，「预处理」阶段由哪个程序完成？</div>
+      <ul class="options" data-answer="A" data-page-node-id="I1TOJjDrVBVQfprf337jPV">
+        <li data-val="A" data-page-node-id="BzMjwjVdf3hyayIPfcFfNu">A. cpp（C Preprocessor）</li>
+        <li data-val="B" data-page-node-id="ClICqPksRZgu1rSeLrWIEX">B. ccl（编译器）</li>
+        <li data-val="C" data-page-node-id="L6EnG1QTzy4yH2GJHeldjG">C. as（汇编器）</li>
+        <li data-val="D" data-page-node-id="BD72Xlwzt6SYqTCFrXN0Us">D. ld（链接器）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="1FxofDCFz2tZgWFDXIi7ma">查看解析</button>
+      <div class="answer-box" data-page-node-id="TgU0g3NF4HFsPgxWi0OBag"><strong data-page-node-id="GAt9OHsMIXXguT8AUTptwA">答案：A</strong><div class="analysis" data-page-node-id="9Tx29LRAnFyp3uZk2AnGtV">预处理由 cpp（C Preprocessor）完成，主要处理 #include、#define、条件编译等命令。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="EpmKnXIAD6rMFP8ImTyT1z">
+      <div class="q-title" data-page-node-id="cKfz5Vq3K6tY2mvoS5gGVA"><span class="q-num" data-page-node-id="Kfm01UKDD4m4YqSOIJr2gz">2.</span><span class="type-tag type-single" data-page-node-id="bycs8kOlY4u945EGx3577e">单选</span>GCC 中「只预处理不编译」对应的命令选项是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="9nRIIkBdyiG6i7alRyienV">
+        <li data-val="A" data-page-node-id="Z2QDrYvt8m7ZAtYEIoeUh5">A. <code data-page-node-id="doNi8zrGtzBxl2oBDSOH15">gcc -S</code></li>
+        <li data-val="B" data-page-node-id="OoxkDvSO6UxBj1WRNmPq9U">B. <code data-page-node-id="jlxAPgM0lQOCIREo8KKBDS">gcc -c</code></li>
+        <li data-val="C" data-page-node-id="eNxP9D4r6JRARmA1QOnXqM">C. <code data-page-node-id="t0mBZEyEP3tYUgnlPUzAJh">gcc -E</code></li>
+        <li data-val="D" data-page-node-id="1AcjjSChMncDKiu50bRfSQ">D. <code data-page-node-id="copXHPdLue5wxIaSLvtgbj">gcc -o</code></li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="DyGP0KiphucS3DvwscODDR">查看解析</button>
+      <div class="answer-box" data-page-node-id="WzhpPAnX3DcFRLHxieE16s"><strong data-page-node-id="sLVFsGnSbyZgSvu0Et2SmI">答案：C</strong><div class="analysis" data-page-node-id="LwLp20T9EWj3Om3shbpJ5z"><code data-page-node-id="4tArrx3I7mGsQp8DmuWB0N">-E</code> 只预处理；<code data-page-node-id="GCcTDJv5Z5SpbAeinNwFA4">-S</code> 编译到汇编；<code data-page-node-id="uarHMecYuylX91pcUL2Qln">-c</code> 汇编到可重定位目标文件；<code data-page-node-id="kLXKuJimlUWCA1Ba67ZwdA">-o</code> 指定输出文件名。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="onpbyQ0FNXnztKGe2V8pZ4">
+      <div class="q-title" data-page-node-id="J9hfNGwPi56g9ZqMfL9MGc"><span class="q-num" data-page-node-id="NtFDhXApwVJUvhLZ0vIUZL">3.</span><span class="type-tag type-single" data-page-node-id="Gh39bnaMyTG9LXXBrmD1jy">单选</span>汇编器生成的「机器语言目标文件」通常称为？</div>
+      <ul class="options" data-answer="B" data-page-node-id="HV0weBqd3XM2V0kaZXCweL">
+        <li data-val="A" data-page-node-id="9MjznGvdWQYvrouCkWvcup">A. 可执行目标文件</li>
+        <li data-val="B" data-page-node-id="z9bHSBEldnec4tLR2gc3fG">B. 可重定位目标文件</li>
+        <li data-val="C" data-page-node-id="kuCZ8DChD1UqL1b9PkzHFZ">C. 共享库文件</li>
+        <li data-val="D" data-page-node-id="x6nHKMRUhqYySAQgncK1uO">D. 文本文件</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="42y6kM2eeCHBloasXCxlXw">查看解析</button>
+      <div class="answer-box" data-page-node-id="IgmoeG7LnlA8uMwrCjTanv"><strong data-page-node-id="hciEowLwcq6LBCDH1W6g56">答案：B</strong><div class="analysis" data-page-node-id="oGj31iMDFaJqnQhJ5QfNVI">汇编生成的是「可重定位目标文件」（.o），因为单模块的指令/数据最终地址尚未确定，需要链接器重定位。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="PlNO2PtnwKQfOoPBgLCLiv">
+      <div class="q-title" data-page-node-id="BfEParPeQLriwU9LztJa9Z"><span class="q-num" data-page-node-id="RME8fESdKteEPlBMr37vTh">4.</span><span class="type-tag type-single" data-page-node-id="ztGLiIYOpQg6Ar2cmtcCGz">单选</span>下列哪个不是链接器完成的主要任务？</div>
+      <ul class="options" data-answer="D" data-page-node-id="mIwHsG25jUB0cKwWakIO0v">
+        <li data-val="A" data-page-node-id="bMdkBcyqEeVa1lzPKzuDSt">A. 符号解析</li>
+        <li data-val="B" data-page-node-id="z2u8iqxBdqTWPZRVkfukv7">B. 重定位</li>
+        <li data-val="C" data-page-node-id="cPQrU4kraFq5GzCboQ9WiB">C. 合并可重定位目标文件</li>
+        <li data-val="D" data-page-node-id="NcVyG5NSCnqNmBAYhb5jTw">D. 词法分析</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ZosESiGdyInuGycCBO1P4A">查看解析</button>
+      <div class="answer-box" data-page-node-id="e857E4P1iaVKMCnp39YGAX"><strong data-page-node-id="4UOL3Fr2x0CAwAGQ3WL9J9">答案：D</strong><div class="analysis" data-page-node-id="9MFZ2KgReckcCN4q0xT1n1">词法分析由编译器前端完成，链接器只做「符号解析 + 重定位」。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FzOuxAvGLWLekJxztdLC6Y">
+      <div class="q-title" data-page-node-id="kEYPuPAmZ7aWuGO2C7CJt5"><span class="q-num" data-page-node-id="iLDuPRd4GrYAeIKipsBuEp">5.</span><span class="type-tag type-single" data-page-node-id="NOKrPFdm5TjQOHcVjjycjg">单选</span>编译时 GCC 默认产生的汇编语言源文件后缀是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="gCPnEfwbEMPJxfZsQLj7R0">
+        <li data-val="A" data-page-node-id="GCRoCr4IFF3RFf7PkX93d6">A. .o</li>
+        <li data-val="B" data-page-node-id="RkTmALtgHaWIojSC8L1Png">B. .i</li>
+        <li data-val="C" data-page-node-id="R59PdcIqBBnVE7AaH7d0o2">C. .s</li>
+        <li data-val="D" data-page-node-id="bYNeejBW0oiHkw7FiFj3N0">D. .c</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="2bEcTtTWVgeE38YZNT0WGp">查看解析</button>
+      <div class="answer-box" data-page-node-id="QOZMWKjtY5ChAlseA8RLvU"><strong data-page-node-id="5q4PDGCEyloXBjC2uotOH7">答案：C</strong><div class="analysis" data-page-node-id="flDywpp7KFhVb0CIsK56t2">预处理 .i → 编译 .s → 汇编 .o → 链接 可执行文件。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="8e9i14RPnMWZ0BuBNk6soa">
+      <div class="q-title" data-page-node-id="TZJgDoHcJuUzoGyvbTk768"><span class="q-num" data-page-node-id="pkYdvqAvZYIEq9ExCaGrRg">6.</span><span class="type-tag type-single" data-page-node-id="HXhuSssuxHqz3qnUCR99Ve">单选</span>链接器 ld 使用的命令格式，下列哪个能直接把两个 .o 文件链接为可执行文件？</div>
+      <ul class="options" data-answer="A" data-page-node-id="EDqONqV3OPOut72p8XdWAE">
+        <li data-val="A" data-page-node-id="E4erGbYphF0QVJaiJgzpfz">A. <code data-page-node-id="zDKjU4bNnhPNoc2iEwERGo">ld -o test main.o test.o</code></li>
+        <li data-val="B" data-page-node-id="9BbPHzfUvPMRqhveb6p8Ms">B. <code data-page-node-id="vWJIHr58zWY7Q571s9Xo77">ld main.o test.o test</code></li>
+        <li data-val="C" data-page-node-id="Ttma32Xh9iAMaCBK183Cf1">C. <code data-page-node-id="aNIsuw3vr3MCkjgki3Ed4f">ld -c main.o test.o</code></li>
+        <li data-val="D" data-page-node-id="pDyIoVRnXHkRjJl9EY8kse">D. <code data-page-node-id="3p83hsKNrdKj2bHWSvxr2n">ld main.c test.c</code></li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="AcEPGGnccu7eFmiujBxqOS">查看解析</button>
+      <div class="answer-box" data-page-node-id="kncFhjlakCAPwBvUAkCHYV"><strong data-page-node-id="e6yZ2a1VqadgqEWCS7mHIW">答案：A</strong><div class="analysis" data-page-node-id="jSHrsHkH65as7nPsG4BU4x"><code data-page-node-id="rjQuh0BwFCcAO8eBHGdnNP">-o</code> 指定输出文件名，ld 接受 .o 而不接受 .c。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="QQjluBobj1cvivRewX0faE">
+      <div class="q-title" data-page-node-id="nuanQQZLhxQyOa8FekEGDa"><span class="q-num" data-page-node-id="ANSB5nRJBQ0mSsNAMMfzCB">7.</span><span class="type-tag type-single" data-page-node-id="uVRzBB30wFLE6vZVgSt6NG">单选</span>符号解析的本质是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="Cs0kHUJhghN0UdzTxp5oF0">
+        <li data-val="A" data-page-node-id="ay1XDCa8Fbogo4GisqWSCp">A. 确定每条指令长度</li>
+        <li data-val="B" data-page-node-id="dtuyeRoKR91YI7L4HnVFsW">B. 把符号引用与符号定义建立关联</li>
+        <li data-val="C" data-page-node-id="ZIh4bO1RSpaWVP8pcm3pTR">C. 把机器指令翻译为汇编指令</li>
+        <li data-val="D" data-page-node-id="TjJEZCWpjN3FMqr9x0quD9">D. 把数据从小端转为大端</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="d9S8CTqUAbBjvMbDeiB2lM">查看解析</button>
+      <div class="answer-box" data-page-node-id="3CJAJJhmUUvabF58FXUUDU"><strong data-page-node-id="ybDb9lAPkBVt7XiRH3vU13">答案：B</strong><div class="analysis" data-page-node-id="2z8p85XFiH02SFBvLmortv">符号解析的目的：让每个符号的引用都能关联到一个确定的符号定义。</div></div>
+    </div>
+
+    <!-- 填空 -->
+    <div class="question" data-page-node-id="Dc7eSIZWbrWE9WDkGZZADW">
+      <div class="q-title" data-page-node-id="Q16dx3MSRNrziGjGpIicYh"><span class="q-num" data-page-node-id="QLelGJQRjZa7uV3HRitdOc">8.</span><span class="type-tag type-fill" data-page-node-id="Q9D1VgVTyBfzCd4u1YRJo6">填空</span>C 源程序生成可执行文件的四个步骤依次是：预处理 → ____ → 汇编 → ____。</div>
+      <button class="reveal-btn" data-page-node-id="WnbxR7e0qorSkWiMiK8oyH">查看答案</button>
+      <div class="answer-box" data-page-node-id="sQut8RRPjQLrWUEDapuzQz"><strong data-page-node-id="TcFL4g5yUsymTDQWhqMh2E">答案：</strong>编译；链接</div>
+    </div>
+
+    <div class="question" data-page-node-id="fRUNAZt3QRfoYpxhAmEztq">
+      <div class="q-title" data-page-node-id="gjdJ47n8xa8TYp57QydhHo"><span class="q-num" data-page-node-id="B0ezBUOpJWAFrdOilUEINJ">9.</span><span class="type-tag type-fill" data-page-node-id="Kh1aJi4Hnt3eSz0wRp3LrH">填空</span>GCC 中 <code data-page-node-id="jkroBuzI7EBpetXpTkiJRE">gcc -S</code> 对应的是 ____ 阶段，生成扩展名为 ____ 的汇编语言源文件。</div>
+      <button class="reveal-btn" data-page-node-id="3RxLEPJhUehSGOXecOm8Gp">查看答案</button>
+      <div class="answer-box" data-page-node-id="xUJmEosTvAXOCdD0vixGXL"><strong data-page-node-id="o9D5iU7HZUqL3hmh4h9r5U">答案：</strong>编译；.s</div>
+    </div>
+
+    <div class="question" data-page-node-id="kYwWOwKH4khovTsnGQcba8">
+      <div class="q-title" data-page-node-id="2l0lBPGAJOqV58y4WP3Iy3"><span class="q-num" data-page-node-id="M6QHAFCKLxKVWovmPRHZA8">10.</span><span class="type-tag type-fill" data-page-node-id="Jyxo1gmeSS2CCoPuD7gifw">填空</span>汇编程序生成的机器语言目标文件由于指令和数据地址尚未确定，故称为 ____ 目标文件。</div>
+      <button class="reveal-btn" data-page-node-id="0eJsW7YJnxaZmpIZ024CeX">查看答案</button>
+      <div class="answer-box" data-page-node-id="AZin60nodyISfAD5RopveA"><strong data-page-node-id="Q7Opieq5vmIBDGeV8Po8sF">答案：</strong>可重定位</div>
+    </div>
+
+    <!-- 名词解释 -->
+    <div class="question" data-page-node-id="1wIdDw0Kx51yXKvlqVW7R2">
+      <div class="q-title" data-page-node-id="OYIDAx6a9Emfo6uIUzHYBN"><span class="q-num" data-page-node-id="BHPHZkeknFuCJ4smwg8upp">11.</span><span class="type-tag type-term" data-page-node-id="GlbPZhdxYspaZoCGFZwS5G">名词解释</span>链接器（Linker）</div>
+      <button class="reveal-btn" data-page-node-id="nLn8z1zRVxFxzRqrLxRunV">查看答案</button>
+      <div class="answer-box" data-page-node-id="CQuiULTYF5XDBeYzvRu6b0">将多个可重定位目标文件以及库例程组合起来，生成可执行目标文件的程序，主要完成符号解析和重定位两项任务。</div>
+    </div>
+
+    <div class="question" data-page-node-id="LGw4JOUAADQihxsn7VdTCY">
+      <div class="q-title" data-page-node-id="9qcVTUsQ8KmjzAECCPWx1I"><span class="q-num" data-page-node-id="bdMiUIh8MsKiSgGDRxvn7C">12.</span><span class="type-tag type-term" data-page-node-id="yrFHnejsP0PpHWEOfgHCro">名词解释</span>符号解析（Symbol Resolution）</div>
+      <button class="reveal-btn" data-page-node-id="2p3crwdrxgG188CfXkdTFP">查看答案</button>
+      <div class="answer-box" data-page-node-id="P2kDeBMoRHYLn3UBeUORUf">链接器把每个模块中引用的符号（外部函数名、外部变量名）与某个目标模块中的符号定义建立关联的过程。</div>
+    </div>
+
+    <div class="question" data-page-node-id="9ZVRg342rNYqke1bJFsfo8">
+      <div class="q-title" data-page-node-id="5SFUob7hUlPNh4NqFxi3lp"><span class="q-num" data-page-node-id="HBZIEkBY0RxPf2QLT64qzV">13.</span><span class="type-tag type-term" data-page-node-id="RvKI85tpjD6aS4RhrbD5rC">名词解释</span>重定位（Relocation）</div>
+      <button class="reveal-btn" data-page-node-id="XAZUXie3SPQqE9vFi6dsxC">查看答案</button>
+      <div class="answer-box" data-page-node-id="H4HAq6fflFeT5GFGRdPPLU">链接器合并所有可重定位目标文件后，根据符号在虚拟地址空间中的新地址，修改每个符号引用处地址的过程，包含「节的合并定位」和「引用地址修改」两步。</div>
+    </div>
+
+    <!-- 综合题 -->
+    <div class="question comp-q" data-page-node-id="tjamsxgXBPklbzH8c5HQJa">
+      <div class="q-title" data-page-node-id="Bisn4MHJTY0I7usdgBzylh"><span class="q-num" data-page-node-id="d7mRwgMhxDot8ysKNO4D6d">14.</span><span class="type-tag type-comp" data-page-node-id="uWLtFMKcC5OOBUb4aA9JHG">综合题</span>已知某 C 源文件 main.c 中调用了在 test.c 中定义的函数 add()，请按 GCC 处理流程写出从源码到可执行文件的完整过程，并指出每一步的产物后缀。</div>
+      <button class="reveal-btn" data-page-node-id="OtLVQrK2hItYLJa359zUJO">查看答案</button>
+      <div class="answer-box" data-page-node-id="2PHgEp0E5BbWSXwFLp8hRC"><strong data-page-node-id="vTOQ1O1AVLACO1bhhSSupC">答案：</strong>
+        <div class="analysis" data-page-node-id="C6TVAgwmXUdqjArlxhL4e9">
+          ① 预处理（cpp / <code data-page-node-id="BzHdF4gHgUo4WIugTNsYqj">gcc -E</code>）：main.c → main.i；test.c → test.i<br data-page-node-id="fbX6j3O0luBfh37CbrumEf">
+          ② 编译（ccl / <code data-page-node-id="HXvkyH8GygYCunvMe1kgVx">gcc -S</code>）：main.i → main.s；test.i → test.s<br data-page-node-id="CPRx5WmOV9klFoR0qCHt9i">
+          ③ 汇编（as / <code data-page-node-id="Fpyv7pWVuJopmrGrnZo6qL">gcc -c</code>）：main.s → main.o；test.s → test.o（可重定位目标文件）<br data-page-node-id="edWdQCGfKcertJKG3AxPch">
+          ④ 链接（ld / <code data-page-node-id="dkpYVtKmQQat0K5FC55UIT">gcc -o</code>）：main.o + test.o → test（可执行目标文件），期间完成「符号解析」（把 main.o 中 add 的引用与 test.o 中 add 的定义关联）和「重定位」（修改 call 指令中的目标地址）。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="z0gS5RsfxzoAvHe23KQMEl">
+      <div class="q-title" data-page-node-id="olivNDnylG9QGgWSjJPPXp"><span class="q-num" data-page-node-id="mdGn3rBiLQjuUm3uYcwAhV">15.</span><span class="type-tag type-comp" data-page-node-id="3yoVCIttACUImYVYHzR7sf">综合题</span>为什么单个模块的汇编结果不能直接运行，而要先经过链接？</div>
+      <button class="reveal-btn" data-page-node-id="NGOJmyDXAJf9BCCUjhr572">查看答案</button>
+      <div class="answer-box" data-page-node-id="3vcAGjPdHcl0ATX3YMFla0"><strong data-page-node-id="haIbKpI1o4AOUUNYgzXoA8">答案：</strong>
+        <div class="analysis" data-page-node-id="AVAmLhEIgrB0JAyRxW5VZo">
+          单个模块在汇编时，编译器无法确定本模块中引用的外部符号（如 printf、其他模块的函数和全局变量）在最终可执行文件中的实际地址，因此其代码区、数据区都是从地址 0 开始的「待定状态」，即「可重定位目标文件」。只有经过链接器的符号解析（找到外部符号的定义）和重定位（修改所有引用处的地址），才能把所有模块拼合成地址确定的可执行文件。
+        </div>
+      </div>
+    </div>
+
+    <div class="question" data-page-node-id="M4IcgBhhjqhfJRoIzAz8OO">
+      <div class="q-title" data-page-node-id="QMc7Grm0SSk4CwJOQ9CfdE"><span class="q-num" data-page-node-id="9iDWYW3mYRtkw6VPDJGr20">16.</span><span class="type-tag type-fill" data-page-node-id="0ui4p1Y2iTyY2WHNSfF37G">填空</span>链接器主要完成 ____ 和 ____ 两个任务。</div>
+      <button class="reveal-btn" data-page-node-id="H4lkWgYkrBAO1W8yZBhlGE">查看答案</button>
+      <div class="answer-box" data-page-node-id="Fz1uXViEKAqG4NnTEjO7kP"><strong data-page-node-id="m4YA7PPbdJaO0TrGJZ7vTO">答案：</strong>符号解析；重定位</div>
+    </div>
+
+    <div class="question" data-page-node-id="5av1Vsb5OmpQiMkpfLTDWp">
+      <div class="q-title" data-page-node-id="onifqW9LRYOf5Nqdx6etqk"><span class="q-num" data-page-node-id="mp9qyQXtBmVOSi30m1OT4Y">17.</span><span class="type-tag type-fill" data-page-node-id="3o9f6os8aRXf9ylc3tVVch">填空</span>可重定位文件中的代码区和数据区都是从地址 ____ 开始的。</div>
+      <button class="reveal-btn" data-page-node-id="ky9Ap1kVCoX5YDEvrSm2Uf">查看答案</button>
+      <div class="answer-box" data-page-node-id="zZrqaWEJ8CR8jrLk7YXsM2"><strong data-page-node-id="FK2DnW49BFqmw55AZdFw6s">答案：</strong>0</div>
+    </div>
+  </section>
+
+  <!-- ========== 第二节 ========== -->
+  <section class="section-block" id="sec2" data-page-node-id="BaBixCOFBKfbDaPpjCvbg4">
+    <div class="section-header" data-page-node-id="tF9Z67easwuj6BuIzvFY47">
+      <div class="num" data-page-node-id="kxaNN8IqcvpUDFAHx5jaRX">2</div>
+      <h2 data-page-node-id="jbb53YGvyKckslW2DZyEiD">第二节 目标文件格式</h2>
+      <span class="count" data-page-node-id="szQ75LHXZHXdPkn2Tx2jzH">22 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="mjToQcFv3SFwFnl5Nn7fbG">
+      <div class="q-title" data-page-node-id="EmifmAjhSah2dHcITP9H8n"><span class="q-num" data-page-node-id="zeAaO5oNWW8Q9CpryhYB47">18.</span><span class="type-tag type-single" data-page-node-id="oXCMr0EmsigAc3tD3jfpcI">单选</span>Linux / UNIX 平台主要使用的目标文件格式是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="QQA9EhyuGWcGu414yk1jK7">
+        <li data-val="A" data-page-node-id="s4nMcoEcrhn07hsDBxJ3fo">A. PE</li>
+        <li data-val="B" data-page-node-id="oTEfs8qYfDxPSQY2fUjlVj">B. COFF</li>
+        <li data-val="C" data-page-node-id="KfBQqiHXCn2wYUKvk4Xczq">C. ELF</li>
+        <li data-val="D" data-page-node-id="HFnVOSFAX0aL15BFQF0m7u">D. Mach-O</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="q6ZWfMEyo1WBJSvBVj6pAz">查看解析</button>
+      <div class="answer-box" data-page-node-id="QCyiOgCY0A2MZS6PGKGPOD"><strong data-page-node-id="aPMPxdBCPIDBZonY0RyOi8">答案：C</strong><div class="analysis" data-page-node-id="uP7vmwCpxHSUu5ovCUmCVQ">ELF（Executable and Linkable Format）= 可执行可链接格式，Linux/BSD 默认；Windows 使用 PE；macOS 使用 Mach-O。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="7tUBqXa9jiCUWFHuynbX6v">
+      <div class="q-title" data-page-node-id="kNnhr9lAslQRenPPGkX423"><span class="q-num" data-page-node-id="u6kum5CE4ZHUBqaHKoVECY">19.</span><span class="type-tag type-single" data-page-node-id="AJPm7vA7AIY0NIZGXETauF">单选</span>ELF 头位于目标文件的什么位置？</div>
+      <ul class="options" data-answer="A" data-page-node-id="WJ3FtdSV3MPnVc1H3HvevI">
+        <li data-val="A" data-page-node-id="DOk3kGJMdlojhFcOHwVEoy">A. 文件起始位置</li>
+        <li data-val="B" data-page-node-id="cJfmF7EHkljhcG8pZQtVsr">B. 文件结尾</li>
+        <li data-val="C" data-page-node-id="t5ytwsHVZbcvi1KIGdjqKP">C. 程序头表之后</li>
+        <li data-val="D" data-page-node-id="lvNHDdvT1Ke8sSDGdBuQ2X">D. .text 节之后</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="n2BEYdG9sPJ5JoIpfmlA6R">查看解析</button>
+      <div class="answer-box" data-page-node-id="bt5BgZQWfZwTTdzok8mKAk"><strong data-page-node-id="GRCVRGfNBegODNNbvp1Nmd">答案：A</strong><div class="analysis" data-page-node-id="54oeiS1ePJgGiYj4Ct8ATM">ELF 头固定位于文件起始，包含文件类型、机器类型、节头表偏移等元信息。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Uus7tWCfivnWA24sA0oyiO">
+      <div class="q-title" data-page-node-id="Xgj4JSfbZCCaA36d77GlZF"><span class="q-num" data-page-node-id="G3QuA8MdXD8kIVwTULsn3G">20.</span><span class="type-tag type-single" data-page-node-id="NVnkV3IzMGj1hT9FQSCBgm">单选</span>32 位系统对应的 ELF 头数据结构 Elf32_Ehdr 大小为？</div>
+      <ul class="options" data-answer="B" data-page-node-id="IkVOPA2zbTtci4xXVej7jt">
+        <li data-val="A" data-page-node-id="0z0xHmO6Vzk77FxvrC1amv">A. 32B</li>
+        <li data-val="B" data-page-node-id="w8YKQAmknh1A5hTYYLgSsn">B. 52B</li>
+        <li data-val="C" data-page-node-id="uSPKnrDgTr1q0OibTJBA4S">C. 64B</li>
+        <li data-val="D" data-page-node-id="O8TKpbIHT7RUTNntBgeoDs">D. 128B</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="EyhOtfkt9EDXyUCceWHyy9">查看解析</button>
+      <div class="answer-box" data-page-node-id="ht6SRzZgUrjZw76yS9w3Vt"><strong data-page-node-id="8xFyDSmBK1B4gHl7aKOrCQ">答案：B</strong><div class="analysis" data-page-node-id="Gd8uQzVioTNifw8A2EGhVH">Elf32_Ehdr 共 52B；Elf64_Ehdr 共 64B，结构类似。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="US0B8bM5PiQz0Dy66FAksc">
+      <div class="q-title" data-page-node-id="rHGmFHOCzuhFKrVJrHF0Wh"><span class="q-num" data-page-node-id="OQ4BotdTZIoE7uZPhodIXF">21.</span><span class="type-tag type-single" data-page-node-id="2VBAlxoLCAonm2FBq2PdRz">单选</span>ELF 文件开头用于识别文件类型的几个字节称为？</div>
+      <ul class="options" data-answer="D" data-page-node-id="fHHk9RaAcjOQyOjeiASC3g">
+        <li data-val="A" data-page-node-id="NHHo1HMOq00KHZzCF36f17">A. 标识符</li>
+        <li data-val="B" data-page-node-id="8za4v1GuX0OU0502zN3rGk">B. 版本号</li>
+        <li data-val="C" data-page-node-id="00aYFdLsHuWB9cbok7p1bt">C. 签名</li>
+        <li data-val="D" data-page-node-id="lEOQHKpriEMbUMxYFhTv3W">D. 魔数</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="SaBTVrGplCE7WbJyPVi2Y5">查看解析</button>
+      <div class="answer-box" data-page-node-id="0V6nHmTpOJxXOcWAGbu9Ur"><strong data-page-node-id="dVsSjfyVmXZ1R2kCCm3HFS">答案：D</strong><div class="analysis" data-page-node-id="KrtXnX7ZQmtY7KXzwGPoAe">Magic Number，开头几个字节用来确认文件类型/格式是否正确。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="h5sVaDDjAXPkrETRry5uks">
+      <div class="q-title" data-page-node-id="BHRNTG4B12NjESLvC1DzAc"><span class="q-num" data-page-node-id="S1UjIPjR2H2E1ARDaYyEeT">22.</span><span class="type-tag type-single" data-page-node-id="lSl3HV2HC7V8ton87Qd9AF">单选</span>ELF 可执行目标文件比可重定位目标文件多了一个关键表，称为？</div>
+      <ul class="options" data-answer="A" data-page-node-id="4uCPDuiv6qwx093gxEr8nB">
+        <li data-val="A" data-page-node-id="6I6w3tBegfPH7YiFIVzbsd">A. 程序头表（段头表）</li>
+        <li data-val="B" data-page-node-id="DXG4RQqHXbzp6nJkN2k4N7">B. 节头表</li>
+        <li data-val="C" data-page-node-id="uDp0FMlqXtAoEHUIDJ4WHJ">C. 符号表</li>
+        <li data-val="D" data-page-node-id="4vwsDlb5BMyQBjDqMcjmsj">D. 重定位表</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="A2fstlHXEUsGviGvHRaMiY">查看解析</button>
+      <div class="answer-box" data-page-node-id="anQbFNAU2RvCMcBQz4dc89"><strong data-page-node-id="Vkam1YV5L8Bf8P9FzzB5RA">答案：A</strong><div class="analysis" data-page-node-id="IrVC4ZeA1O5YNO8z0Cbf96">可执行文件额外有「程序头表 / 段头表」描述各段到虚拟地址空间的映射；可重定位文件只有节头表。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="AkzBlDrnmmrnz0FeBPIK5O">
+      <div class="q-title" data-page-node-id="DAJkCFdYFP2qFuwDjrg0T2"><span class="q-num" data-page-node-id="KRlDWNeQrBGogQmCi5CXlM">23.</span><span class="type-tag type-single" data-page-node-id="eb9gUWcs5aSjwNzKG7N0UX">单选</span>可执行文件中 .init 节的用途是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="5dIdEZC2XvWQiYKQ3iEWOz">
+        <li data-val="A" data-page-node-id="fyM30RvosaiT8ayFMLEUoQ">A. 存放已初始化全局变量</li>
+        <li data-val="B" data-page-node-id="ImXXIwkSqcz9RFMsc3pyZW">B. 定义 main 函数</li>
+        <li data-val="C" data-page-node-id="UR8SmhmXe05CCOwn5Rj52L">C. 定义 init 函数，用于程序进入 main 前的初始化</li>
+        <li data-val="D" data-page-node-id="wfeqLpPb95DnhoR78pCBga">D. 存放动态链接信息</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ogxIUYEiE3qoLUQj18v7xt">查看解析</button>
+      <div class="answer-box" data-page-node-id="rBmIks3C106h7KwwIERwfG"><strong data-page-node-id="2t4SCEAgWVV7TRN2RqMkhc">答案：C</strong><div class="analysis" data-page-node-id="4WdiwYC4Dq0sCcnJtYAgD7">.init 节包含 init 函数，系统在进入 main 之前会先执行；.fini 节则在程序退出时执行收尾。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="pfqX7Dn9obNaaEMp1BsVnp">
+      <div class="q-title" data-page-node-id="7nJigeYCtzGrcSe9SDWD41"><span class="q-num" data-page-node-id="SBNq7sQHbVLXPHLRb6tGNp">24.</span><span class="type-tag type-single" data-page-node-id="rHYp9c3xYFQd2QLz4hEd73">单选</span>可执行文件相比可重定位文件，「少了」下面哪个节？</div>
+      <ul class="options" data-answer="B" data-page-node-id="rlra4shjksJqHbOGZ0nudV">
+        <li data-val="A" data-page-node-id="wfwnoJkDja65K6iegf3KFp">A. .text</li>
+        <li data-val="B" data-page-node-id="BYMee2FFgHTDzq6UsqOZT3">B. .rel.text</li>
+        <li data-val="C" data-page-node-id="WkjrpPLpbCVmnvNTIhh7E7">C. .rodata</li>
+        <li data-val="D" data-page-node-id="x8GGCDqrdO6sXIiMjpxNRX">D. .data</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Gr5X3w4zJrSe4nfFpUTLBB">查看解析</button>
+      <div class="answer-box" data-page-node-id="DmB7LAIChXakdZIDT0M4Uf"><strong data-page-node-id="9mSpq7goIU3pZ0vvXTc7kM">答案：B</strong><div class="analysis" data-page-node-id="1D3fypEWaWhCtaOrKfLd1r">可执行文件中指令/数据已被重定位，故可去掉 .rel.text、.rel.data 等重定位节。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="UJqUVR73qmgHy3CR2MmwbI">
+      <div class="q-title" data-page-node-id="eI3uEsBZvhvdiCGOd5bc3F"><span class="q-num" data-page-node-id="a4FglixbMN6dyQgPXEmyhN">25.</span><span class="type-tag type-single" data-page-node-id="CsCK55OGvWtK0X1OdTKkCC">单选</span>i386 System V ABI 中，只读代码段在 Linux 进程虚拟地址空间中的起始地址是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="S1RL9jHQUWzPQsrdk6B9UF">
+        <li data-val="A" data-page-node-id="MzHVB8QwwuSXH0wYoTrAVA">A. 0x00000000</li>
+        <li data-val="B" data-page-node-id="159cCzdFygD9SvSBsC2SMQ">B. 0x08048000</li>
+        <li data-val="C" data-page-node-id="0XOQGsaHeJKrtVPp5PtC6G">C. 0x08048000（实际值常用 0x08048000）</li>
+        <li data-val="D" data-page-node-id="5X3qIXPDBwjGmBfvnHZdB2">D. 0xFFFFFFFF</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="zanHLp1LpJelzDl8vB8QsD">查看解析</button>
+      <div class="answer-box" data-page-node-id="LeThzovk3K1cDSGHis65Va"><strong data-page-node-id="NuomO5v1YuyUsslKg9rBfR">答案：C</strong><div class="analysis" data-page-node-id="GduMajiGhiufcLWyv1sANC">i386 System V ABI 规定只读代码段起始虚拟地址 = 0x08048000。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="7ychyGpHD1ajXeP16nKs8z">
+      <div class="q-title" data-page-node-id="8aE4fM7CkmtScKlBpuZg1a"><span class="q-num" data-page-node-id="JFDFFolpZ9FTnrCGMirhJw">26.</span><span class="type-tag type-single" data-page-node-id="uxQf1D4QuMzVDAaD7rpNTD">单选</span>.bss 节对应的存储区域在程序运行时会被初始化为？</div>
+      <ul class="options" data-answer="A" data-page-node-id="dE9CLDHNMICakHMcHtVkvf">
+        <li data-val="A" data-page-node-id="BF9ZsBpX1Q6X0ME7Pos02D">A. 0</li>
+        <li data-val="B" data-page-node-id="1YyPdkqVSmXEYtG7fCybM7">B. 随机值</li>
+        <li data-val="C" data-page-node-id="oGvSn4du6etj2FWN4Z1ET3">C. 1</li>
+        <li data-val="D" data-page-node-id="GUNN1ivebhKFG5eXn0S2Ql">D. -1</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="wIJT77z7pQh5uvK2GL7yGE">查看解析</button>
+      <div class="answer-box" data-page-node-id="03bX4d2pPJHF6RYr5o2OFt"><strong data-page-node-id="Qpppq2FSEhgaXIXEtdZsmj">答案：A</strong><div class="analysis" data-page-node-id="IbpV10XbfGT4Rg3jloEORB">.bss 存放未初始化或初值为 0 的全局/静态变量，运行时由系统自动清零；文件本身不占空间。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="eDoyfsSLDOfuGdNPcZGAE5">
+      <div class="q-title" data-page-node-id="n35MijIT3wnl9pPEONGXYs"><span class="q-num" data-page-node-id="WIOlSJ3dkxZx8pVU5IBC29">27.</span><span class="type-tag type-single" data-page-node-id="ZGIDwO0qH8YTzgHiYcbIzY">单选</span>关于运行时堆与用户栈的地址增长方向，正确的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="xWdEZcPG66crBFmawqDato">
+        <li data-val="A" data-page-node-id="4ALHkHLE1BTo7e48io1g0V">A. 堆向低地址、栈向高地址增长</li>
+        <li data-val="B" data-page-node-id="tqtbqfZpwS67ovDOHbq9rp">B. 都向高地址增长</li>
+        <li data-val="C" data-page-node-id="CTR7c7hox6p3Eppy9HpMSg">C. 都向低地址增长</li>
+        <li data-val="D" data-page-node-id="EhBcYY0lMWoXqRe0u54TOW">D. 堆向高地址、栈向低地址增长</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="VCdCdrZ6i3mXL128SEQXU4">查看解析</button>
+      <div class="answer-box" data-page-node-id="sGoHjuQ1gfI9AoaXKHqHPm"><strong data-page-node-id="07IWisQtkI1Rmg0xBigqnV">答案：D</strong><div class="analysis" data-page-node-id="RMJtGGox6eeLdNZjoBj5eZ">Linux 中堆区（malloc）向高地址增长；用户栈从最大地址向低地址增长。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="lqcp8GUxUJV6upekMqaMrd">
+      <div class="q-title" data-page-node-id="BIqQ0vHJCR2p0HQoE5Jwb8"><span class="q-num" data-page-node-id="bFxiKXGD8WkElVN3F01Q5G">28.</span><span class="type-tag type-single" data-page-node-id="pjwhSETY1JcC1uMIZsxxWy">单选</span>节头表中每个表项描述的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="9H3Mtzt1qiW57573tt6Vrc">
+        <li data-val="A" data-page-node-id="wVOo3XfgzHJEfDcHYddkjA">A. 每个符号的地址</li>
+        <li data-val="B" data-page-node-id="OpUsccG2I21wRztVICApwX">B. 每个节的名称、偏移、大小、对齐方式等信息</li>
+        <li data-val="C" data-page-node-id="srP1B0z5BNEJ5Xk5fQWmrz">C. 程序的入口点</li>
+        <li data-val="D" data-page-node-id="XmKR371VFKPMQYF6XebNNV">D. 每个段的起始地址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="30iQIi4mGPATynJeUkfBLB">查看解析</button>
+      <div class="answer-box" data-page-node-id="vyA4oba06NWyXF6IzZny4m"><strong data-page-node-id="ox4Sdk1DLHDTwUjHxEBQJR">答案：B</strong><div class="analysis" data-page-node-id="lP6ylMbqK2M7Y1qC6S5qB6">节头表（Section Header Table）的每个表项描述对应节的元信息。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="7GLD0o4NtolmkIEEtwU9pa">
+      <div class="q-title" data-page-node-id="RTY3H50jxUEP59iGjTHa5R"><span class="q-num" data-page-node-id="noXp5cNkKFbatIFqDocXoW">29.</span><span class="type-tag type-fill" data-page-node-id="FqaNGCOuUmcwHKkPmxtK5E">填空</span>ELF 全称是 Executable and ____ Format，即可执行可链接格式。</div>
+      <button class="reveal-btn" data-page-node-id="WMPeqsvjlIEay6BfOiGIIP">查看答案</button>
+      <div class="answer-box" data-page-node-id="6sUjOrd6HDfwKWcbQBxSG9"><strong data-page-node-id="Dj4ccNuz7pGbW4pv3B45yl">答案：</strong>Linkable</div>
+    </div>
+
+    <div class="question" data-page-node-id="QAaW4nymOvCOKaXKdF5E7L">
+      <div class="q-title" data-page-node-id="aoCzMsBHKbU3oQdIFlBv9m"><span class="q-num" data-page-node-id="cZas1ys9r1Jts4q5Zbv297">30.</span><span class="type-tag type-fill" data-page-node-id="6hSlQbJgGSL6aD0Aqssu5J">填空</span>节头表由若干表项组成，每个表项描述对应节的 ____、在文件中的偏移、大小、对齐方式等信息。</div>
+      <button class="reveal-btn" data-page-node-id="kULwEPB3U2HjXQngN0cDZp">查看答案</button>
+      <div class="answer-box" data-page-node-id="OyoxsBHf85hmPXW42zLt8h"><strong data-page-node-id="bIokXGLoJs2xKeyQpSWZUB">答案：</strong>节名</div>
+    </div>
+
+    <div class="question" data-page-node-id="EEBebC68MD1HrWtlKC4BPh">
+      <div class="q-title" data-page-node-id="YyNnqCDx3CYnEW5CWl3oEq"><span class="q-num" data-page-node-id="ASYDwNW9DW6rV4vDgvw0hh">31.</span><span class="type-tag type-fill" data-page-node-id="vfK8xm232JAnGfa15NkHDl">填空</span>可执行文件中所有代码位置连续，所有只读数据位置连续，所有可读可写数据位置连续，这些连续区域由 ____ 表描述。</div>
+      <button class="reveal-btn" data-page-node-id="LDVVoR6Jz9oNg3mfXfekll">查看答案</button>
+      <div class="answer-box" data-page-node-id="usV3icl1ZVFKG7sEh2HuDM"><strong data-page-node-id="Jg9u9HqDp8OjMQvFVoNqVl">答案：</strong>程序头（段头）</div>
+    </div>
+
+    <div class="question" data-page-node-id="Pxpwfx1RpNEDdCZuObPTiE">
+      <div class="q-title" data-page-node-id="7H29VFVvWYfuNvg4BCCwkK"><span class="q-num" data-page-node-id="CWwHmiIAm2oCaXqbWTnSj8">32.</span><span class="type-tag type-fill" data-page-node-id="GyYAcweAI53CfeGxdw60BF">填空</span>运行时用户栈从用户空间的最大地址往 ____ 地址方向增长。</div>
+      <button class="reveal-btn" data-page-node-id="DgFIeqCYSd7IuTGytg4P0Q">查看答案</button>
+      <div class="answer-box" data-page-node-id="1eLjUdbTN3IH3wySws33Gp"><strong data-page-node-id="UzHpzMa2AGrVblQUIekuQQ">答案：</strong>低</div>
+    </div>
+
+    <div class="question" data-page-node-id="t7J83lzuCOP8NEDwWGyH3l">
+      <div class="q-title" data-page-node-id="TjM8KarHEl71ciZa3GH6K5"><span class="q-num" data-page-node-id="Dv0XH6YUIYRWCafRsI6tOz">33.</span><span class="type-tag type-fill" data-page-node-id="3r6Jjz36qXEp7W54QBoAbg">填空</span>ELF 头的 e_entry 字段给出程序的 ____ 地址，可重定位文件中此字段为 0。</div>
+      <button class="reveal-btn" data-page-node-id="yebDquVbknBtzcAfAsrLps">查看答案</button>
+      <div class="answer-box" data-page-node-id="j128AI6y65CPHXOyII0Et7"><strong data-page-node-id="HApoPHVeUCn3dM6ggf27J8">答案：</strong>入口（执行入口）</div>
+    </div>
+
+    <div class="question" data-page-node-id="AGTAXNaI8ooxfonQ1Dl6qs">
+      <div class="q-title" data-page-node-id="YmN59AdJdk3HnDmEpDQhah"><span class="q-num" data-page-node-id="CHLCxKwlQObmVkhUC61uVv">34.</span><span class="type-tag type-fill" data-page-node-id="VH4N9Oxc6NltuAFKEJFv0S">填空</span>i386 System V ABI 规定可读/写数据段映射到只读代码段后面按 ____ 对齐的高地址上。</div>
+      <button class="reveal-btn" data-page-node-id="EDH91BVU5L8I9CCCFq2Gcl">查看答案</button>
+      <div class="answer-box" data-page-node-id="WfJBIq1FjNcfxpDAB5znAi"><strong data-page-node-id="m78B4iIsBzn9VXybuh2ax6">答案：</strong>4KB</div>
+    </div>
+
+    <div class="question" data-page-node-id="0WNnPGoUGEhJxvpt50Ky87">
+      <div class="q-title" data-page-node-id="pmYSTRkAsDopqrDVgqMRGz"><span class="q-num" data-page-node-id="gYCTP9UgEEeRzXKKwPN8AP">35.</span><span class="type-tag type-fill" data-page-node-id="TFKrQIzMLlVS0qAz3UQuka">填空</span>堆区和栈区中间保留一块空间给 ____ 的目标代码。</div>
+      <button class="reveal-btn" data-page-node-id="Y15oute6ojlqINpoeNWWPe">查看答案</button>
+      <div class="answer-box" data-page-node-id="ZF6gH7NQ8HsZSWlEBwbptu"><strong data-page-node-id="QCmInvKKIE8XZdnh1TmL6w">答案：</strong>共享库</div>
+    </div>
+
+    <div class="question" data-page-node-id="SpCR5amE0J25Qf46CIIEYd">
+      <div class="q-title" data-page-node-id="zLjcPoxR0jWtdjVrefzyoN"><span class="q-num" data-page-node-id="ClDy6zkSKgAGvi1FjiGXZI">36.</span><span class="type-tag type-term" data-page-node-id="ZAQAej95rtLBIZP8nIzH7t">名词解释</span>节（Section）</div>
+      <button class="reveal-btn" data-page-node-id="PcMpAtMPYgNUOLESYYFzN3">查看答案</button>
+      <div class="answer-box" data-page-node-id="fOfRMjLAIjNdHDYhQQ2pZQ">ELF 文件中的主体信息单元，包含了链接过程所用的目标代码信息，包括指令、数据、符号表和重定位信息等。</div>
+    </div>
+
+    <div class="question" data-page-node-id="xMI05ZYAGEsOpiACIE3gxL">
+      <div class="q-title" data-page-node-id="1F5T5Lgs4DeEmoZymHtCPl"><span class="q-num" data-page-node-id="M8ivQheyqHdRHnJFKH4nYX">37.</span><span class="type-tag type-term" data-page-node-id="6EyJmKc3h6eqQBF3fDYcPc">名词解释</span>程序头表（Program Header Table）</div>
+      <button class="reveal-btn" data-page-node-id="kI7DBP1sfpQrurDtcb8uf8">查看答案</button>
+      <div class="answer-box" data-page-node-id="Ui33giw7HETA1WCfk7NLAk">也称段头表，是可执行文件中的一个结构数组，描述可执行文件中各「段（Segment）」到进程虚拟地址空间的映射关系，由操作系统加载器使用。</div>
+    </div>
+
+    <div class="question" data-page-node-id="78dFVMnGfuZlAdJwfxJXqF">
+      <div class="q-title" data-page-node-id="6TPIS5fdluhG6eqSJvuGid"><span class="q-num" data-page-node-id="vXg0xPHoGzGeGfzHnSdTJf">38.</span><span class="type-tag type-term" data-page-node-id="isVTM1yFHuGJFLWpax9NSM">名词解释</span>魔数（Magic Number）</div>
+      <button class="reveal-btn" data-page-node-id="ezcM7Hy3KKGy5w5RddhzW2">查看答案</button>
+      <div class="answer-box" data-page-node-id="LPGk8hg8wCwTD12y0x8Q77">文件开头几个字节的固定特征值，用来在加载/读取时确认文件的类型或格式是否正确，例如 ELF 文件以 0x7F 'E' 'L' 'F' 开头。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="Dv9bQIdmfKjQuw31YfVgS8">
+      <div class="q-title" data-page-node-id="MeeohdmdkOjpD2ktRBfgd8"><span class="q-num" data-page-node-id="mZUlIAXJesUEudrwsyOwHK">39.</span><span class="type-tag type-comp" data-page-node-id="nUBltvHYKr6zF8JQhzizpD">综合题</span>请按地址从低到高的顺序，列出 IA-32+Linux 进程的虚拟地址空间中常见区域。</div>
+      <button class="reveal-btn" data-page-node-id="W79YxSrIvzIazDxdGZiCjV">查看答案</button>
+      <div class="answer-box" data-page-node-id="kJhJAcCUEB0yIDf067PvAq"><strong data-page-node-id="zayg0YNju84NuaMS1DtBj1">答案：</strong>
+        <div class="analysis" data-page-node-id="1UKOqbXKThpbGbmeW8V4AU">
+          从低到高大致为：<br data-page-node-id="wHD0hRPg7y0uopo17BTNp9">
+          ① 保留区（低地址 0 附近不可用）<br data-page-node-id="OilPInqCa8pD91KfVSFB3D">
+          ② 只读代码段（.text + .rodata，起始 0x08048000）<br data-page-node-id="VTKVJHFDSSpcL9zvMQaT5y">
+          ③ 可读/写数据段（.data + .bss，按 4KB 对齐）<br data-page-node-id="d2wxeuhrmQka69z0FDIwmY">
+          ④ 运行时堆（run-time heap，malloc 向高地址扩展）<br data-page-node-id="lydSi1NRrjYJw8DAr8NSGm">
+          ⑤ 共享库映射区<br data-page-node-id="VNZmFHMWadSm7dHObixBF1">
+          ⑥ 用户栈（user stack，从最大地址向低地址增长）<br data-page-node-id="BNdxBlucaM24eA24w4oE6V">
+          ⑦ 内核虚拟存储区（最高地址区）
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第三节 ========== -->
+  <section class="section-block" id="sec3" data-page-node-id="ZPcQfhdDihVL8GbTUUe4hQ">
+    <div class="section-header" data-page-node-id="g3M4z3nwfPlaCsHMtAOHTb">
+      <div class="num" data-page-node-id="wy47k4DooVi15cMlAnxdKK">3</div>
+      <h2 data-page-node-id="sdyCAyJuEyyhEWTvTnnzYI">第三节 符号解析与重定位</h2>
+      <span class="count" data-page-node-id="nDX4TqAoEtHZEpFck8GBnc">24 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="dwCV6SCprIIoAUdkLsmTca">
+      <div class="q-title" data-page-node-id="Vclft948cfjntKE0vWLO0M"><span class="q-num" data-page-node-id="PykuUFQrFm20KHqUq2mEE2">40.</span><span class="type-tag type-single" data-page-node-id="0jgWNwAZqzdYXfTefcQirF">单选</span>以下哪类「不是」符号表中需要包含的符号？</div>
+      <ul class="options" data-answer="D" data-page-node-id="R0EgVThtuHvALeJ0qSo5I3">
+        <li data-val="A" data-page-node-id="oEvo1YaC8PzGVBqTL49HAp">A. 非静态函数名</li>
+        <li data-val="B" data-page-node-id="sxWADfk2BeZQJpEzUxdZyJ">B. 全局变量名</li>
+        <li data-val="C" data-page-node-id="kHr9Iu67OpuVA5ZqvHKDh9">C. 带 static 属性的本地变量名</li>
+        <li data-val="D" data-page-node-id="Qdcdayw4B68aueoklZNqJ9">D. auto 型非静态局部变量名</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="46kIfoxmAyB6WCDYlLVMXb">查看解析</button>
+      <div class="answer-box" data-page-node-id="12HP6acIPXGS5CJ3uyOeOj"><strong data-page-node-id="I4lDWCopTQ68geX2ePonJR">答案：D</strong><div class="analysis" data-page-node-id="aJMUZRBDjjWSPE9t7Q0eN1">auto 局部变量在栈中管理，链接器不需要其信息，故不进入 .symtab。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="O5LN6xHBQrvM55hK7CYLps">
+      <div class="q-title" data-page-node-id="1QLdLqiDcoHCB6AmKGef5q"><span class="q-num" data-page-node-id="cryxbC8CN7Bu5sxvTUQPzG">41.</span><span class="type-tag type-single" data-page-node-id="bikDmY441PAkREJo8E9WMc">单选</span>符号表中由其他模块定义、被本模块引用的全局符号称为？</div>
+      <ul class="options" data-answer="B" data-page-node-id="0ECwnrrk6DW20Z7U8SN1hK">
+        <li data-val="A" data-page-node-id="FLfeLeHI2Np6sL9bEi8rSc">A. 全局符号</li>
+        <li data-val="B" data-page-node-id="bMBSnvbnPhwBj2gIksUzVq">B. 外部符号</li>
+        <li data-val="C" data-page-node-id="qg8wFz21wVbH9KuNv063HX">C. 本地符号</li>
+        <li data-val="D" data-page-node-id="Dm2JZ5JPp3YMbPGyxN72cC">D. 弱符号</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="bZyWmYQ9ZX2IBrF40ZUqdm">查看解析</button>
+      <div class="answer-box" data-page-node-id="v4YFEoLsHjMANd5vnwTyqo"><strong data-page-node-id="LnNu3ffurI4G4CYBwO3AHW">答案：B</strong><div class="analysis" data-page-node-id="naRjxEo4qPK15yRXFORsNs">Global / External / Local 三类：①本模块定义并被其他模块引用=Global；②其他模块定义并被本模块引用=External；③本模块内定义并引用=Local（含 static 变量）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="k2LQnOQVnGPO2Q3DDRzAn6">
+      <div class="q-title" data-page-node-id="2HTY2HD9kmwyDo0dXDRMfO"><span class="q-num" data-page-node-id="GocFLTDwrPzvIlKvx2Crj9">42.</span><span class="type-tag type-single" data-page-node-id="wkDVO8UQvFz0miYUf02iHX">单选</span>符号解析中，多个同名 COMMON 符号同时定义时，链接器选择？</div>
+      <ul class="options" data-answer="C" data-page-node-id="HxG5CUfDHeAYVFiQf4irCl">
+        <li data-val="A" data-page-node-id="sDMCdIXavqRHTeEABLJVd7">A. 任意一个</li>
+        <li data-val="B" data-page-node-id="QuUTt46YypGM4tGHona1wD">B. 最小长度的一个</li>
+        <li data-val="C" data-page-node-id="zM70SQkKfdgTasoSZBsREO">C. 占用空间最大的一个</li>
+        <li data-val="D" data-page-node-id="ahrFphEu01F5ivQ69T8wqk">D. 抛出链接错误</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="d0KVowqmxHYRXRwd7lcXdO">查看解析</button>
+      <div class="answer-box" data-page-node-id="laAoQ8E2adHrmfowKVjDZT"><strong data-page-node-id="3ohYEbAWsNPODUlJu8kQGw">答案：C</strong><div class="analysis" data-page-node-id="4EGlT1Af91FCdfCy0Kbga4">COMMON 块规则：链接器取「最小长度中的最大值」，以满足所有同名 COMMON 符号的空间要求。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="OaW5RfBOWx35Dds9e4aefN">
+      <div class="q-title" data-page-node-id="cfUOtqBPv3MThkqWJL9m7l"><span class="q-num" data-page-node-id="Y7TiHdhIXnSiSZfpmt6Rw3">43.</span><span class="type-tag type-single" data-page-node-id="wlJQAKvEK108yO3iNzdKEU">单选</span>对于模块内部的 static 本地变量，链接器如何处理？</div>
+      <ul class="options" data-answer="A" data-page-node-id="3KUbnEUctubn05Q4mzBBk9">
+        <li data-val="A" data-page-node-id="Lq5FloBUPLV5nv1wNW94FN">A. 编译器为它们在 .data 或 .bss 中分配空间，并作为不同符号记录到符号表</li>
+        <li data-val="B" data-page-node-id="K7LwcBn6zB5McRAU4loQV9">B. 分配在栈中并放入符号表</li>
+        <li data-val="C" data-page-node-id="ujW2ol749v2IAbCDSk8Ssv">C. 不分配空间，链接时再决定</li>
+        <li data-val="D" data-page-node-id="GEg917z7nILQB1XYdYxBz7">D. 编译时直接丢弃</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="IxwtXdYoj8eCTwH4apW14z">查看解析</button>
+      <div class="answer-box" data-page-node-id="0QXSP8NXlgDbYdV6iRKLIA"><strong data-page-node-id="JXWgNHHp4uK6gmbdeVGxPn">答案：A</strong><div class="analysis" data-page-node-id="9AwZ3iqaqOWzA1QQnC3UQW">static 本地变量不在栈中，由编译器在 .data/.bss 中分配，并在 .symtab 中以独立符号记录。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="EJktGiEeLKIYlBumjBnsEG">
+      <div class="q-title" data-page-node-id="mrvZu6vuROjHYuwbedltlD"><span class="q-num" data-page-node-id="tVjwj89ERDonkZiZYqNMnt">44.</span><span class="type-tag type-single" data-page-node-id="jtmKqdFZ7LBwXnoTqTK74o">单选</span>类 UNIX 系统中静态库文件的后缀和格式是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="RA93gHUoKJmV1VfuCXznda">
+        <li data-val="A" data-page-node-id="izsLrDM8QSZ7XAv2ZyziD1">A. <code data-page-node-id="yNR7Zgz8LuhuygBxrtKPyw">.so</code> / ELF</li>
+        <li data-val="B" data-page-node-id="dMAI41KuquLoxRA8Szaupt">B. <code data-page-node-id="EBFGajcwJ6tkL71UOGk7St">.a</code> / 存档档案（Archive）</li>
+        <li data-val="C" data-page-node-id="azxgCoArgRPfLuG2v5YQWF">C. <code data-page-node-id="AmyNkEgRfREu0OoIMZMcdE">.lib</code> / COFF</li>
+        <li data-val="D" data-page-node-id="zR07ZcXLuRbew2lpFUeot5">D. <code data-page-node-id="keJUlgNDjyvvjsPupeqJuA">.dll</code> / PE</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Fba3c3PlvvmsF14dXBV9UV">查看解析</button>
+      <div class="answer-box" data-page-node-id="1D85AxsaRDUcyohw4sNeMD"><strong data-page-node-id="WwKoqmHVqj7ua3nG3lgcZb">答案：B</strong><div class="analysis" data-page-node-id="7WxEeRuwD2VrSYhqyoHAUr">静态库 .a，使用 Archive 格式（ar 工具创建）。.so 是共享库。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="NvXTnCbnusaxIzDTI7wPHt">
+      <div class="q-title" data-page-node-id="UJ3fFfFAkHfoazxssRtH6j"><span class="q-num" data-page-node-id="1YcBw8y5FYoc0MHbS6nFlH">45.</span><span class="type-tag type-single" data-page-node-id="3dz5nvlL6yfsLsOXKwKoLz">单选</span>重定位过程需要借助哪个节中的「重定位表项」完成？</div>
+      <ul class="options" data-answer="D" data-page-node-id="ZAYsgcXbACamBePs0f3V2h">
+        <li data-val="A" data-page-node-id="wwbFqkVkkj04rj62D1BWGq">A. .symtab</li>
+        <li data-val="B" data-page-node-id="ZyIc9HUFhd2sOrr5Axitfg">B. .text</li>
+        <li data-val="C" data-page-node-id="ufQm6e9UzTcBy0AMxgxEt9">C. .data</li>
+        <li data-val="D" data-page-node-id="4CrmShC1hymGrZwVEgJPjU">D. .rel.text 和 .rel.data</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="6xCmPdelpgq0PkeM9sAqaP">查看解析</button>
+      <div class="answer-box" data-page-node-id="eQ3dGMUDUc09mWBx0mgd5D"><strong data-page-node-id="R6k6ldhTlxNZMf3NVVY7wS">答案：D</strong><div class="analysis" data-page-node-id="7yGe4opSRm3vf5I3JHCDHc">.rel.text/.rel.data 记录需要重定位的符号引用位置和所引用的符号。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FYl43xQncN6kC9FWgzvCXA">
+      <div class="q-title" data-page-node-id="o0R4ooPx1NXXFsuCytwSsV"><span class="q-num" data-page-node-id="KoGL0FT02KqGx3HHKZWW0k">46.</span><span class="type-tag type-single" data-page-node-id="pHwSSyA7tzBzgqU6C9CMWn">单选</span>下列关于「共享库」描述错误的是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="YLABEEA77Ha7eRNzj63eVx">
+        <li data-val="A" data-page-node-id="ywcENxes4Sabx5YCbs1znz">A. 共享库代码段在内存中每个进程各有一份副本</li>
+        <li data-val="B" data-page-node-id="kE7mAUQqUTVxm1tL0Jq71Q">B. 共享库具备「共享性」与「动态性」</li>
+        <li data-val="C" data-page-node-id="r2vO6O46AMvW5bcHPypYFD">C. 共享库由动态链接器完成链接</li>
+        <li data-val="D" data-page-node-id="CAI8bMBSrZXh7Q1FZEZUyf">D. 共享库更新后无需重新链接应用程序</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="HkjCmJGZCiGQDtDp8IVxL2">查看解析</button>
+      <div class="answer-box" data-page-node-id="DjlITUeAvBSQfZK8rf1OBo"><strong data-page-node-id="hrHxaHTYELeWdUjBFinWyq">答案：A</strong><div class="analysis" data-page-node-id="2qtAbSbyTce4RgkLVoKYkY">共享库的代码段在内存中只有「一份副本」，被所有进程共享，正是「共享性」的体现。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="BboAyTDLfED0bEQZ6qBgbi">
+      <div class="q-title" data-page-node-id="cGXqDLeMOYYyCkgOswSn3C"><span class="q-num" data-page-node-id="LT3YDEv0fEfVAP8EOdCMoz">47.</span><span class="type-tag type-single" data-page-node-id="yuVWFr2orCAKCgnPiHkoqs">单选</span>共享库的「动态性」体现在？</div>
+      <ul class="options" data-answer="C" data-page-node-id="Fti00BV2Ehb1noRtaoW2B0">
+        <li data-val="A" data-page-node-id="NoOe4C9SlKea64aj9feiSF">A. 编译时静态绑定</li>
+        <li data-val="B" data-page-node-id="y5P9FkOvG3JBXsZuwrKhM8">B. 链接时确定所有地址</li>
+        <li data-val="C" data-page-node-id="LmfzsPA5vetCydkiw0KQNg">C. 共享库只在程序加载或运行时才装入内存</li>
+        <li data-val="D" data-page-node-id="ZPqDLCFmf64AsRnOzhQKsA">D. 共享库不能被卸载</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Gc2jZ6KQgf6y9AwWHCRVLt">查看解析</button>
+      <div class="answer-box" data-page-node-id="aX7x494xe7uEoHoL7786Qs"><strong data-page-node-id="viuCrGGKgtkYqdvYExGQtb">答案：C</strong><div class="analysis" data-page-node-id="SoyZKDgOwkMyIxOmHvOz1U">动态性：共享库在被使用时才装入，更新后应用程序无需重新链接。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="HHaH9yrfaFzpmjCtvWjDzY">
+      <div class="q-title" data-page-node-id="VDgwoxD2cRG6HtYnsYnTlA"><span class="q-num" data-page-node-id="sH68ZgFQBEy22sS7pSBiM4">48.</span><span class="type-tag type-single" data-page-node-id="OwHc6N3vV0Cll1csIRULlC">单选</span>动态链接的两种方式是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="feaKnq6RAqSK3zZ9bPCsoT">
+        <li data-val="A" data-page-node-id="cQhCW2rrOyDIum8G45wv3R">A. 加载时链接 + 运行时链接</li>
+        <li data-val="B" data-page-node-id="LNuDQG1HS1juQtqtlCAdQH">B. 静态链接 + 动态链接</li>
+        <li data-val="C" data-page-node-id="RpaYZj3BZ5xDxDIUfNlG4x">C. 编译时链接 + 加载时链接</li>
+        <li data-val="D" data-page-node-id="k4QP9NDVJZFeWLVQFiUP6W">D. 显示链接 + 隐式链接</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="RwQGy0H2EcwbW9mHp3o5IC">查看解析</button>
+      <div class="answer-box" data-page-node-id="uHo9FCVNwfII8gkqgxMbHR"><strong data-page-node-id="87wm6lc4CvLDtCShtvk5Xi">答案：A</strong><div class="analysis" data-page-node-id="egKgH4XbDDfzcBujUoDAVz">①加载时动态链接（程序装入时完成）；②运行时动态链接（程序运行中按需装入，如 dlopen）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="AlrVKIyIt5uhHYokGK5LB5">
+      <div class="q-title" data-page-node-id="okRiXfSaA7MQmjILtBtNKL"><span class="q-num" data-page-node-id="HG7jHdHABADyNGqT8t1FZd">49.</span><span class="type-tag type-single" data-page-node-id="wrLsMABEdvcQAQVyYdMt0X">单选</span>关于弱符号（weak symbol）的描述，正确的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="WPsdLkJQaBLmLA0fucBJkG">
+        <li data-val="A" data-page-node-id="1BmK2oN4pecWkS5mPTL1ET">A. 优先级高于强符号</li>
+        <li data-val="B" data-page-node-id="RytEbU4qsRil24FaZny7Uy">B. 可被同名强符号覆盖</li>
+        <li data-val="C" data-page-node-id="P7HgbKqIdyJdiPJBbO2AFy">C. 多个弱符号同名时链接器报错</li>
+        <li data-val="D" data-page-node-id="Y9vJY17q0WbWvQ0hT10azn">D. 不能出现在全局变量中</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="XNzNxbGNVZ1wHOJPQlpfRl">查看解析</button>
+      <div class="answer-box" data-page-node-id="asGpeDCrtIGtC9c0iWOnyH"><strong data-page-node-id="owhsauSBhLCCf2yMo2DqFP">答案：B</strong><div class="analysis" data-page-node-id="kcu4RTbY8n3babH37CHyzm">规则：强符号只能有一个；多个弱符号同名时按「最大长度」处理；强+弱同名时，强覆盖弱。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="lUMOEOCYRDG3bE4NIokSM3">
+      <div class="q-title" data-page-node-id="a2tifmJATXGvytcx3EQBE8"><span class="q-num" data-page-node-id="mhmZtqZDIHZhfoFuFGOwWf">50.</span><span class="type-tag type-single" data-page-node-id="BPLg4DELvgRVki0LINI4SG">单选</span>下列选项中，「不属于」强符号（strong symbol）的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="Zh39HuWDSzQF70DBBb61pR">
+        <li data-val="A" data-page-node-id="gMDb9bODshDl3SWEjBSeKB">A. 已初始化的全局变量</li>
+        <li data-val="B" data-page-node-id="NfHxQkNRd8sx7y0e8cN1ag">B. 函数名</li>
+        <li data-val="C" data-page-node-id="X2z5jxBQOf2IQgBdqqJ4lI">C. 定义时未使用 static 关键字的全局变量</li>
+        <li data-val="D" data-page-node-id="SJ7VhMY8tDRWMbRKhuCOZB">D. 未初始化的全局变量（C 语言习惯）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="GvW0DkIOFikOZrp0C0nGKk">查看解析</button>
+      <div class="answer-box" data-page-node-id="onz6Gf6QA2V0boHelUnZgB"><strong data-page-node-id="pYUl0ChKNa71uYaWq2UynO">答案：D</strong><div class="analysis" data-page-node-id="QG1F8ZmNJdH1TudmrxiSwc">C 习惯：未初始化全局变量按「弱符号 / COMMON」处理；已初始化或带 static 的全局变量是强符号。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="d3p0ccWdG1r8gd5HaPwdU3">
+      <div class="q-title" data-page-node-id="DXBzeuwFHGgjKS9d0doDO0"><span class="q-num" data-page-node-id="O6xhiWtDqfCMTrCZDto46o">51.</span><span class="type-tag type-fill" data-page-node-id="eA6IH94nibDoplIMtWJMoF">填空</span>符号表中共三类符号：本模块定义被其他模块引用的「全局符号」、其他模块定义被本模块引用的 ____ 符号、本模块内定义并引用的「本地符号」。</div>
+      <button class="reveal-btn" data-page-node-id="1mQlHKTWso1lAfQ3JeTDk8">查看答案</button>
+      <div class="answer-box" data-page-node-id="Jh4HQYhkEJACZHsAwCukoA"><strong data-page-node-id="UUoMmeufbNYzqzinoOLnUd">答案：</strong>外部</div>
+    </div>
+
+    <div class="question" data-page-node-id="9p9N2csoGhCB5V9ZeEp1I3">
+      <div class="q-title" data-page-node-id="t8FPdKa1vi8uinps419VNx"><span class="q-num" data-page-node-id="LB8cDs7gGu0T115VAaHlHH">52.</span><span class="type-tag type-fill" data-page-node-id="lqxQAwU6d5n75sPmqE6TfJ">填空</span>重定位分为「节和定义符号的重定位」与「____ 的重定位」两个方面工作。</div>
+      <button class="reveal-btn" data-page-node-id="XGyCtKuFvn0KixYllkGtGN">查看答案</button>
+      <div class="answer-box" data-page-node-id="Q2DijXVMfCIQ8zmhChPH4H"><strong data-page-node-id="MnZOm2trVqR5Pc5BbzY9Iy">答案：</strong>引用处符号</div>
+    </div>
+
+    <div class="question" data-page-node-id="WzThc6oCgdcdAi97PY23Xk">
+      <div class="q-title" data-page-node-id="03WnFpFSGgU0QHcns4OofX"><span class="q-num" data-page-node-id="ShneJYHUpdEGoCnlKap0Cs">53.</span><span class="type-tag type-fill" data-page-node-id="OHhK0YjUtmPJTpAKPvUwxG">填空</span>类 UNIX 系统的静态库使用 ____ 后缀的特殊存档文件格式。</div>
+      <button class="reveal-btn" data-page-node-id="fzCZBJ1TMrIffFSoT0H306">查看答案</button>
+      <div class="answer-box" data-page-node-id="mpNWc0uqT8pQnkFJZszFZD"><strong data-page-node-id="EvGjmAoh9XAvW26bikBdSm">答案：</strong>.a</div>
+    </div>
+
+    <div class="question" data-page-node-id="jZ3h1gt8WBICRcxyKKJrWG">
+      <div class="q-title" data-page-node-id="THvg7xwZpzU7ciZg4zVlBp"><span class="q-num" data-page-node-id="eZF2OM8buWwZI7NKinyF73">54.</span><span class="type-tag type-fill" data-page-node-id="Ffi9YUNGph8E36x5Ycb84l">填空</span>动态链接器也称为 Dynamic ____，负责装入并链接共享库。</div>
+      <button class="reveal-btn" data-page-node-id="djCevqOJNKuGXsWdUVt2yK">查看答案</button>
+      <div class="answer-box" data-page-node-id="dx3JxkP5Tz0bAaV1H1h5nV"><strong data-page-node-id="7KH9huSJn8FdLqt36HOlF8">答案：</strong>Linker</div>
+    </div>
+
+    <div class="question" data-page-node-id="Wp3saLNfBOA603WitGxVFO">
+      <div class="q-title" data-page-node-id="KozpX4uxRjhMIfPR9DcZLD"><span class="q-num" data-page-node-id="EYqBlA70F4fbg5NI4Ei4CC">55.</span><span class="type-tag type-fill" data-page-node-id="UxUFIielk5ixnhxEqItzYQ">填空</span>共享库的两大特点是「共享性」与 ____。</div>
+      <button class="reveal-btn" data-page-node-id="ph5CHIjA2XlAKZFSAIC751">查看答案</button>
+      <div class="answer-box" data-page-node-id="WlHpBhxkgAKK6uG62MH91h"><strong data-page-node-id="nC60DDDab9MR6GoH5EQ7qD">答案：</strong>动态性</div>
+    </div>
+
+    <div class="question" data-page-node-id="C3KNDDpmDSwUkhTkSrv5Vd">
+      <div class="q-title" data-page-node-id="PXxwEFthCAE5edwqvPNtsx"><span class="q-num" data-page-node-id="scUd0F8hAUQOPg51RqhOql">56.</span><span class="type-tag type-fill" data-page-node-id="q47IQNnE4Beqx25iLmNmH1">填空</span>链接器对 .text 中所有符号引用进行重定位时依据的是 ____ 节中的重定位表项。</div>
+      <button class="reveal-btn" data-page-node-id="keqBUHRg5ZBZ3Dik6mosH6">查看答案</button>
+      <div class="answer-box" data-page-node-id="8YLVwR9qB6sE3pmZe7c4dx"><strong data-page-node-id="OSourcSLWawvl0KRjtwzJ2">答案：</strong>.rel.text</div>
+    </div>
+
+    <div class="question" data-page-node-id="kpAWOXBgv1Y6KRJCp3M8vt">
+      <div class="q-title" data-page-node-id="FAv2tRZEcv4ZnC2MArWWYo"><span class="q-num" data-page-node-id="VsDljRpcxo6HhuNlUCCeQD">57.</span><span class="type-tag type-fill" data-page-node-id="juk0Hc5AtcQ6a3KGufBJ8V">填空</span>链接器通常用 ____ 命令将 .a 中被实际引用到的目标模块提取出来与应用程序链接。</div>
+      <button class="reveal-btn" data-page-node-id="WfUlkynaa3IM5XzejohRi0">查看答案</button>
+      <div class="answer-box" data-page-node-id="gEBL3qVX8oHbHxpW9kRXti"><strong data-page-node-id="2xWY2ibfL8PHCrafAc7LsP">答案：</strong>ld（链接器）</div>
+    </div>
+
+    <div class="question" data-page-node-id="6SViLQTG6LRwuEYiIaftIC">
+      <div class="q-title" data-page-node-id="HYaOqlqav5EaaJPqtAVEcr"><span class="q-num" data-page-node-id="eFtV9kvQfjQV4Sj4EUs6sF">58.</span><span class="type-tag type-term" data-page-node-id="oQdi5jGhblY7GM1UkwtXOe">名词解释</span>全局符号（Global Symbol）</div>
+      <button class="reveal-btn" data-page-node-id="1f2FlRkztQHy03bk4vCPAI">查看答案</button>
+      <div class="answer-box" data-page-node-id="YavW64kAcXF1eQjlIPEFwD">在模块 m 中定义并被其他模块引用的符号，包括非静态的函数名和全局变量名，可被其他模块访问。</div>
+    </div>
+
+    <div class="question" data-page-node-id="cQaTru1r373edpSdl443cV">
+      <div class="q-title" data-page-node-id="xXzqn2eQEPqxedk5zH1z4P"><span class="q-num" data-page-node-id="z2uVLtENlUSud7ZK680EGE">59.</span><span class="type-tag type-term" data-page-node-id="4uEmJqWPX1z8YLvsxua9sY">名词解释</span>本地符号（Local Symbol）</div>
+      <button class="reveal-btn" data-page-node-id="teHc7xXCpLjqjAXdK0GvlG">查看答案</button>
+      <div class="answer-box" data-page-node-id="sMDPuz4DXLEEL4M0H6ShYb">在模块 m 中定义且仅在 m 内引用的符号，主要指带 static 属性的函数名和全局变量名，由编译器在 .data/.bss 中分配空间并记录到符号表。</div>
+    </div>
+
+    <div class="question" data-page-node-id="eJLuWAV0YYyRG3Ok2c39SN">
+      <div class="q-title" data-page-node-id="9WjqLbbIuTBvqSo2U3Ah1O"><span class="q-num" data-page-node-id="TBGOUW03CRrAofFCGG270b">60.</span><span class="type-tag type-term" data-page-node-id="JGRGP5mWGSpUbiuunPH5hd">名词解释</span>静态库（Static Library）</div>
+      <button class="reveal-btn" data-page-node-id="VJLtBuxUaeFbZa1HXylUCv">查看答案</button>
+      <div class="answer-box" data-page-node-id="Kn1FOWQhdlh14gU9vAJvjA">由链接器在构建可执行文件时使用的库文件机制，将一组可重定位目标模块打包成一个 .a 后缀的存档档案，链接器自动从库中抽取被引用到的模块并与应用模块链接。</div>
+    </div>
+
+    <div class="question" data-page-node-id="REm5oyPqChDMdcxxg6ECH6">
+      <div class="q-title" data-page-node-id="rZMBiuyQFq6PGYUNaL3hak"><span class="q-num" data-page-node-id="7t7NfNungf66DnEhPuqOu9">61.</span><span class="type-tag type-term" data-page-node-id="D1TJsXtsuKOqPo74Bv9Knx">名词解释</span>共享库（Shared Library）</div>
+      <button class="reveal-btn" data-page-node-id="AtLrLCIHkGHOuzC4Tnkpc4">查看答案</button>
+      <div class="answer-box" data-page-node-id="DDgS3slfXh0GKJfW07ZuiX">一种特殊的可重定位目标文件（.so），可在可执行文件装入或运行时被动态地装入内存并自动链接，由动态链接器完成，具备共享性（内存中代码段仅一份）和动态性（按需装入、无需重链应用）。</div>
+    </div>
+
+    <div class="question" data-page-node-id="EcTBBLxA5Gmvuq2OGupHYS">
+      <div class="q-title" data-page-node-id="SH9JT0nwbYBDRgvZ2ViheH"><span class="q-num" data-page-node-id="7EU4CbQZ8LakJNbukQp05u">62.</span><span class="type-tag type-term" data-page-node-id="gyBbtnBN4eUlnjt7MxV0Vl">名词解释</span>动态链接（Dynamic Linking）</div>
+      <button class="reveal-btn" data-page-node-id="GbsZHHKM54SaJ1hjUi4LiQ">查看答案</button>
+      <div class="answer-box" data-page-node-id="hQqkN98GyoRHL56LxH1r88">在程序加载时或运行过程中，把共享库装入内存并完成符号解析与重定位的链接方式，由动态链接器完成，分为加载时链接和运行时链接两种。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="H2ADpAqt5cWYOeWE1FoN4Q">
+      <div class="q-title" data-page-node-id="EcM9cpxML4Tj1Op6tqlqWL"><span class="q-num" data-page-node-id="JG3LJMaFA5265K4CEnsM08">63.</span><span class="type-tag type-comp" data-page-node-id="mMfmA8mpCsMxONXORGCqhx">综合题</span>为什么 auto 型非静态局部变量不在符号表中？链接器不需要它们会引起什么后果？</div>
+      <button class="reveal-btn" data-page-node-id="Y4wi691Vffqet0Xc3QcTiA">查看答案</button>
+      <div class="answer-box" data-page-node-id="kzfRnbyC51gQyHk7x30D3x"><strong data-page-node-id="EEbhUL11Wi2bqGf6j9bmav">答案：</strong>
+        <div class="analysis" data-page-node-id="zJB9zNtVoOnPE9ZY6ad4la">
+          auto 局部变量随函数调用在栈帧中动态分配、随函数返回而释放，其生命周期只属于本次调用，链接器在合并模块时不需要也无法跨模块访问它们，因此不进入 .symtab。<br data-page-node-id="Y1VBHnzcHP2YpVesT27hVJ">
+          后果：不同模块可以各自定义同名 auto 变量而互不干扰；但同时也意味着链接器无法为它们分配固定地址、不能跨函数保留值（C++ 中 static 局部变量则进入符号表，由编译器在 .data/.bss 中分配全局唯一的存储）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第四节 ========== -->
+  <section class="section-block" id="sec4" data-page-node-id="qfx7huuBjU32C4lldH6DCC">
+    <div class="section-header" data-page-node-id="2Tfa0tl2grl1r0HKySw2Zh">
+      <div class="num" data-page-node-id="CCWmVb2k5m7XUCFyw5FXtU">4</div>
+      <h2 data-page-node-id="qGTxcrYoAFHMF7Z2dLukPH">第四节 可执行文件的加载</h2>
+      <span class="count" data-page-node-id="oNQGyFRjxIrkVeMpJry627">20 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="Rw53IUEsC5InLLLjmALki8">
+      <div class="q-title" data-page-node-id="RIxBGdnNzqzRoHUGMs1Tbx"><span class="q-num" data-page-node-id="CLiHxy3McBF0ACxExZCQXs">64.</span><span class="type-tag type-single" data-page-node-id="ucy89un0kDnOS9EgGOtcbA">单选</span>下列关于「程序」与「进程」描述正确的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="1neytfIRVrt6PgflligcP8">
+        <li data-val="A" data-page-node-id="3evx9WZtM9WofVDTgVrLa4">A. 进程是静态的代码集合</li>
+        <li data-val="B" data-page-node-id="hH9kBsbBlwy3woTq4i0yDb">B. 一个程序可以被加载多次，对应多个进程</li>
+        <li data-val="C" data-page-node-id="G2YT7IBNZnnnBdFX1tfPoO">C. 程序具有动态性</li>
+        <li data-val="D" data-page-node-id="hW3lQnlCRLJIA3lRaUSTgN">D. 进程可以脱离程序存在</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="DFmfGEc05wCMFaghZrTD7o">查看解析</button>
+      <div class="answer-box" data-page-node-id="IH2vzc2ZsGdAhYnOfMEDur"><strong data-page-node-id="SJPoS1WaBcDvufXDnAJgKC">答案：B</strong><div class="analysis" data-page-node-id="a3GxFlXZmcICV1YDJ3lf3o">程序=静态的代码+数据集合；进程=程序在某数据集合上的一次运行活动，动态性。一个程序可对应多个进程。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="H0NBtvIaW4qfQ4mOQEvFj4">
+      <div class="q-title" data-page-node-id="Tv1sDtmeQwcBnLUS7yFplr"><span class="q-num" data-page-node-id="x4VUuu3j0W2YJnQVohylmJ">65.</span><span class="type-tag type-single" data-page-node-id="CahPsEJItTKuptTbWFOKzu">单选</span>进程的虚拟地址空间信息保存在哪？</div>
+      <ul class="options" data-answer="C" data-page-node-id="uCk7MUQ8yG0iDdgWbRN1Zn">
+        <li data-val="A" data-page-node-id="QCJy6WKib1KL7RH9NDsfw6">A. ELF 头</li>
+        <li data-val="B" data-page-node-id="MjyA6fQHJH8vhxKBjKAee6">B. 节头表</li>
+        <li data-val="C" data-page-node-id="sLoZrNfdg0YkcAPdKFHSnn">C. 进程描述符</li>
+        <li data-val="D" data-page-node-id="H9upqRkYqGR9cdZxMpmOXi">D. 符号表</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="RGDuFdnSMMnsUGCU2AhfuQ">查看解析</button>
+      <div class="answer-box" data-page-node-id="1inuSmHYPGpFFHK8YaamjS"><strong data-page-node-id="zwcmrSCUMVeNN0PiyECX8m">答案：C</strong><div class="analysis" data-page-node-id="HrABev8TgFhwr9GdCe6zWt">操作系统把进程的各存储区域信息记录在「进程描述符」（PCB）中。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="2GNYQjuZVpIB56Bfd2VznV">
+      <div class="q-title" data-page-node-id="E95fIHPNvXpDVNyH8yGo7N"><span class="q-num" data-page-node-id="jlMthQTUXyLpIGbyovu1AQ">66.</span><span class="type-tag type-single" data-page-node-id="Zr1aO4Pg4ngabBvFbiEIeO">单选</span>execve 函数的原型中，参数 filename 表示？</div>
+      <ul class="options" data-answer="A" data-page-node-id="MhgL7u7xkau8oOnn4hYo6p">
+        <li data-val="A" data-page-node-id="rBOOx36g4BZu0ohqZkdU00">A. 要加载运行的可执行文件名</li>
+        <li data-val="B" data-page-node-id="vuAB229IrTsYBoJqoA3vMc">B. 命令行参数数组</li>
+        <li data-val="C" data-page-node-id="V1zzJovvglaNpnB3oqU2VD">C. 环境变量数组</li>
+        <li data-val="D" data-page-node-id="xcq3Oe54xXIG5UCXJwtqTq">D. 进程 PID</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ftOBjAchc9BoTnZovBhAo9">查看解析</button>
+      <div class="answer-box" data-page-node-id="01A5GQTGNi6gCuzNoZvKZV"><strong data-page-node-id="vD5sLeCYUjRFAK68Ii0Aga">答案：A</strong><div class="analysis" data-page-node-id="DuBmGP3SWBkakBc3MmQwsF">int execve(char *filename, char *argv[], char *envp[]); filename 是要运行的可执行文件路径名。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="0x9S23o9eOscnq10vvVC2Y">
+      <div class="q-title" data-page-node-id="aUxZSTjMfQne8c7VpiFjWS"><span class="q-num" data-page-node-id="lmGeDH2WOBwKL7fj4zQUVt">67.</span><span class="type-tag type-single" data-page-node-id="MBGIgwALuzhqYqPnJCAzdK">单选</span>main 函数的 argv 参数中，argv[0] 通常指向？</div>
+      <ul class="options" data-answer="D" data-page-node-id="AOBJcvmF7wsHoJo6T9SLSr">
+        <li data-val="A" data-page-node-id="4l1bOQXP3Ii1hllmfD0G4Z">A. 命令的第一个参数</li>
+        <li data-val="B" data-page-node-id="wwJmmDruFalxiuDwFZoYg6">B. 命令行字符串</li>
+        <li data-val="C" data-page-node-id="yInMnoHtXZY76hix3Pihzz">C. 环境变量字符串</li>
+        <li data-val="D" data-page-node-id="uuHnpuoiKhN2iXkNvz1L8h">D. 可执行目标文件名</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="vQVQM2SRXkNgxRFG5uMqjL">查看解析</button>
+      <div class="answer-box" data-page-node-id="HR11ZRSlAwUxuewDUbWFnx"><strong data-page-node-id="lWRiMYwnI8syOutlcbarVo">答案：D</strong><div class="analysis" data-page-node-id="gwKjSXtOTl4A5Q8in5PNXT">argv[0] = 程序名；argv[1] = 第一个参数；依此类推；参数个数 = argc。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Guw9FcBbolUsvsGsMDXnTE">
+      <div class="q-title" data-page-node-id="dZyL6gIYpmOSwCk8QgM2TR"><span class="q-num" data-page-node-id="ZeECn46kIliyDKM92gLvN6">68.</span><span class="type-tag type-single" data-page-node-id="6IlegQNNL96qCA07qOWnW6">单选</span>关于 fork 函数返回值的描述，正确的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="mdgiO5iE6aWDyigFEaO6tu">
+        <li data-val="A" data-page-node-id="CRuZiYD6W2zc6jZLUVdOlF">A. 子进程中返回子进程 PID，父进程中返回 0</li>
+        <li data-val="B" data-page-node-id="arD9sGCBWazKbxbJTpNYdn">B. 子进程中返回 0，父进程中返回子进程 PID</li>
+        <li data-val="C" data-page-node-id="20GwNMxrnYXm2JLEeBuNA2">C. 父子进程都返回相同 PID</li>
+        <li data-val="D" data-page-node-id="OIjdgRtObG5VPIf3kceub9">D. 子进程不返回值</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="CWwCkVPFx53rQzCwCmundM">查看解析</button>
+      <div class="answer-box" data-page-node-id="bhFs78rMSdPVCoPFYrkwYw"><strong data-page-node-id="u581poTDmg9jaqy83WhlfK">答案：B</strong><div class="analysis" data-page-node-id="XVoW9FffDSgYpHZPTzt1gf">pid_t fork(void); 子进程返回 0；父进程返回新创建子进程的 PID（>0）；失败返回 -1。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Q8FdrNzDWMSEdYnKjiPTAu">
+      <div class="q-title" data-page-node-id="Xy5xFu3aG3w2waZUckrOfI"><span class="q-num" data-page-node-id="rBgAzDhMxAqQ0tt1adi3Jx">69.</span><span class="type-tag type-single" data-page-node-id="4m3evT4niXzXZt21giOfvx">单选</span>fork 创建的子进程与父进程相比，下列哪项「不同」？</div>
+      <ul class="options" data-answer="C" data-page-node-id="LUxeFPo7QRMXYikZEwjRtH">
+        <li data-val="A" data-page-node-id="lthLRriNCq2GUYYco19fUa">A. 虚拟地址空间内容</li>
+        <li data-val="B" data-page-node-id="l3pG15ACAAIdejASeXeDai">B. 打开的文件描述符表</li>
+        <li data-val="C" data-page-node-id="VhqYtPaFrHR8D07FjonyKc">C. 进程 PID</li>
+        <li data-val="D" data-page-node-id="R08ZAuoqaaAXeLHBREiILm">D. 代码段内容</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="oDaGWx3BSXUuUFEg9yxFMI">查看解析</button>
+      <div class="answer-box" data-page-node-id="XDBA0vntNGEkSII4ALMEsE"><strong data-page-node-id="Nw5xHraDD1j0vPVljvCd6x">答案：C</strong><div class="analysis" data-page-node-id="8JUjisYhkfjtwCnUgZAaSi">子进程复制父进程的虚拟地址空间、文件描述符表等；最大差别是 PID 不同。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="xNmo6IWcoK19mjcxzdrqZw">
+      <div class="q-title" data-page-node-id="HfGBXID04W0QMw7DyzlhBt"><span class="q-num" data-page-node-id="RMSJsG6zoAdTlFYB0ltBZ8">70.</span><span class="type-tag type-single" data-page-node-id="kBrrO7xC3cwvDSPsklgV04">单选</span>fork 在 Linux 中原型定义于哪个头文件？</div>
+      <ul class="options" data-answer="A" data-page-node-id="H7Lpo01gHMLPkgRHbgkI8j">
+        <li data-val="A" data-page-node-id="5VUFCHreinWrDDsJDCm4J9">A. unistd.h</li>
+        <li data-val="B" data-page-node-id="wMX8GRksSoy9zxcl21NcMt">B. stdio.h</li>
+        <li data-val="C" data-page-node-id="5Yiau7Ba3yzF3PqWDQkMQ4">C. stdlib.h</li>
+        <li data-val="D" data-page-node-id="KjQaJOze8tTHxPgXZaEQDB">D. process.h</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="HdjMNDviAwDDfV4Ka8RfpZ">查看解析</button>
+      <div class="answer-box" data-page-node-id="tExnmmSseCCZY8vBHxmE4g"><strong data-page-node-id="KtEblH1s4IUECYOAFXALG2">答案：A</strong><div class="analysis" data-page-node-id="dOw0qDg3PfcG5NkTwx5xRa">pid_t 类型定义于 sys/types.h；fork 原型定义于 unistd.h。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="JqrPtlR1CEY1zG6rzJ6iLT">
+      <div class="q-title" data-page-node-id="cssAM8LWJLipAH7nBPUQNq"><span class="q-num" data-page-node-id="Rhq3JLj1iaKc2PrU0McQ7a">71.</span><span class="type-tag type-single" data-page-node-id="2Ax2WbDmfo6zIoSKEI1uWl">单选</span>关于 fork 后父子进程之间的关系，错误的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="QIL5k6kmFpGoDPHMD4wws8">
+        <li data-val="A" data-page-node-id="ZtTjqW9373gSO31FYjtbpH">A. 父子进程都从 fork 返回处继续执行</li>
+        <li data-val="B" data-page-node-id="YauysJMhKndVQhfNS55van">B. 子进程获得父进程的文件描述符副本</li>
+        <li data-val="C" data-page-node-id="HLa0GaJhYAzpdC1zAoAAnp">C. 修改任一方虚拟地址空间不会影响另一方</li>
+        <li data-val="D" data-page-node-id="Khyij87gbsggQ3Cb8rPP3D">D. 父子进程共享同一份物理内存</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="4qOoG3ne08HuZs1e5ZzxOf">查看解析</button>
+      <div class="answer-box" data-page-node-id="4E8RAMdVwAsh6i6pMdCXuJ"><strong data-page-node-id="B3QF99zYsjXb0uRAy3hHCV">答案：D</strong><div class="analysis" data-page-node-id="sLAxSTOFJT2ufgMB2HjHip">fork 后父子进程拥有相同但独立的虚拟地址空间；写时复制（COW）机制下初时共享物理页，一旦任一方写入则复制新页。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="9CmYtUOB4EsGknoQnsFrIq">
+      <div class="q-title" data-page-node-id="2fgjudpsHwvgSACRZlvJ66"><span class="q-num" data-page-node-id="RUoQIyFUS10KkgU0meM02j">72.</span><span class="type-tag type-fill" data-page-node-id="o1PGt23Qkp8xtYQNvwFzLf">填空</span>程序是代码和数据的集合，是 ____ 概念；进程是程序的一次运行活动，是 ____ 概念。</div>
+      <button class="reveal-btn" data-page-node-id="a1A4xBkULpH81oayqtGPx3">查看答案</button>
+      <div class="answer-box" data-page-node-id="O1BxjMPPT55mybPPKDKmxH"><strong data-page-node-id="OkKWWCUkYntAsnYBlyOXfB">答案：</strong>静态；动态</div>
+    </div>
+
+    <div class="question" data-page-node-id="q4Tpal7GkwPXKpE2Rn3LtS">
+      <div class="q-title" data-page-node-id="QSpAl5BezfrTcUOj2AenJw"><span class="q-num" data-page-node-id="m13EtkgEo6nIqTVDsRL5D5">73.</span><span class="type-tag type-fill" data-page-node-id="QZEeJ2PdSIDHoR4VSw0f0H">填空</span>execve 函数的三个参数依次是 ____、argv、envp。</div>
+      <button class="reveal-btn" data-page-node-id="PA93D0Eq3Sff0OVGQ2304Y">查看答案</button>
+      <div class="answer-box" data-page-node-id="IdaWYVq3ofU7TDmg3vUlEm"><strong data-page-node-id="hNTGHCDCyCzP58MMA4MiFR">答案：</strong>filename</div>
+    </div>
+
+    <div class="question" data-page-node-id="CCmdOCjaFKAzMopAtGq1Ej">
+      <div class="q-title" data-page-node-id="VOZLEfrFsLwrHVFV8vg69X"><span class="q-num" data-page-node-id="aAcCS4a43acHtGmcBMKMFG">74.</span><span class="type-tag type-fill" data-page-node-id="XYkDLJ9inYXajCIkWVrmcA">填空</span>fork 创建的子进程继承了父进程的打开 ____ 表。</div>
+      <button class="reveal-btn" data-page-node-id="JChOvgO4dyLgO0l4lEVVip">查看答案</button>
+      <div class="answer-box" data-page-node-id="M7ez1C6nX9kmvGqF6JAsoM"><strong data-page-node-id="rhKD43p35mJt1FVSuP8y21">答案：</strong>文件描述符</div>
+    </div>
+
+    <div class="question" data-page-node-id="xxwdSTDloMg8ishylV4BFi">
+      <div class="q-title" data-page-node-id="FH4xDYOORzw9edt1luBcc4"><span class="q-num" data-page-node-id="Sg1eFh9k9zOrbF3W9L2kjk">75.</span><span class="type-tag type-fill" data-page-node-id="CpPlvjBpU4O7DlTlaBMpOj">填空</span>Linux 中用一个唯一的正整数标识进程，称为 ____。</div>
+      <button class="reveal-btn" data-page-node-id="LFUiZRYQhv1s80kX8rNiFj">查看答案</button>
+      <div class="answer-box" data-page-node-id="fR3Ws3E6QWiZqOfuqHB1Ry"><strong data-page-node-id="E5DNY4mfNZdjPqqNidzOad">答案：</strong>PID（进程标识符）</div>
+    </div>
+
+    <div class="question" data-page-node-id="QOLDzfYodZpf3DT26RCFSX">
+      <div class="q-title" data-page-node-id="q7lPBV61KU06fq7oOpyD2A"><span class="q-num" data-page-node-id="bjdlr7yi2QsFF846A4fKQo">76.</span><span class="type-tag type-fill" data-page-node-id="PUe7y4qRB8AawhBpW1LLZ3">填空</span>程序头表描述了可执行文件中的只读代码段和可读/写数据段与 ____ 地址空间之间的映射关系。</div>
+      <button class="reveal-btn" data-page-node-id="GazqC6rzGUqvrpBwMzlNWp">查看答案</button>
+      <div class="answer-box" data-page-node-id="scTBVTbH5pIpCcZBnUNXfl"><strong data-page-node-id="UK6Ais1jxEoCj49p9T7mvp">答案：</strong>虚拟</div>
+    </div>
+
+    <div class="question" data-page-node-id="7sLjdzHwnDeodmk9VCygoO">
+      <div class="q-title" data-page-node-id="L5dx4pQBzPeB5AOHbxSZVN"><span class="q-num" data-page-node-id="fFLpN1j4BZwueDtcoPrEqP">77.</span><span class="type-tag type-fill" data-page-node-id="sFzX4f0m0kOTJvTAsHVyEA">填空</span>fork 函数的返回值类型 pid_t 在 Linux 中实际上是 ____ 型。</div>
+      <button class="reveal-btn" data-page-node-id="0IpwDEclJmFTWzyNNfGkJu">查看答案</button>
+      <div class="answer-box" data-page-node-id="zKBONdPDHY1EFLh4fBh0N8"><strong data-page-node-id="3D64G7JMPnCO0ZZpITVgIk">答案：</strong>int</div>
+    </div>
+
+    <div class="question" data-page-node-id="Fra4DwsDCGpvCh5Is4lHdE">
+      <div class="q-title" data-page-node-id="DFhb33hpyrm5Q1wjPFRuys"><span class="q-num" data-page-node-id="h9z7m3FJ78gwboSl9cOHLr">78.</span><span class="type-tag type-term" data-page-node-id="DaMFrkJbOiHH1j9Ojs6cvf">名词解释</span>程序（Program）</div>
+      <button class="reveal-btn" data-page-node-id="spYEJxFzg03cmc0zvVVY8i">查看答案</button>
+      <div class="answer-box" data-page-node-id="09dEBqyWFkNHLtuzfHNeBG">代码和数据的集合，程序的代码是一个机器指令序列，作为文件存放在硬盘中，是静态的概念。</div>
+    </div>
+
+    <div class="question" data-page-node-id="4ZeD9CJe5FXVqN7OredOtb">
+      <div class="q-title" data-page-node-id="1z1jnDxxPYWr3eHMh0Wa3m"><span class="q-num" data-page-node-id="FlEr8wSrGMCRm8jiOIhmr4">79.</span><span class="type-tag type-term" data-page-node-id="rpnMXOA6QAWZtSQTf0gSAD">名词解释</span>进程（Process）</div>
+      <button class="reveal-btn" data-page-node-id="5Vq9YuJqfIMb0QZACQFJxE">查看答案</button>
+      <div class="answer-box" data-page-node-id="ZPorJLFYvXGbQuuU3RJ6PH">具有一定独立功能的程序关于某个数据集合的一次运行活动，具有动态的含义；一个可执行文件可被加载多次，对应多个不同的进程。</div>
+    </div>
+
+    <div class="question" data-page-node-id="GA6HZTS2Gide7AuSx3tsI3">
+      <div class="q-title" data-page-node-id="5C9glDynwni6L3jDYLh7X6"><span class="q-num" data-page-node-id="4TGIuq3n5XpZnKBKkiFYX6">80.</span><span class="type-tag type-term" data-page-node-id="TmVonjgk3aRhhSPChxgcng">名词解释</span>execve 函数</div>
+      <button class="reveal-btn" data-page-node-id="HD5XQGCj6EreLPJFctuFGJ">查看答案</button>
+      <div class="answer-box" data-page-node-id="HHG7K1O2MX21Kl1saIH836">在当前进程的上下文中加载并运行一个新程序的系统调用，原型为 int execve(char *filename, char *argv[], char *envp[])，成功调用后进程的代码、数据全部被新程序替换。</div>
+    </div>
+
+    <div class="question" data-page-node-id="wtC2HVGVWGTO5mOH06r67D">
+      <div class="q-title" data-page-node-id="9CzwDvhWwkq7rZuB8qHAyA"><span class="q-num" data-page-node-id="Olydu9d7Dfjxw1qnIlYKuU">81.</span><span class="type-tag type-term" data-page-node-id="NJR4WuKlvwLQQPsuQLyaO7">名词解释</span>fork 函数</div>
+      <button class="reveal-btn" data-page-node-id="9NiygO4ktFFFMqWV8yBm7R">查看答案</button>
+      <div class="answer-box" data-page-node-id="g0g52KnIDoAeGdBwlj6Ubn">Linux 中用于创建子进程的系统调用，原型为 pid_t fork(void)；子进程获得与父进程相同但独立的虚拟地址空间与文件描述符表，两者从 fork 返回处继续执行，区别在于返回值（子进程 0，父进程返回子进程 PID）。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="gnNIVlHQajn4RywKy2fpEg">
+      <div class="q-title" data-page-node-id="q0kSkU5yLueGICJxSK1apS"><span class="q-num" data-page-node-id="mFeWbgJHJAKdui7CpdFqJv">82.</span><span class="type-tag type-comp" data-page-node-id="U1waLTQbjvc4Ui0jO4eC08">综合题</span>简述在 Linux 中通过 fork+execve 启动一个新程序的典型流程。</div>
+      <button class="reveal-btn" data-page-node-id="8GJREqaEkQYG64DkrIMGeG">查看答案</button>
+      <div class="answer-box" data-page-node-id="6Gs3GhA6D70O6rU7QwVFsv"><strong data-page-node-id="Brz2vJlPsraaF7KQPW5aoK">答案：</strong>
+        <div class="analysis" data-page-node-id="bbVaR603i7XoD9QjbUfe0i">
+          ① 父进程调用 fork()，复制出一份与父进程几乎一样的子进程；<br data-page-node-id="14TgEObIk770J9s88Pgxpw">
+          ② 父进程通常根据 fork 返回值 >0 继续执行或调用 wait() 等待子进程；<br data-page-node-id="TfmOkPx7ufeqls7tC5kHUl">
+          ③ 子进程判断 fork 返回值 =0 后调用 execve(filename, argv, envp)；<br data-page-node-id="A3nrSwNpsGGiT5Y2B9y2EN">
+          ④ execve 加载 filename 指定的 ELF 可执行文件，根据其程序头表建立新的虚拟地址空间映像（替换原地址空间），并从 e_entry 入口开始执行；<br data-page-node-id="6bFB7b69tnnXUgQ0MVYThL">
+          ⑤ 子进程执行完后通过 exit() 返回，父进程在 wait() 中被唤醒并回收子进程资源。<br data-page-node-id="c2CK4s6XYtuEcG2SsG1DU7">
+          该模式让父子进程各司其职：父进程可继续服务或并发派生子进程，子进程独立加载并运行目标程序。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="CnwTTGKBiHOgyNpG71XzaZ">
+      <div class="q-title" data-page-node-id="cDMzboXuFcvkdeLU5Z2pkg"><span class="q-num" data-page-node-id="DQUTg9ItqVkqBtev6Q6YsX">83.</span><span class="type-tag type-comp" data-page-node-id="XOoH85e0eNPgF7y5jFYqSk">综合题</span>fork 后父子进程共享哪些资源？又各自独立哪些资源？</div>
+      <button class="reveal-btn" data-page-node-id="EmXm8iLSZ0sMLWOOXOVNoK">查看答案</button>
+      <div class="answer-box" data-page-node-id="t7nS9OBbOV4OSeGrPZnqcJ"><strong data-page-node-id="Fbjey2R7KAwGigpAFUqQkt">答案：</strong>
+        <div class="analysis" data-page-node-id="JiMEpIbHYuzkXtyYWHdbyg">
+          共享（继承的）：打开的文件描述符表、信号处理方式、当前工作目录、用户 ID/组 ID 等进程属性。<br data-page-node-id="s3OCe2EmK3jnyvBnqJTLoe">
+          独立：进程 PID、虚拟地址空间（fork 时复制，写时复制）、父进程 PID、未决信号集等。<br data-page-node-id="GLBX777RrsmKmFhLl1Rgrr">
+          关键点：fork 后两者拥有相同但独立的虚拟地址空间，任一方写入会触发 COW 复制，互不影响。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第五节 ========== -->
+  <section class="section-block" id="sec5" data-page-node-id="4dwBs8mzsyrkhxPp0TFFaA">
+    <div class="section-header" data-page-node-id="ik6gtnVHbA2FW2pzqBKIUT">
+      <div class="num" data-page-node-id="IvUG2rY4uXf5l8OlOj2Exq">5</div>
+      <h2 data-page-node-id="TBzAwTSJVi4pizcxvM7oN7">第五节 程序的执行和中央处理器</h2>
+      <span class="count" data-page-node-id="EkvlwCpLErIVBnEVYopWBv">31 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="vNPo0tjeZ502D3U8MfcDC7">
+      <div class="q-title" data-page-node-id="wQbJmPylMwDFsn0fQn7sPm"><span class="q-num" data-page-node-id="KHv4zzCN45jlJcbmoRefr5">84.</span><span class="type-tag type-single" data-page-node-id="qvtOOggZ0MHMxGjOwDElAq">单选</span>CPU 即将执行的指令地址存放在哪个寄存器中？</div>
+      <ul class="options" data-answer="A" data-page-node-id="rMgD6SKcyhHUxj2ANmCqAi">
+        <li data-val="A" data-page-node-id="SwNnLH2FDaYiRW7uUhYogU">A. PC（程序计数器）</li>
+        <li data-val="B" data-page-node-id="3zrFCHuG5mTW2nQuOwdW3Y">B. IR（指令寄存器）</li>
+        <li data-val="C" data-page-node-id="0z0GbFycvIWJ3s9pSUUCdR">C. MAR（主存地址寄存器）</li>
+        <li data-val="D" data-page-node-id="rGvYk410FRifrpEt6oqArK">D. MDR（主存数据寄存器）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="BxV1iYu8h4hdKbB78JZ2AL">查看解析</button>
+      <div class="answer-box" data-page-node-id="D1Rqy1Wn6vedGkenmKRSWu"><strong data-page-node-id="ien4jeUuX33HBRCHEu5Gp6">答案：A</strong><div class="analysis" data-page-node-id="LsHa6kPsaL6HvubFfpyyCy">PC（IP/EIP）始终指向下一条将执行指令的地址。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="v0gEFVOugHw4mV42hPObC1">
+      <div class="q-title" data-page-node-id="lyyyCGwm7nJUrmd1EOSZqK"><span class="q-num" data-page-node-id="A0snaJr0o9zNwANIW86Nkf">85.</span><span class="type-tag type-single" data-page-node-id="SJM3fhRQRDsfPbYFfcW9Pp">单选</span>取出的指令存放在哪个寄存器中等待译码？</div>
+      <ul class="options" data-answer="C" data-page-node-id="WpfHDot3bpuEPrnxMwe7CG">
+        <li data-val="A" data-page-node-id="635VYP5FQmIBfaQJbJOYYK">A. PC</li>
+        <li data-val="B" data-page-node-id="YiSzEOAGAY4Q6DWQH1KXUI">B. MAR</li>
+        <li data-val="C" data-page-node-id="WEzVyZ7IkrFD1NLzpOSwDX">C. IR</li>
+        <li data-val="D" data-page-node-id="kwRkTSXIOkADhcmGTiwsZg">D. PSW</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="xFkdiFHBOQ9XkDzG4tSDGm">查看解析</button>
+      <div class="answer-box" data-page-node-id="7A7gCL2iTReZyd7wTIV6oe"><strong data-page-node-id="ZAYG4GJa2eYCNdy5KDRQwC">答案：C</strong><div class="analysis" data-page-node-id="5juyUYOcZCJqhSvfpsyGC4">指令寄存器 IR 缓存当前正在译码/执行的指令。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="xzBS9NNfi8fXS4sNEEk4PX">
+      <div class="q-title" data-page-node-id="bQA3RxWbdLAZamxx7nvSEE"><span class="q-num" data-page-node-id="qDPyBxx19NsNIowStB9xbW">86.</span><span class="type-tag type-single" data-page-node-id="D4oubwBbY6gvbDA4bEvIDP">单选</span>CPU 执行一条指令大致分为 6 步，下列顺序正确的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="6N60Yguf3Qcrf0GHSCzVOG">
+        <li data-val="A" data-page-node-id="croXiZJJ1WedRiGQzEgw1i">A. 取指 → 译码 → 算源地址 → 算目的地址并存结果 → 执行数据操作 → 算下条指令地址</li>
+        <li data-val="B" data-page-node-id="h9UFh8kETYkDXQJiU3S1ht">B. 取指 → 译码 → 算源地址并取操作数 → 执行数据操作 → 算目的地址并存结果 → 算下条指令地址</li>
+        <li data-val="C" data-page-node-id="64Gf5C3mvob2UQWTKVr0B9">C. 译码 → 取指 → 算源地址 → 存结果 → 执行 → 算下条地址</li>
+        <li data-val="D" data-page-node-id="q6RDBzoAMagv47dppdjFCk">D. 取指 → 译码 → 执行 → 算源 → 算目的 → 算下条</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="X2iMGCzoYhHo06azhjzDxD">查看解析</button>
+      <div class="answer-box" data-page-node-id="HJihEtkDPGcQ2hZfXBmMDi"><strong data-page-node-id="9poQpjMW7rmCZ1QRjaj6WB">答案：B</strong><div class="analysis" data-page-node-id="fOtr1n3XIrklu0Rit201Bu">六步：取指 → 译码 → 计算源操作数地址并取操作数 → 执行数据操作 → 计算目的操作数地址并存结果 → 计算下条指令地址。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="HDjCz4CdBerIxxk64cWhBV">
+      <div class="q-title" data-page-node-id="TyGXpJ9OunsKoouxFaGKxC"><span class="q-num" data-page-node-id="W2mTwwHHOdaUGVbquAEK9N">87.</span><span class="type-tag type-single" data-page-node-id="SP9EoOx7DvvaSzSP7tZ1qN">单选</span>CPU 中「操作控制信号形成部件」综合的三类信息不包括？</div>
+      <ul class="options" data-answer="D" data-page-node-id="tn5JhPTSBAwKDdSl6eF2l9">
+        <li data-val="A" data-page-node-id="CJrC64JQCHgVgZeQ72xTFI">A. 时序信号</li>
+        <li data-val="B" data-page-node-id="d2uDTQBv6zy8VhFe7tNuNT">B. 指令译码信号</li>
+        <li data-val="C" data-page-node-id="kK48fhSlBtCQ1ORMr0WTEx">C. 执行部件反馈的条件标志（CF/SF/ZF/OF）</li>
+        <li data-val="D" data-page-node-id="nH7GTtfSzQIxXteRL9n1x1">D. 当前指令的虚拟地址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ktgf7KRdSwhIhM5lhKU8xC">查看解析</button>
+      <div class="answer-box" data-page-node-id="MEHDLbNJHAj5VvLFB1aTk9"><strong data-page-node-id="AD69Bfksm0ZHtcS5tDAHQW">答案：D</strong><div class="analysis" data-page-node-id="DqAa22gxuaW848LFiVLdzo">操作控制信号 = 时序信号 + 指令译码信号 + 条件标志反馈。虚拟地址与此无关。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="ZIwOgKfFDkyCC5MB5oKgUP">
+      <div class="q-title" data-page-node-id="M0CG9w5YnApEQG5yUZIp24"><span class="q-num" data-page-node-id="zwfY4F8IQS0rwg4HtKZaHl">88.</span><span class="type-tag type-single" data-page-node-id="BjB1HXXSX3JcHwvBex0p6I">单选</span>CPU 中「启停控制逻辑」的作用是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="ABP0L4Wa6hUmdKnP7uiGJH">
+        <li data-val="A" data-page-node-id="v2DJYpUB2rxaLqFNqcl2Rg">A. 可靠地开放或封锁时钟信号，实现启动/停机</li>
+        <li data-val="B" data-page-node-id="5HeFGU5MClsx1uJ4AxuYrG">B. 译码指令操作码</li>
+        <li data-val="C" data-page-node-id="hRdJ1bfOceUBSI3IFZCkNi">C. 暂存指令</li>
+        <li data-val="D" data-page-node-id="pIIl1m2emDFZmfzfh2lPqP">D. 接收外部中断</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="fqcqSQQze4TBij9xJ8ieKQ">查看解析</button>
+      <div class="answer-box" data-page-node-id="PtPzwimd8KUhDzDfP3Pw05"><strong data-page-node-id="j2SaKzKlSrnVuchffTSjZI">答案：A</strong><div class="analysis" data-page-node-id="eCjICYrp289M4qKi4qMRls">启停控制逻辑：在需要时开放/封锁时钟信号，实现启动与停机。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="1yRkQ4RCUBZtYcnwt9QK9V">
+      <div class="q-title" data-page-node-id="PBoyTWAVX5WZkisA4S3ymK"><span class="q-num" data-page-node-id="yl8NbmINeTaCbouS3nCVHl">89.</span><span class="type-tag type-single" data-page-node-id="sfDzBrKyZB9XyG627rHgJ5">单选</span>内部异常（Exception）与外部中断（Interrupt）的本质区别在于？</div>
+      <ul class="options" data-answer="C" data-page-node-id="RjNIjOzlZkE0qPTcfqAbs3">
+        <li data-val="A" data-page-node-id="5Dua7skveCi4iwEwowxjjL">A. 异常由软件产生，中断由硬件产生</li>
+        <li data-val="B" data-page-node-id="YDdDHQ5QMGetaYIZP23lRA">B. 中断可屏蔽，异常不可屏蔽</li>
+        <li data-val="C" data-page-node-id="ZSUHIs6UHUIHhKv6Iuxh4y">C. 异常由 CPU 执行某条指令时自身引起，与指令相关；中断由 CPU 外部的 I/O 子系统发出，与执行的指令无关</li>
+        <li data-val="D" data-page-node-id="70OVwMG4fNrZWGrEyG7ua8">D. 异常优先级一定比中断高</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="o9qIbfvm3RWeOSqAEDWNTV">查看解析</button>
+      <div class="answer-box" data-page-node-id="7Wk7DYQ7Kp2bbOpNd0Rq1h"><strong data-page-node-id="XAEjuvjfEZ71PCzp6x1Nnm">答案：C</strong><div class="analysis" data-page-node-id="TPH5RcpQuQMoNeeLmzKpVi">关键区分：异常由指令自身触发（除 0、溢出、断点等）；中断由外部 I/O 事件触发（时钟、网络包、Ctrl+C 等）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="khVAsm0DfBor5N4X72iceB">
+      <div class="q-title" data-page-node-id="N4XDQdFoSsBAGYNtoFoVaQ"><span class="q-num" data-page-node-id="Eh5hRxzgqdyRDXLlhUE05Y">90.</span><span class="type-tag type-single" data-page-node-id="qztEIOJUv04DgfMBcTx8tQ">单选</span>CPU 对异常和中断的响应过程通常分为三步，下列顺序正确的是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="53MWwE4ErYrTdpgg4i4ftc">
+        <li data-val="A" data-page-node-id="B41H3FxaobUet5xZhIkGRb">A. 识别事件 → 关中断 → 保护断点</li>
+        <li data-val="B" data-page-node-id="MSWwni9PdpaH4E9SkSj2kz">B. 保护断点和程序状态 → 关中断 → 识别异常和中断事件并转相应处理程序</li>
+        <li data-val="C" data-page-node-id="nWqSxuoG139nEevk5CqblV">C. 关中断 → 识别事件 → 保护断点</li>
+        <li data-val="D" data-page-node-id="FosUZDfIzVro0T3B6zbxWC">D. 保护现场 → 开中断 → 识别事件</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="9wWRseYFqqM1VAAa9iKcQJ">查看解析</button>
+      <div class="answer-box" data-page-node-id="ZfQqx7OyVIBcvrh5xzdNQm"><strong data-page-node-id="qEjsYCGyYfTdckwvPtCptG">答案：B</strong><div class="analysis" data-page-node-id="bireCT1jGvQOkeVIniOE23">标准三步：保护断点和程序状态 → 关中断 → 识别事件并转入对应处理程序。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="kfFwfm82MNnrDhbemQDzTk">
+      <div class="q-title" data-page-node-id="aDhBo7Wx27e1qCyqqHFV6n"><span class="q-num" data-page-node-id="Akb2xPEpETBOhcXBXNuYc5">91.</span><span class="type-tag type-single" data-page-node-id="S5jG8Zx6qEcPQWHJfDKgTs">单选</span>「关中断」通常由 CPU 通过什么机制实现？</div>
+      <ul class="options" data-answer="A" data-page-node-id="Ei8cdnyCDLiduUZFrikL7q">
+        <li data-val="A" data-page-node-id="6uJ83N7oN1H4VGzzPA0uvE">A. 将中断使能位置 0</li>
+        <li data-val="B" data-page-node-id="rypRy6ES3Z8R1NFdmBzJwU">B. 修改 PC</li>
+        <li data-val="C" data-page-node-id="65QpOOs9qJqArFU3OcuaNp">C. 屏蔽数据线</li>
+        <li data-val="D" data-page-node-id="N6Z1PZ5bsVAP2758PetLAi">D. 关掉时钟</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ubvaOAD5xAgbFE7XXqtXrd">查看解析</button>
+      <div class="answer-box" data-page-node-id="tugevXE2Y2vFvQJMI2TG4P"><strong data-page-node-id="WUDQ25sACd8tjq0RV1sxD3">答案：A</strong><div class="analysis" data-page-node-id="C6nekxJVAJbLXEsHfEvrSU">IF 中断使能位 = 1 开中断，= 0 关中断（响应过程中由 CPU 自动清 0）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="oAnGJKdNavZHv6rpFUXwhg">
+      <div class="q-title" data-page-node-id="vRg6nGuA1SxdHHg2b5K3V7"><span class="q-num" data-page-node-id="I7VnNCuo9Du1sjHhNXbM1f">92.</span><span class="type-tag type-single" data-page-node-id="F2O0NOYP3h2oQFE6ZqWsb1">单选</span>关于「向量中断」方式的描述，正确的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="1xpy19JrZOFFKyOhv2THw0">
+        <li data-val="A" data-page-node-id="N7qPnnx0Ah6mHlg1YgM1os">A. 由软件逐个查询中断源</li>
+        <li data-val="B" data-page-node-id="CDOUTnUGlZ9vUCQoIAECD3">B. 需要 CPU 主动轮询</li>
+        <li data-val="C" data-page-node-id="9HKyHlsGdvFMsXajlXBxzN">C. 比软件识别速度慢</li>
+        <li data-val="D" data-page-node-id="6TuA31lbAQ6eEPPdevgGqN">D. 每种异常/中断都有中断类型号，根据类型号在中断向量表中找到对应处理程序首地址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="sD6lID2NHKDLJgmIgCCBdI">查看解析</button>
+      <div class="answer-box" data-page-node-id="tg5Q2JlU6TpabO6yz6UUdC"><strong data-page-node-id="5wd8EBxExJK85CCO25UbdE">答案：D</strong><div class="analysis" data-page-node-id="pzWL32q3OWsZ1fiL407CsG">向量中断=硬件识别：每种异常/中断对应一个中断类型号，通过中断向量表直接跳转到处理程序入口。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="2P0rBwFJFUpVaJ6pzhgsEr">
+      <div class="q-title" data-page-node-id="BFvGl1YaneEWm2RIvMXEtd"><span class="q-num" data-page-node-id="vrd1YHcAhLoDQH8KGaQAqg">93.</span><span class="type-tag type-single" data-page-node-id="LfvWFzKCcDUsaZVsnLOoJo">单选</span>指令流水线设计中，流水段数 M 与每段执行时间 T 的关系，下列正确的是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="ZnS8fKwszwEhWPAfvcDyBe">
+        <li data-val="A" data-page-node-id="NMbQd661HfAF5GczAPmtRx">A. 流水段数越多越好</li>
+        <li data-val="B" data-page-node-id="sc1r0JaWAVfLctBZIo9JXr">B. 段数与时钟频率无关</li>
+        <li data-val="C" data-page-node-id="n4GoOPgAYExoZRTGWXCm6x">C. 流水段数以最复杂指令的阶段数为准，每段执行时间以最复杂操作所用时间为准</li>
+        <li data-val="D" data-page-node-id="MVF9YGd3dCwL3KTHmS2lNE">D. 单周期 CPU 性能高于流水线 CPU</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="jGExRq8UpyAqCybr4Xni7G">查看解析</button>
+      <div class="answer-box" data-page-node-id="ILGuyGZ904dpsYxGNqnXGf"><strong data-page-node-id="cljaZq49HnOwCZBPDXcVOC">答案：C</strong><div class="analysis" data-page-node-id="nr8NfJOSUZkCX3aoLJlF8u">流水线设计原则：段数以最复杂指令所用阶段数为基准；段执行时间以最复杂操作为基准（同步各段）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="NrDBuHzrWv94VJ67IsLSik">
+      <div class="q-title" data-page-node-id="hezPXV6pz2AfhHUMt6mnxx"><span class="q-num" data-page-node-id="gZZwgm7WrPnPf866jkcWvW">94.</span><span class="type-tag type-single" data-page-node-id="nfuteYDLmpQWQS9te0SwLV">单选</span>理想情况下，N 条指令在 M 段流水线中执行的总时间为？</div>
+      <ul class="options" data-answer="B" data-page-node-id="7OAUAgbI2kTCYVb8M7Aegf">
+        <li data-val="A" data-page-node-id="XMYNeR10hMlYAmV86hhJAs">A. N × M × T</li>
+        <li data-val="B" data-page-node-id="Ikm7YirZY5B1FRWvHre2yj">B. (M - 1 + N) × T</li>
+        <li data-val="C" data-page-node-id="yq0SggB3KObrF9wmZbEaSn">C. M × N × T / 2</li>
+        <li data-val="D" data-page-node-id="1wVObsRDdqYHgVXOuAjIKp">D. N × T</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="vH8YpyCLS33Zd7ADXMVHZD">查看解析</button>
+      <div class="answer-box" data-page-node-id="x9Z2F9gXoQ2ScYwe3mpsQ1"><strong data-page-node-id="oWRiVDEOYVdPaMswpioDBc">答案：B</strong><div class="analysis" data-page-node-id="zxFJFMWcsER2qhZusYvCGE">理想流水：(M - 1) 段填满 + N 条指令逐条流出，总时间 = (M - 1 + N) × T。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="GqhjBKakG2AnCkGHbjQqVW">
+      <div class="q-title" data-page-node-id="hIP4mzgKEPfFek621Slald"><span class="q-num" data-page-node-id="sR04pudILb4G1nHeAJy1Gb">95.</span><span class="type-tag type-single" data-page-node-id="spWk6gtAlDGlXLIRsSqDgr">单选</span>下列哪种事件不属于内部异常？</div>
+      <ul class="options" data-answer="D" data-page-node-id="sraWzbSXa6QPw5bH1mlesT">
+        <li data-val="A" data-page-node-id="u1InG44VGb9eP6oY0PcL2W">A. 除数为 0</li>
+        <li data-val="B" data-page-node-id="ZPyCiC0rW64mDnLQa8j0az">B. 算术结果溢出</li>
+        <li data-val="C" data-page-node-id="R6hxjrlKJGDicDXbr7ivJN">C. 缺页</li>
+        <li data-val="D" data-page-node-id="TYYVCpcQXTQcRFY2LbKYEt">D. 键盘按键中断</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="s4O9Kxut05T7nGpnwHguYj">查看解析</button>
+      <div class="answer-box" data-page-node-id="YNLZdHFaFW9aj76hSVE6aB"><strong data-page-node-id="UwZk1omcOM0gt0hTDVmPjQ">答案：D</strong><div class="analysis" data-page-node-id="CNnTMUTX60o9E0GZizXqcU">键盘按键中断是外部 I/O 事件，属于「外部中断」。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="2xfzoNWFjTWI4UOB9AIiKs">
+      <div class="q-title" data-page-node-id="2pDDFvFpMVr6icaB3S0m5u"><span class="q-num" data-page-node-id="Ka3Nu0Rwgy9WlkIEH13hfJ">96.</span><span class="type-tag type-single" data-page-node-id="YEdtH89jElFqMX3VdjtzDV">单选</span>CPU 检测到中断请求后，所保存的「断点」一般是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="EpdrZy1EJFX6Z7JCF4OdnN">
+        <li data-val="A" data-page-node-id="MlCpifEnU7cuAWAPzV6RT9">A. 当前指令地址</li>
+        <li data-val="B" data-page-node-id="fZMAKqIhAc7KnDcRaCt4tU">B. 下一条指令地址</li>
+        <li data-val="C" data-page-node-id="VxBMQVM2tZqLMrv4bg3n7W">C. 中断服务程序首地址</li>
+        <li data-val="D" data-page-node-id="XweK4rAyA095SKRHAaUDSp">D. 中断向量表的地址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="C7E68ShkOaydEywQRzepgD">查看解析</button>
+      <div class="answer-box" data-page-node-id="O3tYs48Qc5qIXOHIWhGkIa"><strong data-page-node-id="08tGvyOdLWHMrdGebUHX7G">答案：B</strong><div class="analysis" data-page-node-id="2Rd3wu4tNqv82DjYDg9Duk">每条指令执行完后 CPU 才检查中断请求，因此断点 = 下一条指令地址。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="A8taGtIBAcZX5kq6PfIjY1">
+      <div class="q-title" data-page-node-id="pQ3v37NHEH6o1gTvS1Jp3R"><span class="q-num" data-page-node-id="TbPFd6jUTeebwF0EoIYkKw">97.</span><span class="type-tag type-single" data-page-node-id="WAvO4HAxkP1YJEl16r1t9h">单选</span>软件识别异常/中断源时，CPU 中通常设置？</div>
+      <ul class="options" data-answer="A" data-page-node-id="TAybijouYmnWSlVyaGEmUl">
+        <li data-val="A" data-page-node-id="XYkZ8gosOarl9Bnp928JE6">A. 原因寄存器</li>
+        <li data-val="B" data-page-node-id="fsFTiehNLRA8KRjWVO7MJ2">B. 中断向量表</li>
+        <li data-val="C" data-page-node-id="TFvwFtsVbxj4tuHrgrjd6y">C. 中断描述符表</li>
+        <li data-val="D" data-page-node-id="5FbQn85JB8EoPlbGC0oPJl">D. 程序计数器</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="eXCzTpzkCHrtLO10vQtLnU">查看解析</button>
+      <div class="answer-box" data-page-node-id="lsw7BrFoAtw9huqAQLXhRP"><strong data-page-node-id="DpKSGwQu9YwrOWfGea60os">答案：A</strong><div class="analysis" data-page-node-id="k1LYmFEIz5kXPSYAhijYWn">软件识别：在 CPU 中设置「原因寄存器」记录异常/中断类型，由统一查询程序按优先级轮询。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="6hKKb45r9NNFJtEagnbMw6">
+      <div class="q-title" data-page-node-id="34EOvbprh7fuAKJP34caut"><span class="q-num" data-page-node-id="3KuoLwbPJyYHDX1QoIkRVb">98.</span><span class="type-tag type-fill" data-page-node-id="wZIwrDbV6AUGtLCTeDd1nW">填空</span>CPU 两大基本部件是数据通路和 ____ 部件。</div>
+      <button class="reveal-btn" data-page-node-id="Sq1zjshOMnxmQmlF2Tik6k">查看答案</button>
+      <div class="answer-box" data-page-node-id="VlFWGnj1HDULu4XiUTzFIt"><strong data-page-node-id="Vfa3BWuaEyjSIiagD4l0Kw">答案：</strong>控制（Control Unit）</div>
+    </div>
+
+    <div class="question" data-page-node-id="wRegUpa1De1BxrmYSe6T6h">
+      <div class="q-title" data-page-node-id="jEtrwFMCdL5elPOah86h1h"><span class="q-num" data-page-node-id="Yr3wXRJJsUCxfE4Ggjl4Ml">99.</span><span class="type-tag type-fill" data-page-node-id="8mHRefq9nbGDI6ERgaCDI6">填空</span>CPU 中除地址和数据以外的所有信息都属于 ____ 信息。</div>
+      <button class="reveal-btn" data-page-node-id="e93Rt8EY798zg9ZHJU6PqJ">查看答案</button>
+      <div class="answer-box" data-page-node-id="l8uXXttDFIczaSShKsyNaO"><strong data-page-node-id="RxjQR0gCo3q0NnHvR1Y4wF">答案：</strong>控制</div>
+    </div>
+
+    <div class="question" data-page-node-id="Y3esEsEOBdChhrehGRvuMF">
+      <div class="q-title" data-page-node-id="ryuYgXvsYzyKVK5GjGacWc"><span class="q-num" data-page-node-id="hle3MFB28GRia12ys3ErDC">100.</span><span class="type-tag type-fill" data-page-node-id="MgYweMCijzshX89xTUH3TH">填空</span>指令寄存器简称 ____，用于存放现行指令。</div>
+      <button class="reveal-btn" data-page-node-id="sgo1TtkUrjj2JSudUHUlmB">查看答案</button>
+      <div class="answer-box" data-page-node-id="IwROsE2Vt7jquTKTnhR9cM"><strong data-page-node-id="GlDmdm4gCb7fFZvstLFUTu">答案：</strong>IR</div>
+    </div>
+
+    <div class="question" data-page-node-id="T1pO7aJsNhJluJSmoYqo5R">
+      <div class="q-title" data-page-node-id="Apd9mVyp84GbOpcWbfJVGC"><span class="q-num" data-page-node-id="bEtHkiykj2EWJstlFx2TJV">101.</span><span class="type-tag type-fill" data-page-node-id="tKsYtGlHntABVbJncG16Nl">填空</span>指令译码器简称 ____，对 IR 中的操作码部分进行译码。</div>
+      <button class="reveal-btn" data-page-node-id="oMUhyteOO0dm669TajxqAT">查看答案</button>
+      <div class="answer-box" data-page-node-id="Vv5okAlIyFdlZzw7VUX2R2"><strong data-page-node-id="HQBd2f7CbrEsL5Agnvw815">答案：</strong>ID</div>
+    </div>
+
+    <div class="question" data-page-node-id="fQzBa1FM4IHX5HHy1DUxHH">
+      <div class="q-title" data-page-node-id="DTlw9ZUCCpwP61pnwG7zGF"><span class="q-num" data-page-node-id="11urKfdObeHlbuZdbTJVle">102.</span><span class="type-tag type-fill" data-page-node-id="KknvWPGHHp8XHa06mw4Xx2">填空</span>时序信号产生部件以 ____ 信号为基础，产生不同时序信号。</div>
+      <button class="reveal-btn" data-page-node-id="oJJEDDgGB8nD9BA5U5s84T">查看答案</button>
+      <div class="answer-box" data-page-node-id="2zoiec0lQYQNRCdrcm4pyx"><strong data-page-node-id="AmDfzAIkTeh6MuoM6VG7YI">答案：</strong>时钟</div>
+    </div>
+
+    <div class="question" data-page-node-id="2ulX8XABOgmTYHninQgEIt">
+      <div class="q-title" data-page-node-id="ESJDYYpccyOACM8FPiBE9B"><span class="q-num" data-page-node-id="rcwKHcVB0ndceH0WM6Yu8F">103.</span><span class="type-tag type-fill" data-page-node-id="EuBF8EotBgNv6t81xHECvj">填空</span>CPU 中地址线是 ____ 向的，由 CPU 送出地址。</div>
+      <button class="reveal-btn" data-page-node-id="ZXxHCqAoFoYDb62IywkMHR">查看答案</button>
+      <div class="answer-box" data-page-node-id="bxyUjv2UkBBK9jCdQB1jsJ"><strong data-page-node-id="AdB1bzmiCrLrCtJzuTG8kY">答案：</strong>单</div>
+    </div>
+
+    <div class="question" data-page-node-id="4csLLXIc5NY5ctoBPCYUVt">
+      <div class="q-title" data-page-node-id="YiR9U9IrQMgtg4lJVrSRET"><span class="q-num" data-page-node-id="6ZuNifFyDcwIW53fqoWDVA">104.</span><span class="type-tag type-fill" data-page-node-id="S3eTlJfNiRDD55nasmzqrq">填空</span>异常和中断源识别有「软件识别」和「____ 识别」两种方式。</div>
+      <button class="reveal-btn" data-page-node-id="LD34lzrEAO49wCAKtezOkH">查看答案</button>
+      <div class="answer-box" data-page-node-id="eCSUWR8b0UDY5t5h1j6Lch"><strong data-page-node-id="4AYhhiLvQUNMRuNebN15Xr">答案：</strong>硬件</div>
+    </div>
+
+    <div class="question" data-page-node-id="infpT9phK4Trn6usP8v1sg">
+      <div class="q-title" data-page-node-id="qOIn748E9aXd6DAK3on7gw"><span class="q-num" data-page-node-id="xRrDKBy7GKa7bTqz1UlQ3v">105.</span><span class="type-tag type-fill" data-page-node-id="FB2PGQ5wEIW9FAUAbawMXO">填空</span>向量中断方式下，所有中断向量存放在一个表中，称为 ____ 表。</div>
+      <button class="reveal-btn" data-page-node-id="uWmLpuLVF6nGjbOu7AhdlE">查看答案</button>
+      <div class="answer-box" data-page-node-id="RljectE4hOopBnWKVDXGdb"><strong data-page-node-id="4SVjIVS0D5IJk7IsluAFRm">答案：</strong>中断向量</div>
+    </div>
+
+    <div class="question" data-page-node-id="zXNsodBWPMBUjGuI9m4WcZ">
+      <div class="q-title" data-page-node-id="vjXAXHyETfzK6BFeNN5tDh"><span class="q-num" data-page-node-id="en4EreXEUrcdxEIpzryw15">106.</span><span class="type-tag type-fill" data-page-node-id="yhlgLiw9Emox6V8CU8AfLr">填空</span>异常和中断响应过程中由 CPU 将中断使能位 ____，以进行关中断操作。</div>
+      <button class="reveal-btn" data-page-node-id="J2gQSwZGA9RX5UwFVFoAU6">查看答案</button>
+      <div class="answer-box" data-page-node-id="Lxmz5YjL9Q9TCGmtuW5GRa"><strong data-page-node-id="qExOu356bRzQGyj54c8B9a">答案：</strong>清 0</div>
+    </div>
+
+    <div class="question" data-page-node-id="fHAD9UZdtPi2tzP2BNI9W7">
+      <div class="q-title" data-page-node-id="6yCXb8hYaraWBqdcOIECr8"><span class="q-num" data-page-node-id="1Hb7Tj6lJwwyUhu3uVmrGU">107.</span><span class="type-tag type-fill" data-page-node-id="TD4OV2jBl8nhUcMYeZXLKH">填空</span>假设流水线段数为 5，每段时间 T=2ns，则 N=10 条指令理想执行总时间为 ____ ns。</div>
+      <button class="reveal-btn" data-page-node-id="KDHG2SKwI2hA3mcSLqBOsX">查看答案</button>
+      <div class="answer-box" data-page-node-id="VsEV4LiLURBIJtJwyQkUaR"><strong data-page-node-id="GoCQEVxGv8Pvvq5okQvode">答案：</strong>(5-1+10) × 2 = 28ns</div>
+    </div>
+
+    <div class="question" data-page-node-id="za0Ky8PcJFhfyORWpiOGWY">
+      <div class="q-title" data-page-node-id="txFCVXbaV8iS7gpNGt7U51"><span class="q-num" data-page-node-id="WFFwJc7COXBUZkSVyYDHaD">108.</span><span class="type-tag type-term" data-page-node-id="56u0wrHcA4OGdTO3Q3u1Hr">名词解释</span>内部异常（Exception）</div>
+      <button class="reveal-btn" data-page-node-id="nAGAfnBj4cvtt9WCU2BCDj">查看答案</button>
+      <div class="answer-box" data-page-node-id="aXYzz2WDx8i3yRatPl4r72">由 CPU 在执行某条指令时引起的与该指令相关的意外事件，如除数为 0、结果溢出、断点、单步跟踪、缺页、地址越界、非法操作码等，与执行的指令相关。</div>
+    </div>
+
+    <div class="question" data-page-node-id="Ji6JAnC6VP2d0yWjlwlgJf">
+      <div class="q-title" data-page-node-id="W11pTjWS9HBqQKGQkU945k"><span class="q-num" data-page-node-id="jxH5rJCIwPyZG2Mt6xBqTj">109.</span><span class="type-tag type-term" data-page-node-id="tqBAJMrcOW7C2I8aq3aTvg">名词解释</span>外部中断（Interrupt）</div>
+      <button class="reveal-btn" data-page-node-id="vGOcyg0GlxpO6yLcBAqCy1">查看答案</button>
+      <div class="answer-box" data-page-node-id="oaK3HZxh83hFgV2VhjFAX3">由 CPU 外部的 I/O 子系统发出的事件，如时钟中断、网络数据包到达、用户按键等，通过外部中断请求线向 CPU 发请求；与当前执行的指令无关。</div>
+    </div>
+
+    <div class="question" data-page-node-id="oNBj7onDcR9q7v4jPi9VSY">
+      <div class="q-title" data-page-node-id="nQ8IBINgUIQ8BzImG5IIdw"><span class="q-num" data-page-node-id="NlBnS1zHI3dwQQjpEBFHgC">110.</span><span class="type-tag type-term" data-page-node-id="QilF99bPCx8aDSNDevrLiv">名词解释</span>向量中断</div>
+      <button class="reveal-btn" data-page-node-id="qeJ71ynSDpycZrBGChGBrw">查看答案</button>
+      <div class="answer-box" data-page-node-id="xe7eXkmZNf1E2YfTlSkA9v">硬件识别异常/中断的方式：每种类型对应一个中断类型号，所有异常/中断处理程序首地址组成中断向量表，CPU 根据类型号直接索引到对应处理程序入口，速度快。</div>
+    </div>
+
+    <div class="question" data-page-node-id="0fPSencEbT73f9k2eJSByu">
+      <div class="q-title" data-page-node-id="aXufrt8JcAyEuuv03VOGfW"><span class="q-num" data-page-node-id="57Xei1scqjb9GVhmEa2Sgg">111.</span><span class="type-tag type-term" data-page-node-id="PdQbfNR1cHDZpqMvhdIA0c">名词解释</span>指令流水线</div>
+      <button class="reveal-btn" data-page-node-id="z6GBZoigHECso3zb30E9Qk">查看答案</button>
+      <div class="answer-box" data-page-node-id="jf8DMhnqJREB47E8Ofcfo6">把一条指令的执行过程划分为多个流水段，多条指令的不同段在时间上重叠执行的并行处理技术；理想情况下 N 条指令在 M 段流水线上总时间为 (M-1+N)×T，显著提升吞吐率。</div>
+    </div>
+
+    <div class="question" data-page-node-id="HMEaytojWhkAr3BatFnaCK">
+      <div class="q-title" data-page-node-id="8Y16qdP1IxCe5VcfwtWus4"><span class="q-num" data-page-node-id="TqsEUIftv02DkloeA7HNtO">112.</span><span class="type-tag type-term" data-page-node-id="dgADPYAnd8la1KD9pY2FOx">名词解释</span>指令寄存器（IR）</div>
+      <button class="reveal-btn" data-page-node-id="n73UkFEFnbfRGPPYhlCuLP">查看答案</button>
+      <div class="answer-box" data-page-node-id="KjPemw1qgCjckK9ZVfuFBw">CPU 内部用于暂存当前正在译码/执行的指令的寄存器；指令从存储器取出后必须先送入 IR，才能送往指令译码器译码。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="SDenkLso0nIeZspFMW0mci">
+      <div class="q-title" data-page-node-id="L6fVDpyUTtOR4NJo7gdvAJ"><span class="q-num" data-page-node-id="w1TmyFjgt1PcCrRHoU74nE">113.</span><span class="type-tag type-comp" data-page-node-id="RtKTD36dqywd4jtcWQ7zOi">综合题</span>CPU 执行一条指令的 6 步骤是什么？每步的核心操作是什么？</div>
+      <button class="reveal-btn" data-page-node-id="vXmtYNTl5Kvb35DPVVVVQL">查看答案</button>
+      <div class="answer-box" data-page-node-id="UYe5pDZ28KgH1an0T44cbF"><strong data-page-node-id="d76FdNLCHiFkuSyyguFLNb">答案：</strong>
+        <div class="analysis" data-page-node-id="dzBk5jFwq9aaaRtf4RKlDI">
+          ① 取指令：根据 PC 内容访存，将指令取出送入 IR。<br data-page-node-id="X6CKPJAGFNpRCBM7Wny6nm">
+          ② 指令译码：对 IR 中操作码部分译码，产生操作控制信号基础。<br data-page-node-id="SV07SDtWK7wg0GjAZ2fSnH">
+          ③ 计算源操作数地址并取操作数：按寻址方式计算源地址，必要时访存取操作数。<br data-page-node-id="M3bCFhdtnG9wXt1mHHVp55">
+          ④ 执行数据操作：在 ALU / 加法器中对操作数执行运算。<br data-page-node-id="bFK3MDoFDXm5r4fU3GOknK">
+          ⑤ 计算目的操作数地址并存结果：按寻址方式得到目的地址，将结果写入寄存器或存储器。<br data-page-node-id="xi03gfvY4QfYgWAEIxLrQD">
+          ⑥ 计算下条指令地址并送 PC：顺序时 PC+指令长度；跳转时将目标地址送 PC。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="O0y32kX0iXEB1Avoj7TFoc">
+      <div class="q-title" data-page-node-id="5v3WiIMVGLYOMP13kqjr3G"><span class="q-num" data-page-node-id="9cqQXNdKPxiTJm5jNRxhhH">114.</span><span class="type-tag type-comp" data-page-node-id="IxGeaOJPLLPesCTDGoxniT">综合题</span>假设一段程序含 100 条指令，流水线段数 M=4，每段时间 T=10ns，求理想情况下该段程序的总执行时间和吞吐率（条/ns）。</div>
+      <button class="reveal-btn" data-page-node-id="de8GVg4nPfIiPW5og5ug7N">查看答案</button>
+      <div class="answer-box" data-page-node-id="iS2JYjgZ0PXQuxOqCvFYps"><strong data-page-node-id="zc3RxGwRYMOTasob2pv4A4">答案：</strong>
+        <div class="analysis" data-page-node-id="y8sl7PfXdjcbOjJO7BnfQb">
+          总时间 T_total = (M - 1 + N) × T = (4 - 1 + 100) × 10 = 1030 ns。<br data-page-node-id="yF0jac2GyrUBhTr64T1xa1">
+          吞吐率 TP = N / T_total = 100 / 1030 ≈ 0.097 条/ns ≈ 1/(M·T) 当 N≫M 时极限吞吐率 = 1/T = 0.1 条/ns。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾统计 -->
+  <div class="footer-stats" data-page-node-id="qE2OTmydbCxV7onyJ6wZ7V">
+    <h3 data-page-node-id="EoHDhzdQpl6EkRazIf1g65">📊 第四章题量统计</h3>
+    <table class="footer-table" data-page-node-id="BXjqMuyvcF11va5hCYYhMW">
+      <thead data-page-node-id="nQiSijZdn7xApq9UBBCHGe">
+        <tr data-page-node-id="LgrgsBZBVBB0MUUllLWTCG">
+          <th data-page-node-id="5Zoe15uNYAjQbHkcpYzuZ0">板块 / 节</th>
+          <th data-page-node-id="CdtPSGX6iKtCpQ757FaTwX">单选</th>
+          <th data-page-node-id="k1PGkECfsHzJgHKzS95kfB">填空</th>
+          <th data-page-node-id="cOuegigCkTJvUvMFxZONkY">名词解释</th>
+          <th data-page-node-id="fpVQ347e6K7ErU1hRbLEMI">综合题</th>
+          <th data-page-node-id="njsxCgD6gIyNAtaXP0lmnf">小计</th>
+        </tr>
+      </thead>
+      <tbody data-page-node-id="ZZab3i4kGDmki3PqIwFX7S">
+        <tr data-page-node-id="VnbmoQukGB75vHZuutQwmp"><td data-page-node-id="DBENI9E99SIAkaQDmoCpXC">第一节 可执行文件生成概述</td><td data-page-node-id="EMmXwcPFhcdwllbFxDUYFQ">7</td><td data-page-node-id="1cFPLGZdKQRYBEz1lK83Gh">3</td><td data-page-node-id="MerglWFw5FRt0e5j9AA4Bm">3</td><td data-page-node-id="06i2beEZsofVwGaAdMPvEF">2</td><td data-page-node-id="avEcxTCQjzBbGuVWCM60HJ">17</td></tr>
+        <tr data-page-node-id="nb0oAZFgjkTzloLfhGJSZL"><td data-page-node-id="ERHHUnMI0RmBftZILol0ov">第二节 目标文件格式</td><td data-page-node-id="G3lbSclIpBUQVfrDAgGo8t">10</td><td data-page-node-id="NPvXiPMtbe33T0hZ65ECey">7</td><td data-page-node-id="eB2EGG1vTDXSibWUiN5HSI">3</td><td data-page-node-id="dbWSt8ligL07BxpU2sFggs">1</td><td data-page-node-id="zH82rCnTmAlwflctI4uk7x">22</td></tr>
+        <tr data-page-node-id="TW7cadkbVc0iJ0476wvA6g"><td data-page-node-id="2bcT9Stuy9LtpZaNGWrb5G">第三节 符号解析与重定位</td><td data-page-node-id="Bd8y5I49XsS8ZBxIKpRmvx">11</td><td data-page-node-id="Vru4CYM0kPHLb0NrCXOpco">7</td><td data-page-node-id="YCSjfavtVfIAAMNUEW9UQv">5</td><td data-page-node-id="OZ0E5myMrM5VvFC75S4yrE">1</td><td data-page-node-id="lTZJiOwffmkgcADI03oPiF">24</td></tr>
+        <tr data-page-node-id="TK1jGo3GtGlTEpqMr69gcE"><td data-page-node-id="yS4enbuw2cPGqNtWXwELbW">第四节 可执行文件的加载</td><td data-page-node-id="Pi4BZZ4HnGy0fOKXFQ6iz1">8</td><td data-page-node-id="OHxKolt7FEIGaDri5xier5">6</td><td data-page-node-id="81rFUp6IjrCZ0ZAvIS12HE">4</td><td data-page-node-id="70WeV7Ku9W5rOaevqeozKO">2</td><td data-page-node-id="0y5AzBP1PqBpknCDjlqshG">20</td></tr>
+        <tr data-page-node-id="WCK6BRM5rKG7LYA3k0JK7z"><td data-page-node-id="Yh9V0SgEueN1Km9fPs1oF7">第五节 程序执行与 CPU</td><td data-page-node-id="zP55x7H9wgkNvJ3H0dltrZ">14</td><td data-page-node-id="CoXT99yAf2zUGUNFfEmocs">10</td><td data-page-node-id="1Y3olbxv5myUcmI5f1WQ28">5</td><td data-page-node-id="iUc3VAjviU19GDKEEexA1X">2</td><td data-page-node-id="bf6BOvfkrTnwDmhQ7z5GHB">31</td></tr>
+        <tr data-page-node-id="HAnkOZo5IQv8sF0spkXtV8"><td data-page-node-id="HnbBd4hROczCQF44N4NxLn">合计</td><td data-page-node-id="eWCzivIDuaLYmHRBhH8jZw">50</td><td data-page-node-id="TZ4yAAHEEZOTUMQSPCDKYk">33</td><td data-page-node-id="IWDHRqNCuAEP3w5nsnYEmA">20</td><td data-page-node-id="oiNHW87klCvTezFh3EtoIw">8</td><td data-page-node-id="tiHp9BbFgpHFTDS95SljFe"><span id="sumTotal" data-page-node-id="zggB5VCPKReSTodHVckB5Z">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a class="back-nav" href="index.html" data-page-node-id="GTVxvFgs1rBH0fl2sCTDYu">← 返回「计算机组成原理」章节导航</a>
+  <a class="back-nav" href="../index.html" data-page-node-id="wmuGGagDJ7WIuAMWmqLFxv">↑ 返回考研复习总目录</a>
+
+</div>
+
+<script>
+  // 顶部统计
+  const counts = { single: 50, fill: 33, term: 20, comp: 8 };
+  document.getElementById('singleCount').textContent = counts.single;
+  document.getElementById('fillCount').textContent = counts.fill;
+  document.getElementById('termCount').textContent = counts.term;
+  document.getElementById('compCount').textContent = counts.comp;
+  const total = counts.single + counts.fill + counts.term + counts.comp;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('sumTotal').textContent = total;
+
+  // 单选即点即判
+  document.querySelectorAll('.options').forEach(ul => {
+    const correct = ul.getAttribute('data-answer');
+    ul.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', () => {
+        if (ul.classList.contains('answered')) return;
+        ul.classList.add('answered');
+        ul.querySelectorAll('li').forEach(x => {
+          x.classList.add('disabled');
+          if (x.getAttribute('data-val') === correct) x.classList.add('correct');
+        });
+        if (li.getAttribute('data-val') !== correct) li.classList.add('wrong');
+      });
+    });
+  });
+
+  // 答案展开
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling;
+      box.classList.toggle('show');
+      btn.textContent = box.classList.contains('show') ? '收起答案' : '查看答案';
+    });
+  });
+
+  // 胶囊导航：滚动高亮
+  const sections = document.querySelectorAll('.section-block');
+  const pills = document.querySelectorAll('.pill');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id;
+        pills.forEach(p => {
+          p.classList.toggle('active', p.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

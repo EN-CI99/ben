@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="GWOAAHHU1uTNrCPD18aoaH">
+<head data-page-node-id="CZubHdvyliEnl2krDnSw0q">
+<meta charset="UTF-8" data-page-node-id="5XAS7iOslrHlcdFrP1vICJ" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="t0oUiGXj74EbA5OLMMrBmB" />
+<title>第五章 程序的存储访问 · 习题集</title>
+<style>
+  :root {
+    --bg: #f6f8fc;
+    --panel: #ffffff;
+    --panel-2: #f8fafc;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --text-2: #4b5563;
+    --text-3: #6b7280;
+    --brand: #2563eb;
+    --brand-light: #dbeafe;
+    --brand-dark: #1e40af;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 1px 2px rgba(15, 23, 42, .04);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .container { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+  .top-bar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 16px 20px; background: var(--panel);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .top-bar h1 { margin: 0; font-size: 20px; color: var(--brand-dark); }
+  .top-bar .meta { color: var(--text-3); font-size: 13px; }
+  .top-bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--brand-light); color: var(--brand-dark);
+    text-decoration: none; font-size: 13px; font-weight: 500;
+    border: 1px solid transparent; cursor: pointer; transition: all .15s;
+  }
+  .btn:hover { background: var(--brand); color: #fff; }
+  .btn.secondary { background: var(--panel-2); color: var(--text-2); border-color: var(--border); }
+  .btn.secondary:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow);
+  }
+  .stat-card .label { color: var(--text-3); font-size: 12px; }
+  .stat-card .value { font-size: 22px; font-weight: 600; color: var(--brand-dark); margin-top: 4px; }
+  .stat-card .sub { color: var(--text-2); font-size: 12px; margin-top: 2px; }
+
+  .chapter-nav {
+    position: sticky; top: 12px; z-index: 20;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 10px 14px; background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(8px); border: 1px solid var(--border);
+    border-radius: 999px; box-shadow: var(--shadow); margin-bottom: 20px;
+  }
+  .chapter-nav .nav-title {
+    font-size: 12px; color: var(--text-3); align-self: center; margin-right: 4px; font-weight: 500;
+  }
+  .pill {
+    padding: 5px 14px; border-radius: 999px;
+    background: var(--panel-2); color: var(--text-2);
+    text-decoration: none; font-size: 12.5px;
+    border: 1px solid var(--border); transition: all .15s; cursor: pointer;
+  }
+  .pill:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .pill.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .section-block { margin-bottom: 28px; scroll-margin-top: 80px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--brand); color: #fff;
+    border-radius: var(--radius); margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .section-header .num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+  }
+  .section-header h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .section-header .count {
+    margin-left: auto; background: rgba(255, 255, 255, .2);
+    padding: 2px 10px; border-radius: 999px; font-size: 12px;
+  }
+
+  .type-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; margin-right: 8px; font-weight: 500; }
+  .type-single { background: var(--brand-light); color: var(--brand-dark); }
+  .type-fill { background: var(--warning-light); color: var(--warning); }
+  .type-term { background: #ede9fe; color: #6d28d9; }
+  .type-comp { background: #fce7f3; color: #be185d; }
+
+  .question {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .question .q-title { font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.6; }
+  .question .q-title .q-num { color: var(--brand); margin-right: 6px; }
+  .question .q-body { color: var(--text-2); margin-bottom: 10px; }
+  .question .q-body code, .question code {
+    background: var(--panel-2); padding: 1px 6px; border-radius: 4px;
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    font-size: 13px; color: var(--brand-dark);
+  }
+
+  .options { list-style: none; padding: 0; margin: 8px 0 10px; }
+  .options li {
+    padding: 8px 12px; margin-bottom: 6px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer; transition: all .15s; font-size: 14px;
+  }
+  .options li:hover { background: var(--brand-light); border-color: var(--brand); }
+  .options li.correct { background: var(--success-light); border-color: var(--success); color: #14532d; }
+  .options li.wrong { background: var(--danger-light); border-color: var(--danger); color: #7f1d1d; }
+  .options li.disabled { cursor: default; }
+  .options li.disabled:hover { background: var(--panel-2); border-color: var(--border); }
+
+  .reveal-btn {
+    margin-top: 8px; padding: 5px 14px;
+    background: var(--panel-2); color: var(--text-2);
+    border: 1px solid var(--border); border-radius: 999px;
+    cursor: pointer; font-size: 13px; transition: all .15s;
+  }
+  .reveal-btn:hover { background: var(--brand-light); color: var(--brand-dark); border-color: var(--brand); }
+  .answer-box {
+    display: none; margin-top: 10px; padding: 12px 14px;
+    background: var(--success-light); border-left: 3px solid var(--success);
+    border-radius: 6px; color: #14532d; font-size: 14px; line-height: 1.7;
+  }
+  .answer-box.show { display: block; }
+  .answer-box strong { color: #166534; }
+  .answer-box .analysis { margin-top: 6px; color: #166534; }
+
+  .comp-q .answer-box { background: #fdf4ff; border-left-color: #be185d; color: #831843; }
+  .comp-q .answer-box strong { color: #9d174d; }
+  .comp-q .answer-box .analysis { color: #9d174d; }
+
+  .footer-stats {
+    margin-top: 32px; padding: 20px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .footer-stats h3 { margin: 0 0 12px; font-size: 15px; color: var(--brand-dark); }
+  .footer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .footer-table th, .footer-table td {
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .footer-table th { color: var(--text-3); font-weight: 500; background: var(--panel-2); }
+  .footer-table td:first-child { color: var(--text); font-weight: 500; }
+  .footer-table tr:last-child td { border-bottom: none; font-weight: 600; background: var(--panel-2); }
+
+  .back-nav {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 16px; padding: 8px 16px;
+    background: var(--panel); color: var(--brand);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    text-decoration: none; font-size: 14px; transition: all .15s;
+  }
+  .back-nav:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  @media (max-width: 640px) {
+    .container { padding: 14px; }
+    .chapter-nav { border-radius: var(--radius); }
+    .top-bar h1 { font-size: 17px; }
+    .question { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body data-page-node-id="KsJDNfaqGjab9PBKGfTWqQ">
+<div class="container" data-page-node-id="wGmbqB6tTSDts27lzYrxPm">
+
+  <div class="top-bar" data-page-node-id="KqQhFqA5DlM3jZM7ba1h3I">
+    <div data-page-node-id="hLokxPUq5mJSjqf7LtNCsm">
+      <h1 data-page-node-id="1FXdEuwn3fuox2wFb2pCKB">第五章 程序的存储访问</h1>
+      <div class="meta" data-page-node-id="rfQQD3GHH05wlECxoyOh6L">计算机组成原理 · 习题集 · 共 <strong id="totalCount" data-page-node-id="fOZFyE9L5Mh7xEqTiI9GiO">0</strong> 题</div>
+    </div>
+    <div class="actions" data-page-node-id="0iAlu8QkZNNpJhJJGefixR">
+      <a class="btn secondary" href="index.html" data-page-node-id="soYS7U2jDBHKxN0cROyaV6">← 章节导航</a>
+      <a class="btn secondary" href="../index.html" data-page-node-id="gAOohdvhsaE7K0Yq9AuEOi">↑ 考研复习总目录</a>
+    </div>
+  </div>
+
+  <div class="stats-bar" data-page-node-id="RzyIUlfzraBPH9DK4qp8nX">
+    <div class="stat-card" data-page-node-id="GNVzHcay9xqNmKDyzFjmus">
+      <div class="label" data-page-node-id="MaX6B6bTvpFCCtADT8zZmW">单选题</div>
+      <div class="value" id="singleCount" data-page-node-id="LFU0U1qnI09FviVy1bEET2">—</div>
+      <div class="sub" data-page-node-id="rmbccc75n6cGg6kMCGAFfY">即点即判</div>
+    </div>
+    <div class="stat-card" data-page-node-id="C5XCcbyYYdVIGuAizNCdAa">
+      <div class="label" data-page-node-id="Atxxz8aSRaKjqparq8nAYT">填空题</div>
+      <div class="value" id="fillCount" data-page-node-id="5sRzPaq1wPsU29QC1esBka">—</div>
+      <div class="sub" data-page-node-id="c9rKYhR8i3b9uGiNd9YlVP">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="8GboQJE7SlGjTJj64AE3uk">
+      <div class="label" data-page-node-id="EJjhQ4QXE9fq3CYZ8nu9S9">名词解释</div>
+      <div class="value" id="termCount" data-page-node-id="4tYDyR2GPTRlACUEKoZbAM">—</div>
+      <div class="sub" data-page-node-id="l7RwEaMCgHSVYVGzJJ1IiV">点击展开答案</div>
+    </div>
+    <div class="stat-card" data-page-node-id="WR33shgu1R2bfh0lSQC7fZ">
+      <div class="label" data-page-node-id="fx0vTdDeKCr7vAXhHgfZVX">综合题</div>
+      <div class="value" id="compCount" data-page-node-id="NkyxNPXTTs6sBrMwAshJyw">—</div>
+      <div class="sub" data-page-node-id="esZeLaLSZvE3y0JS6bYGbZ">点击展开答案</div>
+    </div>
+  </div>
+
+  <nav class="chapter-nav" id="chapterNav" data-page-node-id="IgOXcXlE06nFccbE7k4lD1">
+    <span class="nav-title" data-page-node-id="6ygbIGBzaoDT0B1OPrje4b">节导航</span>
+    <a class="pill" href="#sec1" data-page-node-id="qmvFi7wiuhM3mWEycsQa1e">① 概述</a>
+    <a class="pill" href="#sec2" data-page-node-id="trEy4FsQS0UOLOgrsvOX8h">② 主存与 CPU</a>
+    <a class="pill" href="#sec3" data-page-node-id="8HmInRRX20SBT9EcKksQNp">③ 硬盘存储器</a>
+    <a class="pill" href="#sec4" data-page-node-id="zEfp4a9v2lCYf3CYW6DtHd">④ 高速缓存</a>
+    <a class="pill" href="#sec5" data-page-node-id="uKUufzNrm37tlWrNIgOCbK">⑤ 虚拟存储器</a>
+    <a class="pill" href="#sec6" data-page-node-id="2A4sgQXHDR1DsexCB4uTIU">⑥ Core i7+Linux</a>
+  </nav>
+
+  <!-- ========== 第一节 ========== -->
+  <section class="section-block" id="sec1" data-page-node-id="WOPnXvsI4b1rNH6bybeDyU">
+    <div class="section-header" data-page-node-id="yLMe5rzGMeSbocfrKaCFOu">
+      <div class="num" data-page-node-id="Q045j6nN7IAP1p4V3pJlLe">1</div>
+      <h2 data-page-node-id="CgGu1UrGU9AGyvmLRmhgcT">第一节 存储器概述</h2>
+      <span class="count" data-page-node-id="DKNaltn8anYBwoqNkFeaop">17 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="MJLyiLOSGnKruKT2iKD1Dm">
+      <div class="q-title" data-page-node-id="5iNI0GxmpVvBIh8vYLzNQ8"><span class="q-num" data-page-node-id="mnV5FlYgUhiXhJC6VshpFQ">1.</span><span class="type-tag type-single" data-page-node-id="RlBneavkUtmGXRE6xxkyxv">单选</span>按存储介质分类，下列哪一类「不属于」计算机存储元件？</div>
+      <ul class="options" data-answer="D" data-page-node-id="O1JG6kuHpUTa9julcE1U54">
+        <li data-val="A" data-page-node-id="0EgEGGE5vcEKJdiB52POZF">A. 半导体存储器</li>
+        <li data-val="B" data-page-node-id="mit6k9F4YWf724QwMCqjCZ">B. 磁表面存储器</li>
+        <li data-val="C" data-page-node-id="3gzgvXH6gV128zSzDHCc6L">C. 光存储器</li>
+        <li data-val="D" data-page-node-id="216LYwUBJYSciBDDyiaLZv">D. 真空管存储器</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="B698e0CyU2yfL9JQrrLKKE">查看解析</button>
+      <div class="answer-box" data-page-node-id="x4vYAB4BUno3VyAc3T9Bg3"><strong data-page-node-id="48wLt2BIRD6fZPMKeLjFbA">答案：D</strong><div class="analysis" data-page-node-id="eF5ze21TdQLljZZLVFcIRH">按存储介质分为半导体、磁表面（如磁盘/磁带）、光介质（光盘）三大类。真空管早已淘汰。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="gqFiAm6EoxJy1T3Nnts4qB">
+      <div class="q-title" data-page-node-id="zQ2GGA29fgqMmM0DlgVZpH"><span class="q-num" data-page-node-id="lFiZrfLSGn4klKmqzbhC2g">2.</span><span class="type-tag type-single" data-page-node-id="hHv4FTZabbFZl9cUAtAsOQ">单选</span>随机存取存储器（RAM）的核心特点是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="GlxaPLnqPYTQUbQN3OLfJ5">
+        <li data-val="A" data-page-node-id="GCtHtoahNoT6NTddJcxJhJ">A. 只能读不能写</li>
+        <li data-val="B" data-page-node-id="FzSNuBZxQCLeQ4CXCKV2yB">B. 按地址访问，每个单元访问时间与地址无关</li>
+        <li data-val="C" data-page-node-id="lIB75AkfnclvqmPqxgMmQg">C. 只能顺序访问</li>
+        <li data-val="D" data-page-node-id="GgFBgfdQUfcjx71B6ndcB6">D. 信息断电后永久保留</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="48FRwq9v2lSDUbjoByjFES">查看解析</button>
+      <div class="answer-box" data-page-node-id="yjJvXC2zn5HmGHdTBGB50n"><strong data-page-node-id="XjRCUosYDMQjUpVz3Xku3l">答案：B</strong><div class="analysis" data-page-node-id="8H9dxrlJZX360Mmge98qHU">RAM（Random Access Memory）：每个地址译码时间相同，访问时间与地址无关；半导体存储器属于 RAM。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Yf748yoYtL2jQm0ldvcPBF">
+      <div class="q-title" data-page-node-id="XllhoIVbdL4ytJYXRjmtaJ"><span class="q-num" data-page-node-id="mdVWlE2AGi06y0sxmgGJOP">3.</span><span class="type-tag type-single" data-page-node-id="30v4jUIP6mtgsXMcVxTnKh">单选</span>主存（内存条）主要由哪种存储器芯片组成？</div>
+      <ul class="options" data-answer="C" data-page-node-id="yGrcNn4tAjghdKk715EZQy">
+        <li data-val="A" data-page-node-id="uAVzSHUKqX4uTpYBJmJwUX">A. SRAM</li>
+        <li data-val="B" data-page-node-id="u6rr41xbP4LKBfkc9tZJza">B. ROM</li>
+        <li data-val="C" data-page-node-id="G36iBYVTNKoyfCtnFEwDhI">C. DRAM</li>
+        <li data-val="D" data-page-node-id="akbkcg3vgEgnVHkrIXnsU6">D. 闪存</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="bNT6IxUVnbRDvX9q3BqHjy">查看解析</button>
+      <div class="answer-box" data-page-node-id="bK1iZHVtK03Q7kRX5Q6ekV"><strong data-page-node-id="7V0kHuIoc9LoK3mpegd4fo">答案：C</strong><div class="analysis" data-page-node-id="AErwO6YAu3KAw4dKVxrTb3">主存由 DRAM 芯片组成（当前多为 SDRAM/DDR 系列）；cache 用 SRAM；ROM 用于固化；闪存用于外存。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="WeSiKH7YqGK9wgYRNnqKLC">
+      <div class="q-title" data-page-node-id="5Mu4TxtRm3fgqOg5pjBdkI"><span class="q-num" data-page-node-id="cKotfl0irG5vcuhDF5uC2T">4.</span><span class="type-tag type-single" data-page-node-id="WjGc1KXguRYREnMqvdlS3M">单选</span>关于「易失性存储器」描述正确的是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="VshkS4vg8uDG58MqicfW3H">
+        <li data-val="A" data-page-node-id="sn1ueba90uDYA2mxYSgkly">A. 电源关闭时信息自动丢失，如 RAM、cache</li>
+        <li data-val="B" data-page-node-id="UcgYJ0lWwBZPOHKTL5Jj5H">B. 信息可一直保留，如 ROM、磁盘</li>
+        <li data-val="C" data-page-node-id="FZID5VRV9j2V7eyk5jld1s">C. 可多次擦写</li>
+        <li data-val="D" data-page-node-id="O4DmByVFCJT40fFnrSaAkY">D. 一定比非易失性存储器快</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="svKQGS6nNFH3mY6TI4IujM">查看解析</button>
+      <div class="answer-box" data-page-node-id="pNAU51WviFcMb1m8HBBVXk"><strong data-page-node-id="Jw5OiDzztM59tDcKJCN3AB">答案：A</strong><div class="analysis" data-page-node-id="x2JbW8EYet6rXdusoC5VBc">易失性 vs 非易失性：易失性断电丢信息（RAM、cache），非易失性不需电源维持（ROM、磁盘、光盘、闪存）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="7rNUuP4H53gBxduKGvB1nm">
+      <div class="q-title" data-page-node-id="vELvRyYVpteZ0jF4CIf3wL"><span class="q-num" data-page-node-id="i0tdQ21XBKGkUIZrsdO5Bc">5.</span><span class="type-tag type-single" data-page-node-id="iv6tLTWwn2lWE2Ulcuwlpp">单选</span>关于「时间局部性」与「空间局部性」描述正确的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="J3WZvpfpEA9MZpxb7HR8Gy">
+        <li data-val="A" data-page-node-id="2Ed9OhRT2CqXAUTdbiA1Oc">A. 时间局部性指访问邻近单元</li>
+        <li data-val="B" data-page-node-id="DUCHmDL8rMwrzf9BCSG8hl">B. 空间局部性指短时间内再次访问同一单元</li>
+        <li data-val="C" data-page-node-id="M434v8bEOkcTdIqkCGDb5h">C. 两者是相同概念</li>
+        <li data-val="D" data-page-node-id="rb9g30ucIYv8DYwoMVhCIH">D. 时间局部性：被访问单元在短期内很可能再次被访问；空间局部性：被访问单元的邻近单元在短期内很可能也被访问</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="EBrqz6jsuUV4pBrB6l7rGp">查看解析</button>
+      <div class="answer-box" data-page-node-id="QtIVoaH8lfJTVcnakGxOzB"><strong data-page-node-id="KqefkAa2tpfeEFfHtOAcM5">答案：D</strong><div class="analysis" data-page-node-id="0RdilOUTWA1uqwOyoo9hGL">时间局部性=同一单元短期内被再次访问；空间局部性=邻近单元短期内也被访问。两者共同支撑 cache 的高效。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="eFHe7VxPpXuUjGFlVFjEaH">
+      <div class="q-title" data-page-node-id="SZJF2rHwkR0dCxbLGANI6D"><span class="q-num" data-page-node-id="q0lDdWR9VN816HDYo9GnGD">6.</span><span class="type-tag type-single" data-page-node-id="zYymBHdKT1DwchLvmPmUrR">单选</span>在存储层次结构中，「指令直接面向的存储器」是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="ClRvQA1fcfww7Elsu7mT19">
+        <li data-val="A" data-page-node-id="dWBWBShOn2AQY9PBHDlGPa">A. 主存储器</li>
+        <li data-val="B" data-page-node-id="p3FGcZ2DSA7InNB61JJbVx">B. cache</li>
+        <li data-val="C" data-page-node-id="wIMREz5mAY5dEZAb50GnTb">C. 辅存</li>
+        <li data-val="D" data-page-node-id="4WoZTAbfq5XCTcO4RtdRpc">D. 寄存器</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="jBsL4nFabzL790W6cod1XV">查看解析</button>
+      <div class="answer-box" data-page-node-id="8tdyBoc7lRJPta4yEDJlrm"><strong data-page-node-id="S71dWoM8xG3DGyeIRHBbEV">答案：A</strong><div class="analysis" data-page-node-id="IKdVgfYxdtkZldCO32FLwA">CPU 给出的是主存地址（逻辑地址），主存是层次结构中的核心存储器。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="fdbngPCBPNJzcgjgAPW1C2">
+      <div class="q-title" data-page-node-id="JQBkRJLdRQHa5kwG7gy4aW"><span class="q-num" data-page-node-id="TfMTKjDLVMXBeK3OV45shY">7.</span><span class="type-tag type-single" data-page-node-id="tOLTK59BIoceOLHVGIXsqr">单选</span>目前大多数通用计算机采用的编址方式是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="BM0g2C1bsRkYBnOQ4Aqh0X">
+        <li data-val="A" data-page-node-id="5LUHug0nLbKazmpG5wSuji">A. 按字编址</li>
+        <li data-val="B" data-page-node-id="zgxYAOtjw244rlDpWFWgwH">B. 按字节编址</li>
+        <li data-val="C" data-page-node-id="2xvAdgsGyrEr3q94t9OXF7">C. 按位编址</li>
+        <li data-val="D" data-page-node-id="TnPpRDr6gBBiJX1vf9ZSM2">D. 按页编址</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="kUD7tLpkbb9J76pXgS8kA3">查看解析</button>
+      <div class="answer-box" data-page-node-id="MCEVIK85r4aOvqUCAs9eHm"><strong data-page-node-id="ugAz2rnKyi41BaIZtRA8yH">答案：B</strong><div class="analysis" data-page-node-id="bRPCoQN6JwB0rML4klwEGC">现代通用计算机几乎都是按字节编址（编址单位=1 字节），如 36 位地址寻址范围 0~2^36-1。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Dr4LeDgZm8fB2VBt6hYQik">
+      <div class="q-title" data-page-node-id="rvFdbf8b1zbI1A16Y6vePA"><span class="q-num" data-page-node-id="ug3MeaBM6YsYq6BJVOvTBd">8.</span><span class="type-tag type-fill" data-page-node-id="o5VuFee3dPdGknFu1pDe0c">填空</span>主存由 ____ 芯片组成；cache 由 ____ 芯片组成。</div>
+      <button class="reveal-btn" data-page-node-id="qYJ68WaJg9aRdQoO7KHzRE">查看答案</button>
+      <div class="answer-box" data-page-node-id="KZqCduIJL0MPDgBF9nc1HC"><strong data-page-node-id="MVfnZ2OdXPxFuggH1GavSm">答案：</strong>DRAM；SRAM</div>
+    </div>
+
+    <div class="question" data-page-node-id="ox0EVLFaITIYVhyW9VtfP5">
+      <div class="q-title" data-page-node-id="zdXbpz7AvMVYc4UzrETpet"><span class="q-num" data-page-node-id="BEAnyJsQOCXW0E0AHMCUk2">9.</span><span class="type-tag type-fill" data-page-node-id="EHFcVwJfOwJMkXkiXYatfp">填空</span>层次化存储系统中数据只能在 ____ 两层之间传送；读数据时总是从慢速存储器传送到快速存储器。</div>
+      <button class="reveal-btn" data-page-node-id="dGpnkgBh1irzZeAAYR14ya">查看答案</button>
+      <div class="answer-box" data-page-node-id="i6uqt3uaUvBKWs1mlsHQs3"><strong data-page-node-id="nsxHLcX1VnDq02riHEswES">答案：</strong>相邻</div>
+    </div>
+
+    <div class="question" data-page-node-id="oI8vpPQRK54E9y1khkD8R6">
+      <div class="q-title" data-page-node-id="vOXXQlD2QudrFSkjBe6FaP"><span class="q-num" data-page-node-id="R0NK3HBJugXyhCfjE1Joz5">10.</span><span class="type-tag type-fill" data-page-node-id="GU76FlgxGiqlm2vCRXHDtN">填空</span>主存地址线的位数决定了主存地址空间的最大可寻址范围，例如 36 位地址的最大寻址范围为 0～____。</div>
+      <button class="reveal-btn" data-page-node-id="OOD9xGc3rdrcMACYdwkMyY">查看答案</button>
+      <div class="answer-box" data-page-node-id="gA6aP8PRr13f3rEOkN4bln"><strong data-page-node-id="EpsvrSf2ScociRGpLFtNKz">答案：</strong>2³⁶ - 1</div>
+    </div>
+
+    <div class="question" data-page-node-id="yzkY4rF8DRvdBnjAcOWE9r">
+      <div class="q-title" data-page-node-id="Qw7DYKaIagmKhixaeC2XZd"><span class="q-num" data-page-node-id="HhCx1pY4Ktga66X7tf9ONI">11.</span><span class="type-tag type-fill" data-page-node-id="ULaVyi2twha969nYvfC9jy">填空</span>编址单位是指具有相同地址的那些位元构成的一个单位，可以是一个字节或一个 ____。</div>
+      <button class="reveal-btn" data-page-node-id="H2TBeMy1SzwbqtJ0Gx6RWh">查看答案</button>
+      <div class="answer-box" data-page-node-id="1VR54QoHsSsWgxbYegSDXg"><strong data-page-node-id="hEC29j3WapLtWjq8fSfnxM">答案：</strong>字</div>
+    </div>
+
+    <div class="question" data-page-node-id="GS1rFPA7S0GzvF2AHvxike">
+      <div class="q-title" data-page-node-id="DM20DIAc3L5NXPC1DBrfak"><span class="q-num" data-page-node-id="7lg302Kid2EdnDW1b5Ky2m">12.</span><span class="type-tag type-term" data-page-node-id="qJ2pIUUBHY2HagyRBQmdMX">名词解释</span>随机存取存储器（RAM）</div>
+      <button class="reveal-btn" data-page-node-id="8JPSCT0TWvp0epQcWHiIwo">查看答案</button>
+      <div class="answer-box" data-page-node-id="95QzqParTGzqNRPyP4UXAu">按地址访问存储单元，每个地址译码时间相同，每个单元访问时间是一个常数、与地址无关的存储器，半导体存储器属于 RAM。</div>
+    </div>
+
+    <div class="question" data-page-node-id="qrgmNouO1tKvpA0CQkkQk9">
+      <div class="q-title" data-page-node-id="WwT9jk41CeGWkOr3verz3n"><span class="q-num" data-page-node-id="577BG9Ho0JYHIgRIwAwMVg">13.</span><span class="type-tag type-term" data-page-node-id="W2aUCgso5GpUHKDk1N6Ffn">名词解释</span>易失性存储器</div>
+      <button class="reveal-btn" data-page-node-id="rdIEAmY8ictauDNyzUhSbN">查看答案</button>
+      <div class="answer-box" data-page-node-id="RMZGHtPW4G2pdETmnl5iHz">在电源关闭时信息自动丢失的存储器，如 RAM、cache 等；反之断电后仍能保留信息的为非易失性存储器（ROM、磁盘、光盘、闪存）。</div>
+    </div>
+
+    <div class="question" data-page-node-id="xz8Zw2M9GQjClg9oCClscs">
+      <div class="q-title" data-page-node-id="WKD7YZXHJd6TsiYMPShJgR"><span class="q-num" data-page-node-id="EDBk6D7t61aI9WgNEm8Gp8">14.</span><span class="type-tag type-term" data-page-node-id="AlTWUDeAU4ZrtnRTg6PyYa">名词解释</span>程序访问的局部性</div>
+      <button class="reveal-btn" data-page-node-id="DcKjkNj8ToCubRjbwThdFq">查看答案</button>
+      <div class="answer-box" data-page-node-id="wayWgqQXT5UeJ7CuVghen8">CPU 访问存储器的规律：①时间局部性——被访问单元在短期内很可能再次被访问；②空间局部性——被访问单元的邻近单元在短期内很可能也被访问。局部性是 cache 高速缓存能显著提升性能的基础。</div>
+    </div>
+
+    <div class="question" data-page-node-id="Mdiy0LmEmQ3yriCcWdN66b">
+      <div class="q-title" data-page-node-id="lGWUXVFeYPtch7kjBEXMgO"><span class="q-num" data-page-node-id="TiYK4gH5VIll7G3emdysGZ">15.</span><span class="type-tag type-term" data-page-node-id="6I9t4ZeEWAexdJUe0i4rmh">名词解释</span>高速缓存（Cache）</div>
+      <button class="reveal-btn" data-page-node-id="frk1odK2HtFF7mdWTprl4u">查看答案</button>
+      <div class="answer-box" data-page-node-id="Ee8VswWdMC308c9rp55DPZ">由快速 SRAM 组成、位于 CPU 与主存之间的小容量高速缓冲存储器，用来存放 CPU 当前经常使用到的指令和数据；利用程序访问局部性提高 CPU 访存速度。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="Hac0TuGXB4pl6oxYsONk6F">
+      <div class="q-title" data-page-node-id="vAnqtyphbcpLcuUrWzT8hL"><span class="q-num" data-page-node-id="beEJsuW3sjCBAFuqmqalB2">16.</span><span class="type-tag type-comp" data-page-node-id="H3OrPPQ5jcyLxDo9F7UhET">综合题</span>画出计算机存储层次结构图，并说明层次化设计在速度、容量、价格方面的好处。</div>
+      <button class="reveal-btn" data-page-node-id="kbmPHw6BWjNwmv6XUcNh33">查看答案</button>
+      <div class="answer-box" data-page-node-id="COjcRfuUrUFbIHuQ0ftJBA"><strong data-page-node-id="FAgdBy6QPrkp00VAtW6i29">答案：</strong>
+        <div class="analysis" data-page-node-id="Fl4TX6Ozh0YYCoJIhrstoz">
+          自上而下（速度由快到慢、容量由小到大、价格由贵到便宜）：<br data-page-node-id="XZVQ8IrHAXXSZ9ZLJ1w8gr">
+          寄存器 → L1 cache → L2 cache → L3 cache → 主存（DRAM）→ 固态/磁盘（SSD/HDD）→ 磁带/光盘<br data-page-node-id="pwLNQFWEGL0ZCEHGrBvgt5">
+          好处：通过层次化组合，整体上获得「接近最快层的访问速度 + 接近最慢层的存储容量 + 接近最便宜层的平均价格」的最优折中。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="qDsjvZZYlRz4WDJxpz9Tjw">
+      <div class="q-title" data-page-node-id="2Pw3HFrT521FBSync6s4zL"><span class="q-num" data-page-node-id="mesadQqHhnwhjYZ7hZ8ZSF">17.</span><span class="type-tag type-comp" data-page-node-id="JtyjhD1z0b9quxMbtJi6U0">综合题</span>为什么在 CPU 与主存之间设置 cache 能提高 CPU 执行速度？</div>
+      <button class="reveal-btn" data-page-node-id="CJGxzZFSIHf1M99YpPKXya">查看答案</button>
+      <div class="answer-box" data-page-node-id="GTgG6DKubcfq7GXG2PMMmB"><strong data-page-node-id="79U4C3ORxr5FRhzSqfZzxL">答案：</strong>
+        <div class="analysis" data-page-node-id="EOO5UbFoGZtWAaEB63qQTf">
+          ① 速度匹配：SRAM 速度接近 CPU，主存 DRAM 慢，cache 作为缓冲减少 CPU 等待主存的时间；<br data-page-node-id="8HLi0Fa84CH3RP4n1d29hA">
+          ② 局部性利用：程序访问具有时间局部性与空间局部性，被频繁访问的指令/数据块放在 cache 中，多数访存可命中 cache 而无需访问慢速主存；<br data-page-node-id="8qYADs8oOPau5ssM0F3cDA">
+          ③ 总体上大幅降低 CPU 的平均访存时间，从而提升程序执行速度。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第二节 ========== -->
+  <section class="section-block" id="sec2" data-page-node-id="lR2wY5Fwkgq2jBLnnAqU38">
+    <div class="section-header" data-page-node-id="d50lg3IdHDeAT8WQJiMXsI">
+      <div class="num" data-page-node-id="fPPKyIEtafAiwxTXn7bFZA">2</div>
+      <h2 data-page-node-id="QzbMxdXblDVDmqIyIvMwJI">第二节 主存与 CPU 的连接及读/写操作</h2>
+      <span class="count" data-page-node-id="ZRNW1RgRRFpba50a4KsT4D">12 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="ppDP02QBcmQB6nhs2Kzatp">
+      <div class="q-title" data-page-node-id="QuQr7P2CagadTFDEBA4Ui1"><span class="q-num" data-page-node-id="ecJB0oSHehpa0vdHm72fiZ">18.</span><span class="type-tag type-single" data-page-node-id="JIz7DLUsdV2BynUPe26rRW">单选</span>DDR3 SDRAM 芯片内部缓冲采用几位预取？</div>
+      <ul class="options" data-answer="C" data-page-node-id="egH62042hAM5KSPRzDOgEM">
+        <li data-val="A" data-page-node-id="surY6GMQuJaNHOfKYuxDDC">A. 2 位</li>
+        <li data-val="B" data-page-node-id="yHi49lZEJvvHwTqPey6fU1">B. 4 位</li>
+        <li data-val="C" data-page-node-id="rtSFJENd2KrHAoRjbGXxBs">C. 8 位</li>
+        <li data-val="D" data-page-node-id="YNLZH8w8q6zcev9N7YNIBc">D. 16 位</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="zDR3kHtvqFTdcvt0GbSKGD">查看解析</button>
+      <div class="answer-box" data-page-node-id="GLtL6Yn2Bnmg3uCZTvEJFY"><strong data-page-node-id="UlmJ0OLOZDANEio2QYphts">答案：C</strong><div class="analysis" data-page-node-id="DGktHWFOVmgv74QuUSgk4O">DDR=2 位预取，DDR2=4 位预取，DDR3=8 位预取。预取位数每翻倍，总线时钟频率相对内部也翻倍。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="8dobSJk82dbtzbYYUj0hUn">
+      <div class="q-title" data-page-node-id="vMeMB3ZhjipZoJfKhWbDws"><span class="q-num" data-page-node-id="2q3FrZx0D1hyTeMQXj865b">19.</span><span class="type-tag type-single" data-page-node-id="xuKGaWXcZMGefnYA3rIyp3">单选</span>DDR2 SDRAM 内存条芯片内部预取位数与总线时钟频率关系是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="upTG7I1C7TeMJG5MuV7bUA">
+        <li data-val="A" data-page-node-id="ueC55DxiBehXNo6tDdtBCG">A. 4 位预取，总线时钟频率 = 芯片内部 × 1</li>
+        <li data-val="B" data-page-node-id="iwiHLDnoYWtBQaqVpawYKG">B. 4 位预取，总线时钟频率 = 芯片内部 × 2</li>
+        <li data-val="C" data-page-node-id="d7qTQ13qrYxxJ4tIBVyBNf">C. 4 位预取，总线时钟频率 = 芯片内部 × 4</li>
+        <li data-val="D" data-page-node-id="opdozJuJsIaCCcCoeKsBfz">D. 8 位预取，总线时钟频率 = 芯片内部 × 2</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="4GhYr7GBCPZ7ploh6G8Ful">查看解析</button>
+      <div class="answer-box" data-page-node-id="5NomTWgeLM5AQc6yziezLW"><strong data-page-node-id="lte8i4xPJyxuG6C3Kagf5D">答案：B</strong><div class="analysis" data-page-node-id="CF5xVVNES6xTndHRRyQ1zx">DDR2=4 位预取，总线时钟频率=内部 ×2；DDR3=8 位预取，总线时钟频率=内部 ×4。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="piPCOenuRjQ1Qpge2dP63R">
+      <div class="q-title" data-page-node-id="fZVuXmnolxQx0cPpAEh8FZ"><span class="q-num" data-page-node-id="ffJABd9bD6gY96bnnKQPPp">20.</span><span class="type-tag type-single" data-page-node-id="6bv5jTfABGEB0H18RWty1k">单选</span>用若干「位数较少」的存储芯片构成给定存储字长的内存条时，需要进行？</div>
+      <ul class="options" data-answer="A" data-page-node-id="sdOeTRdAcB6qViegxQMhlL">
+        <li data-val="A" data-page-node-id="pnd3BT9liy77WIsQDAqMCc">A. 位扩展</li>
+        <li data-val="B" data-page-node-id="4lHz5NWZ83DQStS65RKaA7">B. 字扩展</li>
+        <li data-val="C" data-page-node-id="GMz40pyH7kJrBQmEoovqgX">C. 同时进行字位扩展</li>
+        <li data-val="D" data-page-node-id="R0M4GkbWY3NzBvSYgyRVpV">D. 不需要扩展</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="zTw40DBtiQqcFhMYkzKd2q">查看解析</button>
+      <div class="answer-box" data-page-node-id="3mkKLFRU8P6k0GNEOxU3Vh"><strong data-page-node-id="QRSXDSUSJsQMGCDfWSfguD">答案：A</strong><div class="analysis" data-page-node-id="xTdYEjYgHdzPQE5FpuBpzy">位扩展=横向并联多片以加宽数据位；字扩展=纵向堆叠以加宽地址范围（增加字数）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="1czDQLzD3jMOME81jyFaSM">
+      <div class="q-title" data-page-node-id="dvsLRxOmC1HrxrNXqXCZ1N"><span class="q-num" data-page-node-id="MrjmU1CCfwwzjKUmxut4Xf">21.</span><span class="type-tag type-single" data-page-node-id="tMAhCaHUvcS07q25cO4vP6">单选</span>CPU 通过哪种「桥接器」与主存相连？</div>
+      <ul class="options" data-answer="D" data-page-node-id="YBT3EAMSN79zBtaRTHxu9c">
+        <li data-val="A" data-page-node-id="1NKiJ7hm6f6tEBb42SVlbk">A. CPU 直接连主存</li>
+        <li data-val="B" data-page-node-id="aRLBex39LTG8UNXG3GekkE">B. 磁盘控制器</li>
+        <li data-val="C" data-page-node-id="LCEp9fm6XH0Jn4uGoYp0Dr">C. DMA 控制器</li>
+        <li data-val="D" data-page-node-id="8M4fFD9CUOBo2UFnx0bB7P">D. I/O 桥接器（存储器总线桥接）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ASmLIpLqcBYzOO7UX88jRp">查看解析</button>
+      <div class="answer-box" data-page-node-id="tlF964bXwHlGVTmyyKrh73"><strong data-page-node-id="RvaEPKWnoqVe9TVuoUTMem">答案：D</strong><div class="analysis" data-page-node-id="uZ9ihEAU6BDI2uig91X9Zf">CPU → 系统总线 → I/O 桥接器 → 存储器总线 → 主存。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="lvX7UwEY0CVOGvKLm1gzKg">
+      <div class="q-title" data-page-node-id="cgYt1k1unWlvLgxascQZ85"><span class="q-num" data-page-node-id="RfNEdfoycp7JyYwSmsBmFt">22.</span><span class="type-tag type-single" data-page-node-id="DUhXuXylv5SuAVMJtaJkJn">单选</span>「存数指令（Store）」的功能是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="KEIfvu4Dnui7hceGHY9HzN">
+        <li data-val="A" data-page-node-id="jVk1dpAxgk6Npiu4s1fuhF">A. 从主存读数据到寄存器</li>
+        <li data-val="B" data-page-node-id="RaJNfH8GmlwJS8z5ABEVxl">B. 将 CPU 寄存器的内容存储到主存单元中</li>
+        <li data-val="C" data-page-node-id="GaLljxgbwNFu2kSVQ3hZpm">C. 清空寄存器</li>
+        <li data-val="D" data-page-node-id="vgKNEeWu31fn0zHvgvQcRs">D. 增加 PC 的值</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="DeLEweaBOCxgYLMBHUwvfB">查看解析</button>
+      <div class="answer-box" data-page-node-id="WTeWmNqXiZkOiJYcITcmGC"><strong data-page-node-id="ji5zoXBwGX5y1PSJ9QCkrr">答案：B</strong><div class="analysis" data-page-node-id="C817FhGiSfeeYz8rgpy2xA">取数（Load）=主存→寄存器；存数（Store）=寄存器→主存。两者构成访存指令的两大类。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FLxGqY2KYD0VWnNJYmgk6u">
+      <div class="q-title" data-page-node-id="oUlo7Y5AhnngdiVHnCgW5r"><span class="q-num" data-page-node-id="gA5VKKfxxcMjx29HorBfIN">23.</span><span class="type-tag type-fill" data-page-node-id="LOPUEkazFdoYZOXOwKGSjt">填空</span>SDRAM 芯片读/写受外部系统时钟 ____ 控制，与 CPU 之间采用同步方式交换数据。</div>
+      <button class="reveal-btn" data-page-node-id="jLxPjPjBDDlpHH7K3CTmRx">查看答案</button>
+      <div class="answer-box" data-page-node-id="Z5CbxwhoyepCJGumwxCE7V"><strong data-page-node-id="wHAobOe6ShhCJpdxh54FKi">答案：</strong>CLK（前端总线时钟）</div>
+    </div>
+
+    <div class="question" data-page-node-id="vgZ4OdPt8XjChILYEtWCXm">
+      <div class="q-title" data-page-node-id="nRa0kI2BrIP4Vj5w7gKwWq"><span class="q-num" data-page-node-id="ntNtbd57egrm5bGRwh5xkG">24.</span><span class="type-tag type-fill" data-page-node-id="k3RALVvqZCw81EBjEYKxHW">填空</span>DDR SDRAM 利用芯片内部的 ____ 缓冲区提供的双字预取功能，并利用时钟信号的上升沿与下降沿实现一个时钟内传送两个存储字。</div>
+      <button class="reveal-btn" data-page-node-id="magMK8esc2FMGhnhAT9fpK">查看答案</button>
+      <div class="answer-box" data-page-node-id="plEtpnFag4TiMOYKtobHcK"><strong data-page-node-id="rdCemU9fvWxGDiHWZUxF1c">答案：</strong>预取（Prefetch）</div>
+    </div>
+
+    <div class="question" data-page-node-id="AnBUCATe8UR3u1d0tcnQY0">
+      <div class="q-title" data-page-node-id="v1tyCljEzWRGK9QdQkSxzm"><span class="q-num" data-page-node-id="N4v6naT49HFNMAhxVSGE0O">25.</span><span class="type-tag type-fill" data-page-node-id="JIs06yGxCB3zeTN60Gs9Pt">填空</span>CPU 与主存之间通常由 ____ 线、地址线和控制线三类总线组成。</div>
+      <button class="reveal-btn" data-page-node-id="6eeXQgVYWaN9F2jVQUlOOf">查看答案</button>
+      <div class="answer-box" data-page-node-id="WCIIHagxHKNqxHVuOW4lHp"><strong data-page-node-id="BSv9WZqdzDfj3EdYQub6kI">答案：</strong>数据</div>
+    </div>
+
+    <div class="question" data-page-node-id="gTLvuG4KIBF8z0YGpaG4dI">
+      <div class="q-title" data-page-node-id="KB6Up9WZQv6guOvFSzoJyc"><span class="q-num" data-page-node-id="e1AbqX0S87eIU1InRvrl99">26.</span><span class="type-tag type-fill" data-page-node-id="bMGZZj42LI5fG9f4UtCtNX">填空</span>访存指令主要有「取数指令（Load）」和「____ 指令（Store）」两类。</div>
+      <button class="reveal-btn" data-page-node-id="8f6qbUIcf2P7bpF2ZDoEsb">查看答案</button>
+      <div class="answer-box" data-page-node-id="MGPeWim9BwhnwWmv66xh4k"><strong data-page-node-id="WJ2RUGm7uCxXe8CZBkcnOl">答案：</strong>存数</div>
+    </div>
+
+    <div class="question" data-page-node-id="HtLzHvZFu8rZquN3fQDFQs">
+      <div class="q-title" data-page-node-id="C6zCXyawvKQ1B5Fo1mfZwt"><span class="q-num" data-page-node-id="SHDMG2iuOj0bCfH7YeZwIL">27.</span><span class="type-tag type-term" data-page-node-id="968n2lDkTH1ftrvIVi5sH0">名词解释</span>SDRAM</div>
+      <button class="reveal-btn" data-page-node-id="60em8ikDwxiTpEhPUpKT1s">查看答案</button>
+      <div class="answer-box" data-page-node-id="cnTkcB6VLkP7EXOvLabjNt">同步动态随机存取存储器（Synchronous DRAM），读/写受外部系统时钟 CLK 控制，与 CPU 同步交换数据；目前主存常用 DDR/DDR2/DDR3 SDRAM 内存条。</div>
+    </div>
+
+    <div class="question" data-page-node-id="DDCWHyLJ8NiqRQLjOqg3Oy">
+      <div class="q-title" data-page-node-id="PHvIDtaIDUnRaPGigjatd3"><span class="q-num" data-page-node-id="ZPqORoPWj9BakX7EsSrtP0">28.</span><span class="type-tag type-term" data-page-node-id="HSq5dsQcVUUOcSt1DhLwhR">名词解释</span>位扩展</div>
+      <button class="reveal-btn" data-page-node-id="yjce5LzPt8ml8TPhBEvAM8">查看答案</button>
+      <div class="answer-box" data-page-node-id="xZxjqxAu3gwAHnBtVBLrkK">用若干片位数较少的存储器芯片并联以扩展数据位宽，达到给定存储字长的方法；扩展后每存储单元的位数增加，但存储单元总数不变。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="02ZTKFYGJcrvBu7tHGlZON">
+      <div class="q-title" data-page-node-id="4eAdw7tE6DK5XkqFBjr7Wg"><span class="q-num" data-page-node-id="hPU9CBLWwtDxakc1vwxFto">29.</span><span class="type-tag type-comp" data-page-node-id="3spIrQzzFcVbWHehNext8B">综合题</span>用 8 片 16M×4 位的 SDRAM 芯片组成一个 16M×32 位的内存条，需要采用什么扩展方式？请说明步骤。</div>
+      <button class="reveal-btn" data-page-node-id="ay08d9CsF46Yh0TPdLxAH3">查看答案</button>
+      <div class="answer-box" data-page-node-id="dY6lU8zjaseJRAt5TrNjcv"><strong data-page-node-id="jcqSTrWvpOlvyCBbfDsRuC">答案：</strong>
+        <div class="analysis" data-page-node-id="lvtBlBL0KGCZGtAoOzUqwg">
+          目标：16M×32 位；现有：16M×4 位 × 8。<br data-page-node-id="jE9C51FdpwLgJqFC7CEs2t">
+          方式：位扩展（横向并联加宽数据位）。<br data-page-node-id="rFM9u7pIETcwPcvRij3Cuc">
+          步骤：8 片 16M×4 位芯片分两组，每组 4 片并联组成 16M×16 位；再将两组串联（一组提供低 16 位，另一组提供高 16 位）形成 16M×32 位内存条；地址线、控制线并联接到所有芯片，片选由高位地址译码产生。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第三节 ========== -->
+  <section class="section-block" id="sec3" data-page-node-id="9SX2dp5WBpSZrCboS4yGZf">
+    <div class="section-header" data-page-node-id="C7lQ3mE5x0nTjODQzd1F0R">
+      <div class="num" data-page-node-id="fZrx47o0Qc07QEAUGJUyCO">3</div>
+      <h2 data-page-node-id="U7IH6Ek8f1tc7FIaPlIp91">第三节 硬盘存储器</h2>
+      <span class="count" data-page-node-id="nztbX2nOYu1XgNXWP9oLX6">18 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="H9VLOjnzZstgCZQYcFAm1y">
+      <div class="q-title" data-page-node-id="qN4c79oWQSM7QhsWUu4y1Q"><span class="q-num" data-page-node-id="QoiwROrix6E0MYWhtxSE9t">30.</span><span class="type-tag type-single" data-page-node-id="TmQUDcw5gVAYroxGjogti1">单选</span>磁盘读/写操作的三个步骤依次是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="K2mrJ7MLlAKzfWF86Rhpna">
+        <li data-val="A" data-page-node-id="shhx6VM8GNzuAlugicR4rB">A. 旋转等待 → 寻道 → 读/写</li>
+        <li data-val="B" data-page-node-id="n78PryobTuQS4E1l1JKWHI">B. 读/写 → 寻道 → 旋转等待</li>
+        <li data-val="C" data-page-node-id="SH1enbGFupVFPIHH8dlpEG">C. 寻道 → 旋转等待 → 读/写</li>
+        <li data-val="D" data-page-node-id="Fb9zvlUrufKylWrKpjHSd0">D. 寻道 → 读/写 → 旋转等待</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="fQGG63iyd6ir5hV4tpU0n3">查看解析</button>
+      <div class="answer-box" data-page-node-id="u5hdiIKARXtjesfLau9JH6"><strong data-page-node-id="orCBlfgRJ6lF1Zjh5GTuh8">答案：C</strong><div class="analysis" data-page-node-id="CCiIGIzB7XSXWfsYqTHjt9">标准三步：①寻道（磁头移动到目标柱面）→ ②旋转等待（盘片转到目标扇区）→ ③读/写（传送数据）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="GA4D8yRQVqFoZsZ9CdwUCv">
+      <div class="q-title" data-page-node-id="QMTUQVZ6hf9jGit28XW4xC"><span class="q-num" data-page-node-id="sUWunpxX1VwgKZWyQMPPen">31.</span><span class="type-tag type-single" data-page-node-id="seWqFKMMsiAuVoVTimDHio">单选</span>磁盘「平均存取时间」的正确公式是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="xWRqPxLcPUv8hpFHDvUaB8">
+        <li data-val="A" data-page-node-id="61JlBld5S9syGMSx4YnUBw">A. 寻道时间 + 数据传输时间</li>
+        <li data-val="B" data-page-node-id="vGZ7TDe7HXC1AXXf7RYCYB">B. 寻道时间 + 旋转等待时间 + 数据传输时间</li>
+        <li data-val="C" data-page-node-id="yMhEiE9V9xQo5qE7C2N6yl">C. 旋转等待时间 + 数据传输时间</li>
+        <li data-val="D" data-page-node-id="kMODFPNu0PNULc7d03Ssk9">D. 排队延迟 + 控制器时间 + 数据传输时间</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="lU7HHeOLnVpqn17XGzYioJ">查看解析</button>
+      <div class="answer-box" data-page-node-id="dZ1uO4F5n9yx0JQiYS0DC3"><strong data-page-node-id="elE2bGF6e0gigBKp29j6Ck">答案：B</strong><div class="analysis" data-page-node-id="wDwJPHXIzbJOXKGX7iXkej">存取时间=寻道时间+旋转等待时间+数据传输时间；响应时间还会加上排队延迟+控制器时间。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="b5hlvu7AYnIZmqGHKGOz9q">
+      <div class="q-title" data-page-node-id="tPjwd6lx2FG8hWWodPe20y"><span class="q-num" data-page-node-id="c0lA2VEAYEJKZxQvYJypy7">32.</span><span class="type-tag type-single" data-page-node-id="dn8nXvyrZYP8tsQiK0bhpk">单选</span>磁盘实际数据容量的正确公式是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="vl7eiydYbdHjdLye3qcG6k">
+        <li data-val="A" data-page-node-id="SMHUz7NxAkSBEeD1pdgrIm">A. 2 × 盘片数 × 磁道数/面 × 扇区数/磁道 × 512B/扇区</li>
+        <li data-val="B" data-page-node-id="0t7SS9TS7twiI3wo1EvfbR">B. 盘片数 × 磁道数/面 × 扇区数/磁道 × 512B/扇区</li>
+        <li data-val="C" data-page-node-id="r3wIFHzfBMEHo0jx5ifzsY">C. 2 × 盘片数 × 磁道数/面 × 扇区数/磁道 × 4KB/扇区</li>
+        <li data-val="D" data-page-node-id="djaMJOQsMTh6DQqdOU8kay">D. 盘片数 × 柱面数 × 扇区数/磁道 × 512B/扇区</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Nw1Ri4qHrhFCnd8riXw9yE">查看解析</button>
+      <div class="answer-box" data-page-node-id="3LSbLvLxps6zQg5slh0BdA"><strong data-page-node-id="ASSDy7oJf6SqSBtTS6Gb7b">答案：A</strong><div class="analysis" data-page-node-id="lMixLZ4MbAeLKjTaIkcuRC">两面 × 盘片 × 磁道/面 × 扇区/磁道 × 512B = 总容量。每个盘片有正反两个面（2），每扇区通常 512B。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Yn6rvQQTUSLfSvgzFVa8ES">
+      <div class="q-title" data-page-node-id="Rz0BxNri8HI93MsGHRyMq4"><span class="q-num" data-page-node-id="3b7m2Q096TUfZmlNwnXrHt">33.</span><span class="type-tag type-single" data-page-node-id="wh0xChaF1Ri2xBns5RkX0E">单选</span>磁盘与主存高速批量数据交换通常采用？</div>
+      <ul class="options" data-answer="D" data-page-node-id="awNZzThu61JyYDLVHK3rNf">
+        <li data-val="A" data-page-node-id="q6xETIG7FdFRYAdzD52BBd">A. 程序查询方式</li>
+        <li data-val="B" data-page-node-id="dq9BYByY7WCQ4WDEvN1gNC">B. 中断方式</li>
+        <li data-val="C" data-page-node-id="HbvbYs18cDpAkCUh0xrx77">C. 通道方式</li>
+        <li data-val="D" data-page-node-id="wiBeFRx37vSyt26cnHvuf3">D. DMA 方式</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="R9XJRkLtJSvpWGWmkDUeXJ">查看解析</button>
+      <div class="answer-box" data-page-node-id="4GZoAQ1bxFG82jxfNIBczE"><strong data-page-node-id="CQmqph5sGF7pp5IKaHruVd">答案：D</strong><div class="analysis" data-page-node-id="Z4IRhRIDaEWI2ZLAaBgI8B">DMA（Direct Memory Access）=直接存储器存取，由专用 DMA 控制器在不经过 CPU 的情况下完成外设与主存间的批量数据交换。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="H8wc5qKEmH5O2tS28E8VTC">
+      <div class="q-title" data-page-node-id="yyv3CMrWdcqL3iWdIPjVk1"><span class="q-num" data-page-node-id="dVEjPetawwFZXaQ5SbEWXO">34.</span><span class="type-tag type-single" data-page-node-id="2aD4K9JeBFVpxNJCaa4xD5">单选</span>关于闪存存储元中「浮空栅」带负电荷时表示？</div>
+      <ul class="options" data-answer="A" data-page-node-id="1svsy969oONw4bwfexDnif">
+        <li data-val="A" data-page-node-id="YEfeQBFyK1fpt8dT6z9aAY">A. 0</li>
+        <li data-val="B" data-page-node-id="35vxteZDve43pV2x3nPh9R">B. 1</li>
+        <li data-val="C" data-page-node-id="3FBLn1BXWA3kYY1T7a9TGU">C. 不确定</li>
+        <li data-val="D" data-page-node-id="wkt0MHG6PyEHDM7Uyk8N7w">D. 已擦除</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="nW3TAaVLzwiyHPXguEOwQ5">查看解析</button>
+      <div class="answer-box" data-page-node-id="d9IRQ0V0QyQlqAK7S7E4nB"><strong data-page-node-id="OeWmgROCkh41FRK0b5rjaO">答案：A</strong><div class="analysis" data-page-node-id="6edLexkCpSYZAyP3dSzPil">控制栅加足够正电压 → 浮空栅储存大量电子（带负电荷）→ 状态 = 0；不加正电压 → 少带或不带电子 → 状态 = 1。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="F3Tr0eG0JOFi1kYfrg2G4W">
+      <div class="q-title" data-page-node-id="4KFFHjCMoYCMsl1dyBEGSS"><span class="q-num" data-page-node-id="1VwdaYmBqsaSD1GXLsyexW">35.</span><span class="type-tag type-single" data-page-node-id="8PibfN98z8LXhp3lrIYyCC">单选</span>SSD 的三大限制中，下列哪一项「不在」？</div>
+      <ul class="options" data-answer="D" data-page-node-id="qsrVWLy6mSEShfTtvgGMNd">
+        <li data-val="A" data-page-node-id="Dpx7A8iGjwA1n3hkGgpDCR">A. 写页前必须先擦除整个区块</li>
+        <li data-val="B" data-page-node-id="sT4GHXjN6aD4GWiuOUJPiQ">B. 擦除后区块内页必须顺序写入</li>
+        <li data-val="C" data-page-node-id="qwC5Mb33EmzxuOSPyHCIdZ">C. 擦除/编程次数有限</li>
+        <li data-val="D" data-page-node-id="mxy7PT9wiFmhkgOWBeFCdw">D. 不可读</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="zfgGXAfBpq0vhn2wwQHfGD">查看解析</button>
+      <div class="answer-box" data-page-node-id="jxfL78aNdz4SajK94HjgHu"><strong data-page-node-id="HzROfChDsWmRDtrySVQSGL">答案：D</strong><div class="analysis" data-page-node-id="RNthm5BNGhDUQssuRMLSmc">SSD 三大限制：①写前必擦整块；②擦后顺序写；③擦写次数有限（磨损均衡算法缓解）。读没有限制。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="xBQnzTWDv2Xop0Sf3QMYEt">
+      <div class="q-title" data-page-node-id="f0QzRjcJsbfyoxErXWZDOj"><span class="q-num" data-page-node-id="DNMrfJRFzlfbzBCPATInru">36.</span><span class="type-tag type-single" data-page-node-id="4eSZxSrBW5izeuE6AtJfYx">单选</span>SSD 中「磨损均衡（Wear Leveling）」算法的目的是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="vPVPWLwBi7fMugIWwKntjR">
+        <li data-val="A" data-page-node-id="pI9U2luApAl3WmnCXiSWKi">A. 提高读写速度</li>
+        <li data-val="B" data-page-node-id="fsViG9S5E9lCk5ieHrzuq8">B. 增加存储容量</li>
+        <li data-val="C" data-page-node-id="OIf1NV126KhlO2uaND5TNE">C. 将擦除操作平均分布在所有区块上以延长寿命</li>
+        <li data-val="D" data-page-node-id="c3BN6RE7BgN6e6tbZjCnC4">D. 降低功耗</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="VCHuTPaVOTVfSeEjE65oKF">查看解析</button>
+      <div class="answer-box" data-page-node-id="hlAO96C3vNQdmlkGgRaIGg"><strong data-page-node-id="SjjcnetTbdr1o9ZPHjvMbn">答案：C</strong><div class="analysis" data-page-node-id="l8WDovneqcutXhpaZpjQUF">Wear Leveling：把擦除均匀分布到所有块上，避免某些块过早磨损失效，延长 SSD 寿命。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Ia8DE78fRGi89ZxtNuRqjz">
+      <div class="q-title" data-page-node-id="oE76D58dvBtKSNGOaGsM2b"><span class="q-num" data-page-node-id="hpo68YNvKfVyVyXZLtTA5G">37.</span><span class="type-tag type-fill" data-page-node-id="r1fSG5G47vrvzDThEUuXGI">填空</span>磁盘地址由 ____ 号、磁头号、扇区号三部分组成。</div>
+      <button class="reveal-btn" data-page-node-id="g0jehorbBaRDfdB5KqJe7i">查看答案</button>
+      <div class="answer-box" data-page-node-id="QhcqMIASugLQ2E8j2haXov"><strong data-page-node-id="rfDyNdeNmLFogz6qImW4iB">答案：</strong>柱面</div>
+    </div>
+
+    <div class="question" data-page-node-id="TjYUyf54KwSLcQeeXScSD5">
+      <div class="q-title" data-page-node-id="VVBSkuxzQeVbeHaAFx1LHn"><span class="q-num" data-page-node-id="eZ0bHD2AFg3SWbhuxbrIdL">38.</span><span class="type-tag type-fill" data-page-node-id="Lt43MXK7KgxKzGnBrS3Kmi">填空</span>磁盘每个盘片两个面上各有一个磁头，因此磁头号就是 ____ 号。</div>
+      <button class="reveal-btn" data-page-node-id="BnjG5ChhEGvILJgzm9ufGx">查看答案</button>
+      <div class="answer-box" data-page-node-id="pP25tPjIrEiyLnBDz3eEIL"><strong data-page-node-id="ZK5RqZM37OvjQKKMbqxFkR">答案：</strong>盘面</div>
+    </div>
+
+    <div class="question" data-page-node-id="8PZXyjAk1RFf1z9uv38cWq">
+      <div class="q-title" data-page-node-id="16cRtftd9mbDYuVNHUBoGn"><span class="q-num" data-page-node-id="gNsiSNy3UwQjWJeNQDFGZr">39.</span><span class="type-tag type-fill" data-page-node-id="F0jD6ujTvfgWHpEeAYqwB7">填空</span>磁盘完成磁头定位和旋转等待后的数据传输率称为 ____ 传输速率或持续传输速率。</div>
+      <button class="reveal-btn" data-page-node-id="q91XT6meO5f5q9oLpcfZQm">查看答案</button>
+      <div class="answer-box" data-page-node-id="Kk2dlgME0aQ2EeWOwkrB4D"><strong data-page-node-id="5N4mmckYpbBoJ7izuNR0XL">答案：</strong>内部</div>
+    </div>
+
+    <div class="question" data-page-node-id="qme1kIz4Ircl5DH3jNRETp">
+      <div class="q-title" data-page-node-id="aXo2tgL0CZyhbLfCbhoJ8s"><span class="q-num" data-page-node-id="0BDJ2WyqZ7y6GrM49tdhK1">40.</span><span class="type-tag type-fill" data-page-node-id="c2i0s5RaMpzsnvMkiIylAV">填空</span>SSD 中数据按 ____ 为单位进行读/写，擦除按区块为单位进行。</div>
+      <button class="reveal-btn" data-page-node-id="KG0EvwPrlOfgAPayZyJ0HU">查看答案</button>
+      <div class="answer-box" data-page-node-id="n4nczXdDs1XckwlMP1Lxi0"><strong data-page-node-id="pat6nvjyZEASOgIStCEWns">答案：</strong>页（Page）</div>
+    </div>
+
+    <div class="question" data-page-node-id="l7HCjCNNq1avWB8aIs0dzw">
+      <div class="q-title" data-page-node-id="KpFKIc8a3I8JFAHjHmTwcL"><span class="q-num" data-page-node-id="pzrgPSjepowyy4rwsVhdKP">41.</span><span class="type-tag type-fill" data-page-node-id="CuBB438Mw4E2tMFVaGM8J2">填空</span>闪存有 3 种基本操作：编程（充电）、擦除（放电）、____。</div>
+      <button class="reveal-btn" data-page-node-id="UM3D7MH5N2tgHlYFAYM1kJ">查看答案</button>
+      <div class="answer-box" data-page-node-id="XA6e0BkUNBRHYm3ZHEsKw0"><strong data-page-node-id="mMuBEnIbH9YiJJvHxCorMz">答案：</strong>读取</div>
+    </div>
+
+    <div class="question" data-page-node-id="uPV7WzIjkI78P9gHvFsvDi">
+      <div class="q-title" data-page-node-id="bVrTHVDIA6VE6mxut2KEwH"><span class="q-num" data-page-node-id="eBA21P3Ag4qHKzKitv98Ym">42.</span><span class="type-tag type-fill" data-page-node-id="H1OIEGcWto55k3ex68B7LW">填空</span>闪存全称 ____ 存储器，是一种非易失性读/写存储器。</div>
+      <button class="reveal-btn" data-page-node-id="IFaIT38QIIcgKebRv775fk">查看答案</button>
+      <div class="answer-box" data-page-node-id="CRkDhn2UUxY36FSd46JlCo"><strong data-page-node-id="YpPBgeDQlwpbxd4kxI4B7T">答案：</strong>闪速（Flash）</div>
+    </div>
+
+    <div class="question" data-page-node-id="iYl5Rre8eCv9CWmSFGW5BE">
+      <div class="q-title" data-page-node-id="Wj4BFxDHuRmBnbp39hHEq7"><span class="q-num" data-page-node-id="KD8xkBD4yA5Z7R1b2GBMNs">43.</span><span class="type-tag type-term" data-page-node-id="OMxD4jHmGU8HVbZLwwgqDJ">名词解释</span>DMA（直接存储器存取）</div>
+      <button class="reveal-btn" data-page-node-id="nVw6M5z7Ls18e9xtm4sQFq">查看答案</button>
+      <div class="answer-box" data-page-node-id="WCtbByzhRGJasjJfyF8saR">由专门 DMA 控制器在外设与主存之间直接进行批量数据交换的方式，数据不经过 CPU；常用于磁盘等高速外设的成批数据传送，提高 I/O 效率。</div>
+    </div>
+
+    <div class="question" data-page-node-id="DeN1VbJjgIHHumLaHYdap3">
+      <div class="q-title" data-page-node-id="J0kByTcCiX9rYadCHcLMJq"><span class="q-num" data-page-node-id="WnhKy5ZJEB616scct8vWPf">44.</span><span class="type-tag type-term" data-page-node-id="1cs6V1voIArK6FuuoxAEyi">名词解释</span>固态硬盘（SSD）</div>
+      <button class="reveal-btn" data-page-node-id="OdYZ6b6OlIP3acwTEVKzWr">查看答案</button>
+      <div class="answer-box" data-page-node-id="Y3gm3YiDLLcM4xVWJl21Rr">使用 NAND 闪存组成的外存设备，用闪存颗粒代替磁盘作为存储介质，按页读/写、按区块擦除；相比机械硬盘具有更快的随机访问速度，但有三大限制：写前必擦、擦后顺序写、擦写次数有限。</div>
+    </div>
+
+    <div class="question" data-page-node-id="JjphDJpAs7mDZwLdiYPiXv">
+      <div class="q-title" data-page-node-id="L1yyfdo4x2JEsPURPOkqVX"><span class="q-num" data-page-node-id="RvVz0nVhvpD2Ob0sKuzbli">45.</span><span class="type-tag type-term" data-page-node-id="jTNl66O58vTgB15A2rzAXE">名词解释</span>闪存（Flash Memory）</div>
+      <button class="reveal-btn" data-page-node-id="EezLrDh1VDkGsvAGzbeNEM">查看答案</button>
+      <div class="answer-box" data-page-node-id="GquQClVSEVPVa2U6Iw6Z4C">闪速存储器，一种非易失性读/写存储器，兼有 RAM 和 ROM 的优点，功耗低、集成度高、无需后备电源；每个存储元为单个带浮空栅的 MOS 管，有编程、擦除、读取三种基本操作。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="SPZVpyMlqT0SjKonjF2zuu">
+      <div class="q-title" data-page-node-id="taehqfO0jF5mCoHut4jjof"><span class="q-num" data-page-node-id="1VAkhCkidxAmHYYDS6mHew">46.</span><span class="type-tag type-comp" data-page-node-id="RBh4agBv3PjmMdPhgOiDaa">综合题</span>某磁盘驱动器有 4 个盘片（8 面），每面 5000 磁道，每磁道 1000 扇区，每扇区 512B，求总容量；若平均寻道时间 8ms、平均旋转等待 4ms、数据传输时间 0.5ms，求平均存取时间。</div>
+      <button class="reveal-btn" data-page-node-id="yIaatdaoOq3BEH3LtbbvW8">查看答案</button>
+      <div class="answer-box" data-page-node-id="yWNN9KtkZeuszPPQHrYoQY"><strong data-page-node-id="yeu5sLDxtjiOabosRZwlw4">答案：</strong>
+        <div class="analysis" data-page-node-id="cXs8tokwBjpXs9XT1XK1aK">
+          容量 = 2 × 4 × 5000 × 1000 × 512 B = 8 × 5 × 10³ × 10³ × 512 = 20 × 10⁹ × 512 ≈ 10.24 × 10¹² B ≈ 9.31 TiB（或 ≈ 10.24 TB 商用计法）。<br data-page-node-id="3VAFZh290RrbyWi7N6zTTV">
+          平均存取时间 = 8 + 4 + 0.5 = 12.5 ms。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="gu2fdSOBwgR1ZnwmrUWlwV">
+      <div class="q-title" data-page-node-id="VQzJL9MK4smiXNcZn5ZtJy"><span class="q-num" data-page-node-id="YO7ngDVtChrzUQCCu8kRf3">47.</span><span class="type-tag type-comp" data-page-node-id="opNP9l7XHqFGqvedC6kBOJ">综合题</span>简述 SSD 三个限制及其对操作系统/闪存翻译层提出的要求。</div>
+      <button class="reveal-btn" data-page-node-id="i81zXKNs1BBHSy8OxUyNDZ">查看答案</button>
+      <div class="answer-box" data-page-node-id="J7U5LtKAPx3dq18E4bCuvr"><strong data-page-node-id="nPNLLz4MGJ2yedYxIT0SJ5">答案：</strong>
+        <div class="analysis" data-page-node-id="nWHMFgB6az8YH2H8vMDrjH">
+          ①写页前必须先擦除所在整个区块 → 写放大；需要 FTL（闪存翻译层）做异地写入。<br data-page-node-id="VbpFZlDdozGAmGi9qhRFMN">
+          ②擦除后区块内页必须顺序写入 → 不能随机写；FTL 需维护逻辑→物理映射表。<br data-page-node-id="Ba749CBF0ufIOn3s1QX3fV">
+          ③擦除/编程次数有限 → 块磨损失效；FTL 需实现 Wear Leveling（磨损均衡），把擦除均匀分布到所有块上延长寿命；同时用坏块管理。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第四节 ========== -->
+  <section class="section-block" id="sec4" data-page-node-id="vEfZg3KC1jfYCED9baHmAj">
+    <div class="section-header" data-page-node-id="tBL35YNIi4bMpijd0jyB43">
+      <div class="num" data-page-node-id="kAwhbbItpTVjXhMcqs72r7">4</div>
+      <h2 data-page-node-id="v4DmoZA2PvHCZ93gU5vsVp">第四节 高速缓冲存储器（Cache）</h2>
+      <span class="count" data-page-node-id="fiGXZKDjDMntAtaPuGsh8m">28 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="cqD3LHXPZ1BV09MOXDVHb0">
+      <div class="q-title" data-page-node-id="ZVKxHGQjFuFEhVhTLcObHx"><span class="q-num" data-page-node-id="wJaZIvWs1zZb3U8zqCS7ea">48.</span><span class="type-tag type-single" data-page-node-id="A8orFZ84TN86v2ECBgMxnV">单选</span>Cache 行中的「有效位（Valid Bit）」为 0 表示？</div>
+      <ul class="options" data-answer="B" data-page-node-id="aL7KKXfA7dqkfp7oiUjuuT">
+        <li data-val="A" data-page-node-id="KjI6ZyscIKa4y4IJHp6DzL">A. cache 行被修改过</li>
+        <li data-val="B" data-page-node-id="sEUzbFl3WQOUVL9vAZMCRS">B. cache 行中的主存块信息无效（空或被冲刷）</li>
+        <li data-val="C" data-page-node-id="fpn9G4A8XJbN46gu2kUiuk">C. 命中</li>
+        <li data-val="D" data-page-node-id="iplWt2eJ6AtPLXHOKWZv1y">D. 写入主存</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="dWMfTYHcg5zA2cugCrwCi9">查看解析</button>
+      <div class="answer-box" data-page-node-id="PFTaOhWCHBXTnuo4m4f8M9"><strong data-page-node-id="39P7MDoLEupLLXpm8aFPvI">答案：B</strong><div class="analysis" data-page-node-id="ag8cwrCRrwijtRoTnyFCe0">有效位=0：cache 行空/被冲刷；=1：cache 行中已装入有效的主存块信息。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="ZJItdPWj3ro0UuOtpIHihG">
+      <div class="q-title" data-page-node-id="CT5vlRcErCNLrhnDootmrg"><span class="q-num" data-page-node-id="G8oi8A12ZB4nmOlpMPu4nJ">49.</span><span class="type-tag type-single" data-page-node-id="CKzxuS72TONnXoqA191BW8">单选</span>Cache-主存层次的「平均访问时间」公式是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="4ZkPG2jQAvw91cOzcvLNE7">
+        <li data-val="A" data-page-node-id="7GYFvRW5vtPMc5L9uxhdgv">A. Ta = Tc + (1-p) × Tm</li>
+        <li data-val="B" data-page-node-id="VEvIsCpLgDbJIQcQTtHuDL">B. Ta = p × Tc + (1-p) × Tm</li>
+        <li data-val="C" data-page-node-id="mZUMoCE6ADYYCFKXQYiopm">C. Ta = p × Tm + (1-p) × Tc</li>
+        <li data-val="D" data-page-node-id="vXikQCFbxIYH22CtSMNBHF">D. Ta = Tc + Tm</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="vqcKsGu5IWLE18UoHfFF35">查看解析</button>
+      <div class="answer-box" data-page-node-id="iJ4dtjkFA979FyymQQiV2u"><strong data-page-node-id="XvF9LUzr0hfi7mDmYHLl3h">答案：A</strong><div class="analysis" data-page-node-id="KVvmeM6xDL95dFRByXjT6m">命中 p 直接 Tc；缺失 (1-p) 需先 Tc 再 Tm 再合并；故 Ta = Tc + (1-p)·Tm。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="ClR4KFDqerrpxjfeETxFqv">
+      <div class="q-title" data-page-node-id="7fMFDzwrxvpYlbRcFXApQ0"><span class="q-num" data-page-node-id="oCNDqv61OrwYfwsh2EjKZj">50.</span><span class="type-tag type-single" data-page-node-id="fACsSDeHxv3L8kAFgHw3OZ">单选</span>「直接映射」中主存块号与 cache 行号的关系是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="ACPUL0reE02iV6Hb48JQVI">
+        <li data-val="A" data-page-node-id="IvmGR3OUvurKLxTFgIsAZ7">A. cache 行号 = 主存块号 ÷ cache 行数</li>
+        <li data-val="B" data-page-node-id="DYk7MgDnzFXSKrG9t1l8Cb">B. cache 行号 = 主存块号 + cache 行数</li>
+        <li data-val="C" data-page-node-id="5prCSRd6cdes8KR9xhM7yx">C. cache 行号 = 主存块号 mod cache 行数</li>
+        <li data-val="D" data-page-node-id="8c8LWcbr6bnu8v9211nuXl">D. cache 行号 = 主存块号 × cache 行数</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="JEmRw7ZMLXausYEbWVOhHB">查看解析</button>
+      <div class="answer-box" data-page-node-id="CKqAJSiafAjz1HvJ8Prb3h"><strong data-page-node-id="68bihNxZce0oAScVJUtXBp">答案：C</strong><div class="analysis" data-page-node-id="A0LtDFDfz7f6TCvzUZpVGd">直接映射（模映射）：主存每一块固定映射到唯一一个 cache 行，行号 = 块号 mod 行数。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="FIjAicHO7iRDQzDUUnhT0n">
+      <div class="q-title" data-page-node-id="dDGoKDKqFjpSk2HE25EPTc"><span class="q-num" data-page-node-id="uDaCwtCcoaguJ7m0yAQiz1">51.</span><span class="type-tag type-single" data-page-node-id="u3Gr5oIRDVRunXEs4GJ0sY">单选</span>「全相联映射」的主要优点是？</div>
+      <ul class="options" data-answer="B" data-page-node-id="x96i9EmNbFHR9QBmdMzkbW">
+        <li data-val="A" data-page-node-id="0uxBR0c2NdUALhEVbTvh7E">A. 映射电路简单</li>
+        <li data-val="B" data-page-node-id="TPZ2brvCK9AHzKh5Kpbw9x">B. 块冲突概率低（只要有空闲行就不会冲突）</li>
+        <li data-val="C" data-page-node-id="Hb6CnxrmjGQhCpbqEDsiA9">C. 查找速度快</li>
+        <li data-val="D" data-page-node-id="euwKg1gnfBRZvr2IR78tyz">D. 主存地址无需标记字段</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="evwkhgKXJL4ejDRC0a7F9M">查看解析</button>
+      <div class="answer-box" data-page-node-id="1NnGi0rCRG7t099P3e5rHf"><strong data-page-node-id="uM76AtQ1Nh90qTCnon5xGp">答案：B</strong><div class="analysis" data-page-node-id="jfhPSNRHUOtl2JNwfYBtV0">全相联：主存块可装入任意 cache 行，块冲突概率最低；缺点是查找电路复杂、需比较所有行的标记。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="fLm21UvFVugakgKByBTXGh">
+      <div class="q-title" data-page-node-id="Rf39goTsHTiewDP37JtCtF"><span class="q-num" data-page-node-id="gaXbnz8M7Y8O35qZVD3DGC">52.</span><span class="type-tag type-single" data-page-node-id="s7HrD0UILGOIQJfUrxKXCr">单选</span>组相联映射中「组间模映射、组内全映射」对应的组号公式是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="YIQxhQyQBRw978RGZCR1xu">
+        <li data-val="A" data-page-node-id="CcWD7J9mKQS2rRBStQPLMf">A. cache 组号 = 主存块号 × cache 组数</li>
+        <li data-val="B" data-page-node-id="8SMDMBM3PzolLBLBRQjUJF">B. cache 组号 = 主存块号 ÷ cache 组数</li>
+        <li data-val="C" data-page-node-id="aG71yPBuncYJPFRWnAQn2x">C. cache 组号 = 主存块号 mod cache 每组行数</li>
+        <li data-val="D" data-page-node-id="Er12SQuF38JJlodCgMTwYG">D. cache 组号 = 主存块号 mod cache 组数</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="OXFCGRIJMD0cdqiaccFBgG">查看解析</button>
+      <div class="answer-box" data-page-node-id="UJsU28x9etzyCE2poui8F2"><strong data-page-node-id="y2zuJWtZzbHhXcqtvafbyo">答案：D</strong><div class="analysis" data-page-node-id="dpc1oYtDK1oCMCQRgVnAlM">组号 = 主存块号 mod 组数（组间用模映射确定唯一组，组内可选任意行）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="447mEiPrrb4AHApjDkeyAd">
+      <div class="q-title" data-page-node-id="5mckqaZqrSFl1fvCXMYT3a"><span class="q-num" data-page-node-id="Iqpg5gtKdUwwFUdrNl6dcw">53.</span><span class="type-tag type-single" data-page-node-id="vplZ1Du4nv9KuWlJGDLGn5">单选</span>下列替换算法中，能「较好反映程序访问局部性」的是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="EDxG4x9QvcH60DdSD296CY">
+        <li data-val="A" data-page-node-id="MF0HwZR5jBrRWhrejRHQZT">A. LRU（最近最少用）</li>
+        <li data-val="B" data-page-node-id="RZkOB3J9zlxpCHGDq6Umir">B. FIFO（先进先出）</li>
+        <li data-val="C" data-page-node-id="3qxAwnIoxQiEgFRJV4tHQP">C. 随机替换</li>
+        <li data-val="D" data-page-node-id="u97ADMDH0vFM5J1v0dCZgw">D. 都不行</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ZrxmumS7uxERvDvkX0uonz">查看解析</button>
+      <div class="answer-box" data-page-node-id="GnhbgY2XRTHSjowgnrFi70"><strong data-page-node-id="MmxUDj35dHqKPbbfpA542X">答案：A</strong><div class="analysis" data-page-node-id="CwjsdyrXgLzRMOy7iVJUQS">LRU 选择近期最少使用的块替换，较好反映时间局部性；FIFO 简单但与局部性不一致；随机实现简单但效果稍差。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Vm3umDkDGtCI7tPscktQfA">
+      <div class="q-title" data-page-node-id="EbYeNetgaC6j9pJTw2zqUv"><span class="q-num" data-page-node-id="lTWPFIKIsnxloJWErmTnfM">54.</span><span class="type-tag type-single" data-page-node-id="47WlA15a6zr73jVUEhr5aK">单选</span>「回写法（Write Back）」的核心思想是？</div>
+      <ul class="options" data-answer="C" data-page-node-id="fcaZBIrkJoZHgJLpJe25p4">
+        <li data-val="A" data-page-node-id="XSF3b9O3Bdet3WTFSWHtvC">A. 每次写都同时更新 cache 与主存</li>
+        <li data-val="B" data-page-node-id="c7oTf6BzMOVtjI2BXmR7km">B. 只写主存不写 cache</li>
+        <li data-val="C" data-page-node-id="xQbbipzg2wAgPhnnwc61mX">C. 写命中只更新 cache，仅当该行被替换时才一次性写回主存</li>
+        <li data-val="D" data-page-node-id="xaoYUtCYyOG8K3yVl8ZetI">D. 写不命中时不做任何处理</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="DDR3jBgdBM95alKow4XlCe">查看解析</button>
+      <div class="answer-box" data-page-node-id="FUo4fAJRbivKmsEkUjGpXk"><strong data-page-node-id="udEAYN7vMEpUymszr5gPIM">答案：C</strong><div class="analysis" data-page-node-id="6KtpQLGazxghM2Y9UWFFHz">回写 = 命中只改 cache，块被替换时根据「脏位」决定是否写回主存；减少主存写入次数。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="hzrBbXwpxgTcbvCb0FWHIj">
+      <div class="q-title" data-page-node-id="me4BREBlpNOVvaXYE2WTI6"><span class="q-num" data-page-node-id="LVqhvrknELSXYvwzez3yfS">55.</span><span class="type-tag type-single" data-page-node-id="DG0SFSKOlSeSLEfxcOzXd0">单选</span>回写法中 cache 行的「修改位（脏位）」为 1 表示？</div>
+      <ul class="options" data-answer="B" data-page-node-id="hwhM9hfXew8HJjhqYxqJEM">
+        <li data-val="A" data-page-node-id="xCp9QJh3HhS4cm5lcDJSJv">A. 该行是空的</li>
+        <li data-val="B" data-page-node-id="7RsIDqexwL9wXKW8RAbrAP">B. 该行主存块被修改过，替换时需写回主存</li>
+        <li data-val="C" data-page-node-id="oMrttSgh925kLoCTxiuXf0">C. 该行只读</li>
+        <li data-val="D" data-page-node-id="dik5XL9zI8b5sbhiZsqcwq">D. CPU 正在访问该行</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="mT7sbbqAmNT5GGEliXCE48">查看解析</button>
+      <div class="answer-box" data-page-node-id="FPMhhCXOPgoeIvxzmdj4dV"><strong data-page-node-id="3ASclSi4rc7kWmUuYzV7EC">答案：B</strong><div class="analysis" data-page-node-id="gXit08Q6K4ggZDIBbgYiqF">脏位=1 说明与主存不一致，替换时需写回主存；=0 则可直接丢弃。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="ylHkc75qM36kvvZtOeLWEF">
+      <div class="q-title" data-page-node-id="sIsl6ZYujuFmtuElyZkOLj"><span class="q-num" data-page-node-id="1mnWJ5Djyfx0nHEug9LfDN">56.</span><span class="type-tag type-single" data-page-node-id="5CAtaNYhGmzTkHtFHgH1lZ">单选</span>「全写法 + 写分配法」处理写不命中时？</div>
+      <ul class="options" data-answer="A" data-page-node-id="AEoScp5OqEUYWHiRoMhAf3">
+        <li data-val="A" data-page-node-id="btFAPC67k6kr6TBPrhquDQ">A. 先更新主存，再把更新后的块装入 cache</li>
+        <li data-val="B" data-page-node-id="wjG9FIuxywa6SBDa14Tnrw">B. 只更新主存，不装入 cache</li>
+        <li data-val="C" data-page-node-id="wuMdGhsbCsfg0AFl2uaeNj">C. 只更新 cache，不更新主存</li>
+        <li data-val="D" data-page-node-id="am3TmCR4bFMKv8wtglQSeh">D. 抛出异常</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="2t1AGHx9643A88vSFGQtl2">查看解析</button>
+      <div class="answer-box" data-page-node-id="1LJUOHIU7AQD7OWKfm6A6p"><strong data-page-node-id="e7bHJ6b3JAaDTir4BwD4cx">答案：A</strong><div class="analysis" data-page-node-id="Ne2QqdBLZrCftBJYmlPJyg">全写 + 写分配 = 写不命中时，先在主存更新对应单元，再分配一个 cache 行装入更新后的主存块；充分利用空间局部性。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="6PmboTL1nTM5ZhbuBeaZ1d">
+      <div class="q-title" data-page-node-id="SB3xDDIWQyq070Qo1Js1Vc"><span class="q-num" data-page-node-id="p4v5mQ89TH7FXviT9fXN3W">57.</span><span class="type-tag type-single" data-page-node-id="T9AkMGJCTeGBKFqL08XLDc">单选</span>现代 CPU 中 L1 cache 通常采用？</div>
+      <ul class="options" data-answer="D" data-page-node-id="NGQi40rPqHZ0wQj4WKLv7G">
+        <li data-val="A" data-page-node-id="ylNjK7UrDZ5SLPp8HLywm1">A. 联合 cache（指令+数据合一）</li>
+        <li data-val="B" data-page-node-id="ccgDEfAiriZ81EUEVg6aWk">B. 容量最大</li>
+        <li data-val="C" data-page-node-id="FN6Ezr5j5BGaa728WD0BiI">C. 命中率最高</li>
+        <li data-val="D" data-page-node-id="di7WCb0RYTw6rovVOsVtg3">D. 分离 cache（数据 cache 与指令 cache 分开）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="zZ6sU7LMjZbertvv18Y0rv">查看解析</button>
+      <div class="answer-box" data-page-node-id="aUfogAGUnCECMBVJxhksRp"><strong data-page-node-id="fDxiVJCUitD7ZXPGS2CgNn">答案：D</strong><div class="analysis" data-page-node-id="xTgFluZH28YtQwAbYntjUI">L1 多为分离 cache（指令/数据分开），避免取指与取数的资源冲突；L2/L3 为联合 cache。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="ZxQw4GuRzuAQX5nx9juEPA">
+      <div class="q-title" data-page-node-id="FareziasUtcHTl9xIOYTGC"><span class="q-num" data-page-node-id="N2gS4eGReV6w2AbAZTMEwf">58.</span><span class="type-tag type-fill" data-page-node-id="DjpO44gJAMzyKdETVgCESl">填空</span>CPU 访问 cache 的顺序通常为 L1、L2 和 ____ cache。</div>
+      <button class="reveal-btn" data-page-node-id="4YPY1jwTKncaXHTCVDKWmn">查看答案</button>
+      <div class="answer-box" data-page-node-id="NVumRZQxIJsOmBeFB4fuo7"><strong data-page-node-id="l8kPuk5k2RC7XjeatlHHVa">答案：</strong>L3</div>
+    </div>
+
+    <div class="question" data-page-node-id="PGtgFpKPp3FqLfuHLcxHuI">
+      <div class="q-title" data-page-node-id="5lCPTiEb1owp8aKEwHhgrs"><span class="q-num" data-page-node-id="c2VqOqicw49xGCYzst6zm4">59.</span><span class="type-tag type-fill" data-page-node-id="XKn1EwwVhRAD5wW5B234Pe">填空</span>系统启动或复位时，每个 cache 行都为空，信息无效；每行需要一个 ____ 位。</div>
+      <button class="reveal-btn" data-page-node-id="tpVTm2mgk7kWNLtFFhao28">查看答案</button>
+      <div class="answer-box" data-page-node-id="9MgREWvbiArx6XS43kQdli"><strong data-page-node-id="55IGPNl0AM5mbdDaUQUHDM">答案：</strong>有效（Valid）</div>
+    </div>
+
+    <div class="question" data-page-node-id="LLxQszM0F8JHx8V2hRvPEs">
+      <div class="q-title" data-page-node-id="RhmeZgBt3ZJiWwcgv90D5l"><span class="q-num" data-page-node-id="5yidLGDFwCWp5ONZTejpi5">60.</span><span class="type-tag type-fill" data-page-node-id="tlmJMu8SSAoXt6q0vKqPpa">填空</span>将有效位清 0 来淘汰某 cache 行中的主存块称为 ____。</div>
+      <button class="reveal-btn" data-page-node-id="KRJncUcdUxMCE1HsAEAhRX">查看答案</button>
+      <div class="answer-box" data-page-node-id="KkZEfi2xoO1OpATVPWNJ6N"><strong data-page-node-id="GpwtqxJl2651DnkxJRGuFa">答案：</strong>冲刷（Flush）</div>
+    </div>
+
+    <div class="question" data-page-node-id="MaHwQAbslY6JrX35xciNyI">
+      <div class="q-title" data-page-node-id="Lqz7tMbFBAbr9ycyLGxtZN"><span class="q-num" data-page-node-id="5nOAU3BhEIYGqfLzImPBNp">61.</span><span class="type-tag type-fill" data-page-node-id="7dUNqh5T4OElN6D5eVc3bV">填空</span>直接映射中 cache 行号 = 主存块号 ____ cache 行数。</div>
+      <button class="reveal-btn" data-page-node-id="yrFCOlB2F8SBYYTsG4TxpG">查看答案</button>
+      <div class="answer-box" data-page-node-id="4igUPQCeUOr0zXa7niCf4P"><strong data-page-node-id="RiZP3vaPBmJ5R2Fiy94d15">答案：</strong>mod</div>
+    </div>
+
+    <div class="question" data-page-node-id="sDPZpSFd0EqujCbohNLLRv">
+      <div class="q-title" data-page-node-id="kOxIeoXoFjaTUlxBAzbkl1"><span class="q-num" data-page-node-id="eqZnFh9kovfcJaaYfYHCEe">62.</span><span class="type-tag type-fill" data-page-node-id="AWoONKZWWGdCvgqSYgdBT2">填空</span>全相联 cache 中，主存地址中只需「标记」和「____ 地址」两个字段。</div>
+      <button class="reveal-btn" data-page-node-id="Zsa1rz0pG0FuYeEH8FTndP">查看答案</button>
+      <div class="answer-box" data-page-node-id="dwqgSpVPX4YHd5yAbzVTSK"><strong data-page-node-id="NJJEzZkVfPUs3qxS7wIBG5">答案：</strong>块内</div>
+    </div>
+
+    <div class="question" data-page-node-id="vlNEPbb3dDFYHeAWSH4ydN">
+      <div class="q-title" data-page-node-id="bzIYHfJTeCC1kEoYVw5MeA"><span class="q-num" data-page-node-id="uQaQht35BAFpHYyqF5tBB3">63.</span><span class="type-tag type-fill" data-page-node-id="lMlu8BC6rveMZknxWdnK2m">填空</span>组相联 cache 将所有行分成 2^q 个大小相等的组，每组有 2^s 行；其中 q 决定组索引位数，s 决定组内行索引位数，s+q 加上标记位覆盖主存 ____ 号。</div>
+      <button class="reveal-btn" data-page-node-id="R0RFJEZyFMAkKBfSXcRHxH">查看答案</button>
+      <div class="answer-box" data-page-node-id="cCxSDhjGCdil9GtgXjIt18"><strong data-page-node-id="aPAQaDNJRY50XZNOFwYZ2Z">答案：</strong>块</div>
+    </div>
+
+    <div class="question" data-page-node-id="rhxbbYKdIzq7X8YMGnWrZO">
+      <div class="q-title" data-page-node-id="RMlKCXDjTCisdA6LEtBG3I"><span class="q-num" data-page-node-id="g77Kul6jAiNGofMoNqfYGO">64.</span><span class="type-tag type-fill" data-page-node-id="GzqOtZE4NcfNPjCsgiQgVW">填空</span>FIFO 算法总是选择 ____ 装入 cache 的主存块被替换掉。</div>
+      <button class="reveal-btn" data-page-node-id="9fTwssemkdCKlWrgWMmPZi">查看答案</button>
+      <div class="answer-box" data-page-node-id="KQqmQYEE5XrKT71Dstj7y1"><strong data-page-node-id="ucDVgAV6o1eZPLFHlYgBcx">答案：</strong>最早</div>
+    </div>
+
+    <div class="question" data-page-node-id="DBVYPsMFdKqUK1ILs4vvBY">
+      <div class="q-title" data-page-node-id="MIA2rAmkvessdbGVY8BTdx"><span class="q-num" data-page-node-id="e6V5wFMoAebkmYBvGmucYp">65.</span><span class="type-tag type-fill" data-page-node-id="Jwl6YWqlToObMOcNBXTkII">填空</span>LFU 算法替换掉 cache 中引用 ____ 最少的块。</div>
+      <button class="reveal-btn" data-page-node-id="SlWjWFGOiMDrYpiIl2bWP0">查看答案</button>
+      <div class="answer-box" data-page-node-id="ifbP0KQCtPf1ndRY4mZHJQ"><strong data-page-node-id="4Daji4Vw9WJ7s6QLAk4r4K">答案：</strong>次数</div>
+    </div>
+
+    <div class="question" data-page-node-id="JL8O6rU4ops1gXsvxbUH7j">
+      <div class="q-title" data-page-node-id="VucQwBwArbVVX7VBFgGfW6"><span class="q-num" data-page-node-id="15W0z2tujDcQHEd9ZW2lVE">66.</span><span class="type-tag type-fill" data-page-node-id="WNCB1L78tjJSC29vHdXxuX">填空</span>全写法写不命中时可采用 ____ 法或非写分配法。</div>
+      <button class="reveal-btn" data-page-node-id="cddSVYcPjPN8RCJkATQC2D">查看答案</button>
+      <div class="answer-box" data-page-node-id="hedpdUPLpiyP9t23aoj6MZ"><strong data-page-node-id="geRpcDnEVuB62zmAPGEs8f">答案：</strong>写分配（Write Allocate）</div>
+    </div>
+
+    <div class="question" data-page-node-id="G4EGDQwHyEvODirrTCnwmL">
+      <div class="q-title" data-page-node-id="cI6J0mgKZuoFrHudZlz9Z5"><span class="q-num" data-page-node-id="U9wn6OKeoA8lBHPHl0Xwpb">67.</span><span class="type-tag type-fill" data-page-node-id="tMmZqgdLjoOCSKmz21Gh0Y">填空</span>回写法写不命中时通常采用 ____ 法将主存块调入 cache 并更新单元内容。</div>
+      <button class="reveal-btn" data-page-node-id="woA9DOC4AVYJN9U5fJa9ht">查看答案</button>
+      <div class="answer-box" data-page-node-id="lqanUxFuDXOhjPifJJS8Nc"><strong data-page-node-id="BDTB0tyWVZDMJFUT4quXlZ">答案：</strong>写分配</div>
+    </div>
+
+    <div class="question" data-page-node-id="OsuEk3gkYkuLQy7XppCgn8">
+      <div class="q-title" data-page-node-id="hGstPDsePjH2krWd2lcPtn"><span class="q-num" data-page-node-id="3L2PIUR6ZNaOjeMJhFxx8F">68.</span><span class="type-tag type-term" data-page-node-id="zG5GUvqfCaHrs6uAxgkO7U">名词解释</span>Cache 命中（Hit）</div>
+      <button class="reveal-btn" data-page-node-id="wwMFEIQ5TIzzPYiJEqQ1JK">查看答案</button>
+      <div class="answer-box" data-page-node-id="Kt3zseHLbEIimXxKyrKaTS">CPU 访问存储单元时，对应主存块已在 cache 行中且有效位=1 的情况；命中时 CPU 直接从 cache 取得数据，访问时间=Tc。</div>
+    </div>
+
+    <div class="question" data-page-node-id="9lWPYK99jOcY5JA53g1kwy">
+      <div class="q-title" data-page-node-id="PMC0ZjKgeH8JAiJDkuxwuT"><span class="q-num" data-page-node-id="1IJNY4WSRPKHlb5j4o4nvW">69.</span><span class="type-tag type-term" data-page-node-id="wrPUuA5kk3cWkZPlQrB5Dl">名词解释</span>Cache 缺失（Miss）</div>
+      <button class="reveal-btn" data-page-node-id="YQO0RGD9WI27JFGDD7Ebe2">查看答案</button>
+      <div class="answer-box" data-page-node-id="O3cGVrQN0cF2ylp02AY9yP">CPU 访问存储单元时，对应主存块不在 cache 中（未装入或有效位=0）的情况；缺失时需从主存取块装入 cache，并访问主存，访问时间=Tc+Tm。</div>
+    </div>
+
+    <div class="question" data-page-node-id="rbzt5FCPYVogZmfN8hELhE">
+      <div class="q-title" data-page-node-id="pIE6ZDnvAEjfaw1ye5mKfy"><span class="q-num" data-page-node-id="Jl6skZxX8xuT7gHvLUSnqj">70.</span><span class="type-tag type-term" data-page-node-id="LFmKlCgWJat8mSac9bWy5z">名词解释</span>直接映射</div>
+      <button class="reveal-btn" data-page-node-id="EngnF786NEJimGvuYcCIDa">查看答案</button>
+      <div class="answer-box" data-page-node-id="INY4oiMgjKUvigzzneSVnS">主存每一块固定映射到唯一一个 cache 行（行号 = 主存块号 mod cache 行数）的映射方式；实现简单，但块冲突概率较高。</div>
+    </div>
+
+    <div class="question" data-page-node-id="87dZ0oDzVZdyUejHcnLvtB">
+      <div class="q-title" data-page-node-id="hFGQPzSC9S2vI9RT2Do3Zp"><span class="q-num" data-page-node-id="gPrIdJuyUf7e5FPM48ihpo">71.</span><span class="type-tag type-term" data-page-node-id="FDHnFNik0uGES9kHnhAy95">名词解释</span>全相联映射</div>
+      <button class="reveal-btn" data-page-node-id="mnNXDIzC4e6j021mUtIane">查看答案</button>
+      <div class="answer-box" data-page-node-id="aqKopvtF2EaOUwqSIG243l">主存任一块可装入 cache 任意一行的映射方式；块冲突概率最低，但需比较所有 cache 行标记，硬件实现复杂。</div>
+    </div>
+
+    <div class="question" data-page-node-id="VK2Pk1qXKnKHzRY571rQNl">
+      <div class="q-title" data-page-node-id="PEZHctO3meOOVT7RclsEk0"><span class="q-num" data-page-node-id="jl5WZlqxAZwCLbhgtCb6hS">72.</span><span class="type-tag type-term" data-page-node-id="6i6qsCCrPoRHGYrxRoNZA6">名词解释</span>组相联映射</div>
+      <button class="reveal-btn" data-page-node-id="sylXIEyC9Q6rbm4i2NX7AE">查看答案</button>
+      <div class="answer-box" data-page-node-id="g7eUT7ho6lOxKOVC18QLwX">将 cache 所有行分成若干组，每组内为全相联，组间为直接映射（组号 = 主存块号 mod 组数）；取直接映射与全相联之长，平衡速度与冲突率。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="IqRuGdlpEUtflsEGdXiOV3">
+      <div class="q-title" data-page-node-id="6gE7tZkHF0wh2KsSQORckC"><span class="q-num" data-page-node-id="c0kO9TvCKmoiZNilbw3cyp">73.</span><span class="type-tag type-comp" data-page-node-id="KBqn3klGYrOHHL1qnx6kfx">综合题</span>某 cache 命中时间 Tc=2ns，主存访问时间 Tm=40ns，命中率 p=95%，求平均访问时间 Ta。</div>
+      <button class="reveal-btn" data-page-node-id="pWyEULm6fodG7yaQIGkbgx">查看答案</button>
+      <div class="answer-box" data-page-node-id="p8779T9qoQzTKwIHxB91gi"><strong data-page-node-id="CrwfehZzEALCxWnLVGJ6DG">答案：</strong>
+        <div class="analysis" data-page-node-id="96YqTFy69ThsOERRYFrqQY">
+          Ta = Tc + (1-p) × Tm = 2 + 0.05 × 40 = 2 + 2 = 4 ns。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="Fivw9BHOeFs1FdxPwzs7ue">
+      <div class="q-title" data-page-node-id="Jq1nJBZeIw6MICP2FWFhEb"><span class="q-num" data-page-node-id="hC6exUQfzOBjybVSMp6b9h">74.</span><span class="type-tag type-comp" data-page-node-id="HgTbXau56xsbl6b29iDCMx">综合题</span>某 32KB cache、块大小 32B、采用 4 路组相联映射，求组数、标记位数（假设主存地址 32 位）。</div>
+      <button class="reveal-btn" data-page-node-id="hPF1GlLyKvHtPg6lycMLfV">查看答案</button>
+      <div class="answer-box" data-page-node-id="espPfgLZmQlRSYHK83hCnA"><strong data-page-node-id="d3qrGnzXQSXBtJpricMbMR">答案：</strong>
+        <div class="analysis" data-page-node-id="GT1TowbAq3dyon85EcXYCV">
+          行数 = 32KB / 32B = 1024 行；组数 = 1024 / 4 = 256 组。<br data-page-node-id="i7NeQkzc19QeUfF2m8kOsX">
+          地址字段：块内偏移 = log₂32 = 5 位；组索引 = log₂256 = 8 位；标记 = 32 - 8 - 5 = 19 位。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="LgeFrtMGXsszynZbzHn40Y">
+      <div class="q-title" data-page-node-id="GgFf6g8cGl36ccbZEcm2Kj"><span class="q-num" data-page-node-id="908xXAq7GLPJmBXdl7etLv">75.</span><span class="type-tag type-comp" data-page-node-id="xaGcafl9j1g6EbGJFAD69g">综合题</span>比较直接映射、全相联映射、组相联映射三者在「地址字段」、「查找复杂度」、「块冲突概率」三方面的差异。</div>
+      <button class="reveal-btn" data-page-node-id="62dBJwjgGnykNINjwsybjm">查看答案</button>
+      <div class="answer-box" data-page-node-id="XbmSGiVqhTdznzueRNSLzb"><strong data-page-node-id="3q23zQgvGbErtZfM4b5xow">答案：</strong>
+        <div class="analysis" data-page-node-id="dly2Lnq90AxgJacNXEpBAN">
+          ① 直接映射：地址 = 标记+行索引+块内；查找最简单（一次比较）；冲突概率最高。<br data-page-node-id="IkqoEUxIDbUjtfSqCnxBNE">
+          ② 全相联映射：地址 = 标记+块内（无行索引）；查找最复杂（同时比较所有行）；冲突概率最低。<br data-page-node-id="87cN2kj7MfWgSPqnrAzybi">
+          ③ 组相联映射：地址 = 标记+组索引+块内；查找复杂度居中（组内并行比较 2^s 行）；冲突概率介于两者之间。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第五节 ========== -->
+  <section class="section-block" id="sec5" data-page-node-id="Vta7LtLEKXdv5I67nV6EV2">
+    <div class="section-header" data-page-node-id="YEKOkkN8yvNpuCZqaxeoLI">
+      <div class="num" data-page-node-id="gEvHVGdnxKqr2mAH2tcO3Q">5</div>
+      <h2 data-page-node-id="yqpR7TxaODXlhBrNZf1ZQC">第五节 虚拟存储器</h2>
+      <span class="count" data-page-node-id="XpTfk5WReX4lLe9alrLwHP">25 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="6xjodgoOlA3CMXwB1BEjWG">
+      <div class="q-title" data-page-node-id="Whq1XIy3QEi1SHlOQBsM1h"><span class="q-num" data-page-node-id="qTMAwCuEJMmnmlxdstcKI0">76.</span><span class="type-tag type-single" data-page-node-id="20gmdcn5xHteQGTo2BDfDq">单选</span>CPU 中负责将虚拟地址 VA 转换为主存物理地址 PA 的部件是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="k5evX0zCjSmB5nw2ghu9i5">
+        <li data-val="A" data-page-node-id="Ls3vDa8jXuVDmNldBw6nno">A. MMU（存储管理部件）</li>
+        <li data-val="B" data-page-node-id="zTsAFvvJyY0mMq0i7wXfrH">B. PC</li>
+        <li data-val="C" data-page-node-id="dKSSlADXxJ2Rcle3mPEg3D">C. IR</li>
+        <li data-val="D" data-page-node-id="p68wDcI1Gmv1BBrOihxiKB">D. ID</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="HJiDVFgPxii1Niw1haQsTw">查看解析</button>
+      <div class="answer-box" data-page-node-id="eha2EmJjL4T66AUxgmzLUH"><strong data-page-node-id="LackCuQRAhvBcJf2civQBT">答案：A</strong><div class="analysis" data-page-node-id="Fww2049mT5Sk5xT5ub4k48">MMU（Memory Management Unit）完成虚实地址转换。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="gbLdxu77vRoA108qDIgndx">
+      <div class="q-title" data-page-node-id="El63SRGAlaC3XNT7F9yDSa"><span class="q-num" data-page-node-id="d9dE6kJQsPHDFiushxF1JF">77.</span><span class="type-tag type-single" data-page-node-id="7SjUujlFC6pCmoXXK5463l">单选</span>页式虚拟存储器中，虚拟页调入主存后存放在？</div>
+      <ul class="options" data-answer="B" data-page-node-id="nUXGMs4pyBsIgCxdG3GozC">
+        <li data-val="A" data-page-node-id="EGUgBIPBv0LsziHIBBEyrN">A. 任意虚拟地址空间</li>
+        <li data-val="B" data-page-node-id="jzJv5j0ooBIqZ5AdfjEnqC">B. 任意空闲页框（Page Frame）</li>
+        <li data-val="C" data-page-node-id="awSIlfzuv6wCjSFQs788pf">C. 固定页框</li>
+        <li data-val="D" data-page-node-id="ykAoaFs05zBDfAEWAeP48R">D. 磁盘固定位置</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="aCZiwI1ELHraio77WWxB8b">查看解析</button>
+      <div class="answer-box" data-page-node-id="dtXoFFOEAmGVDNBxeANJE4"><strong data-page-node-id="QDn4cHLDxNlbOgiUFC1rQn">答案：B</strong><div class="analysis" data-page-node-id="jWJzHubgWVqIksPkJqJ1qh">页式虚拟存储采用「全相联」：每个虚拟页可装入主存任意一个空闲页框，由页表记录虚拟页→物理页框的映射。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="bAgnSgcZncTFpQiT2WjCGZ">
+      <div class="q-title" data-page-node-id="YGmxOJ4zjDwLG1lcTV0YiJ"><span class="q-num" data-page-node-id="joGNDx0xKZdki0m17h8rnr">78.</span><span class="type-tag type-single" data-page-node-id="q13rTRb9VfExO54etDfxCt">单选</span>页表项中「装入位（Valid）」=0 时，若存放位置字段为 null，表示？</div>
+      <ul class="options" data-answer="C" data-page-node-id="8pxm00yBLfpOfXCRin9XMn">
+        <li data-val="A" data-page-node-id="3f7DXHEAASLi5DXJFSZFFU">A. 缓存页</li>
+        <li data-val="B" data-page-node-id="s62iRk5DnYzSlsxrMAcq2P">B. 未缓存页</li>
+        <li data-val="C" data-page-node-id="QXwEuVBzHTaINbTmFKXwpH">C. 未分配页</li>
+        <li data-val="D" data-page-node-id="4qreV4XaLFD2fHpfCzv1V3">D. 已淘汰页</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="EkruHOG3a6cQAQ1k3lDKh1">查看解析</button>
+      <div class="answer-box" data-page-node-id="OHG3kLiEa2rlKgzF0QElDH"><strong data-page-node-id="6YzKjRpFOyEWfZ1PVjtwFp">答案：C</strong><div class="analysis" data-page-node-id="Nqf6dEuGWkSWMA9yKdZx0S">装入位=0 + 位置=null = 未分配页；装入位=0 + 位置=外存地址 = 未缓存页；装入位=1 = 缓存页（位置=物理页框号）。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="uJZ4nz5uO6jULzyXRkbHhk">
+      <div class="q-title" data-page-node-id="dKyHesMrN9Lm2Xlzq0e62P"><span class="q-num" data-page-node-id="mTdbNnihuWFb3jS92aL9Dy">79.</span><span class="type-tag type-single" data-page-node-id="6CYMQq6FTXS5FPHrFdRfva">单选</span>「快表（TLB）」本质上是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="7l3s9P4iiJ8AZNCddsRO5S">
+        <li data-val="A" data-page-node-id="k7VHcNz3ZDv3sRPuFxchYT">A. 页表项的高速缓存</li>
+        <li data-val="B" data-page-node-id="YP1qZNh4KELTfM5oO0tv4p">B. 数据的 cache</li>
+        <li data-val="C" data-page-node-id="ewG1IBz50EZn984JdRwfjt">C. 寄存器集合</li>
+        <li data-val="D" data-page-node-id="fDGZAiICkh1IZS2M5bxEDx">D. 硬盘缓冲区</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="QOT8GIfB47kFV9hNMSGqZi">查看解析</button>
+      <div class="answer-box" data-page-node-id="jUjP3rnH8w9cFzziNGchr7"><strong data-page-node-id="wy9u4lcOhE8ZUWwvctIxTZ">答案：A</strong><div class="analysis" data-page-node-id="c1F2LnG77gDxS6zhtKD9Og">TLB（Translation Lookaside Buffer）= 转换后备缓冲器，缓存页表中最活跃的几个页表项；主存中的页表称为慢表。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="bMrkPXv6CxxDCJiIkSmKbQ">
+      <div class="q-title" data-page-node-id="FvxJgHiF5pc12MpdYYrdoH"><span class="q-num" data-page-node-id="NxIa8Z3kkgFjWBkOqIzDFM">80.</span><span class="type-tag type-single" data-page-node-id="ntMNjbzwjSnNPSfxonRlbD">单选</span>下列「最佳」的访存组合是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="4b0P7tnPjsEizTbj54KD1M">
+        <li data-val="A" data-page-node-id="MB3OY1FGXhaNRnqzdJHUmq">A. TLB 命中 + cache 命中 + 缺页</li>
+        <li data-val="B" data-page-node-id="QsKPbu5SfrZzxRuOaQaSXi">B. TLB 命中 + cache 缺失 + 主存命中</li>
+        <li data-val="C" data-page-node-id="WmPxkj68evDwuBWrN6k3xU">C. TLB 缺失 + cache 命中 + 主存命中</li>
+        <li data-val="D" data-page-node-id="KrWxLXY8ywViKRtRgqoSrP">D. TLB 命中 + cache 命中 + 主存命中（页在主存）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="DMYghb5hqv1tD6FWHMgCVS">查看解析</button>
+      <div class="answer-box" data-page-node-id="cpgVPdDPDJKj4j0fCE2pVw"><strong data-page-node-id="tYNpjgRPJ9jVkExCjFEJHi">答案：D</strong><div class="analysis" data-page-node-id="oT2NfTZ1VKHXwDqhmxpOlI">最佳：TLB 命中（快表取页表项，无需访主存取页表）+ cache 命中（无需访主存数据）+ 页在主存；最差：TLB 缺失+缺页+cache 缺失，需访问外存+多次主存。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Ww0416XYfITAEh0b2qOzwf">
+      <div class="q-title" data-page-node-id="hP7Jzzk5LJPeTemD7lJwuc"><span class="q-num" data-page-node-id="xIU3qXtqOdJqPIHta5ad67">81.</span><span class="type-tag type-single" data-page-node-id="iub5uXCXsMwzXTz8XNOqAX">单选</span>段页式虚拟存储器的「地址转换」需几次查表？</div>
+      <ul class="options" data-answer="B" data-page-node-id="zGU7HQZbplSUERsJjW9qEe">
+        <li data-val="A" data-page-node-id="gWtXok1JOhW6cFzL5XcsDC">A. 1 次（页表）</li>
+        <li data-val="B" data-page-node-id="HTMkfDOIuBySqpTznk8UMH">B. 2 次（先段表、再段内页表）</li>
+        <li data-val="C" data-page-node-id="p18slUNR6HCHtHQXj3pGJs">C. 3 次</li>
+        <li data-val="D" data-page-node-id="zALvcDaJCWHyaFPKPDeETb">D. 不需要查表</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="tOXT77yfbm8lLBD9FVk1gX">查看解析</button>
+      <div class="answer-box" data-page-node-id="Kks2iYRX4PWBOrlzNFEEQc"><strong data-page-node-id="NFsoiwBLbCXRuI7HrhC6QZ">答案：B</strong><div class="analysis" data-page-node-id="gEYNmWtynO5MvgGgUvenWD">段页式 = 段表 + 段内页表两级定位：①根据段号查段表得到段页表起始地址；②根据段内页号查段页表得到物理页框号。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="bA7vwa5rYms52eDiiJjCmk">
+      <div class="q-title" data-page-node-id="g1TibcqCFhfrg70eK24igx"><span class="q-num" data-page-node-id="EpUF42LYZz85id4Hu1uu5Q">82.</span><span class="type-tag type-single" data-page-node-id="dAW0wsTbzyDdEb6jr8Oq9N">单选</span>关于虚拟存储器带来的好处，下列错误的是？</div>
+      <ul class="options" data-answer="D" data-page-node-id="9B4YE3jplWijLosEl9vNpS">
+        <li data-val="A" data-page-node-id="UqwVOGWCmR4PlvCpC3SRCY">A. 每个进程具有一致的虚拟地址空间</li>
+        <li data-val="B" data-page-node-id="GLig9koAg2b0qkIROvtFkj">B. 把主存看成硬盘的高速缓存，提高主存利用率</li>
+        <li data-val="C" data-page-node-id="TN7bu2AcVwIm6BwEoc7fER">C. 进程地址空间私有，进程间相互保护</li>
+        <li data-val="D" data-page-node-id="NdQifMtPl6XrAO7nBH3YQU">D. 主存容量因此变得无限大</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="VwPJwcXk5cFZhPiNS32d4K">查看解析</button>
+      <div class="answer-box" data-page-node-id="EsN4tl23bY55k4dLKi1EGL"><strong data-page-node-id="q3t6E8cTbU69lPUarfRyTF">答案：D</strong><div class="analysis" data-page-node-id="fhOcSq1zw5ODfBUiWe1Vdv">虚存是「假象」：让程序以为主存极大，但实际主存容量仍由物理硬件决定，仍可能发生缺页异常。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="WxPqFSxBmZwj7Ej7sCtCyA">
+      <div class="q-title" data-page-node-id="4IYzoFmpx3Mu7MtvFgex32"><span class="q-num" data-page-node-id="fyFF2XXObKD8yNGB3BfgxK">83.</span><span class="type-tag type-single" data-page-node-id="GsGIPQ0CvfgSoMa1L5o4qp">单选</span>Linux 进程的虚拟地址空间中「内核空间」通常位于？</div>
+      <ul class="options" data-answer="C" data-page-node-id="uAAIGGGqSDkyhvBmiWOoy2">
+        <li data-val="A" data-page-node-id="QPhm1GNVgFOxRmq5D1EEjJ">A. 0x00000000 以下</li>
+        <li data-val="B" data-page-node-id="TVTykr3AFINGtC7859LdJf">B. 用户空间之上、堆栈区之间</li>
+        <li data-val="C" data-page-node-id="Xkj2E0qd4GfvccZPzMY88w">C. 0xc0000000 以上的高端地址</li>
+        <li data-val="D" data-page-node-id="Tc9iRFcuTIQePvygeU3Rin">D. 0x08048000 起</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="ahbEgscG1N4KmbutXVsAWU">查看解析</button>
+      <div class="answer-box" data-page-node-id="9Svnhwnt3kNTfxZRLCrQbh"><strong data-page-node-id="dwLRa5juDxTntDUPRBXT43">答案：C</strong><div class="analysis" data-page-node-id="Z0QZfdWM2GVblVS25yKbmq">32 位 Linux 中内核空间在 0xc0000000 以上；用户空间在其下方，包含只读代码/数据、堆、共享库、用户栈等。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Ke7mDSa1exeoJOHY7WuaSk">
+      <div class="q-title" data-page-node-id="uup7Ix2RASDjtON6B2YUVk"><span class="q-num" data-page-node-id="j9eeBbQYCfozCM75egcuNX">84.</span><span class="type-tag type-single" data-page-node-id="4H4jQgEudRtVNcH23tn2GW">单选</span>Linux 中「用户栈」的地址增长方向是？</div>
+      <ul class="options" data-answer="A" data-page-node-id="kUmdgCRWO7VbQ3GkzxMaWD">
+        <li data-val="A" data-page-node-id="LJ1D2nreLnDz9jrxj94OiX">A. 从高地址向低地址增长</li>
+        <li data-val="B" data-page-node-id="VLYBVQzEPqphlJnrrhjRak">B. 从低地址向高地址增长</li>
+        <li data-val="C" data-page-node-id="GCmbhxS3nBYDF0wr3Zl44K">C. 不增长</li>
+        <li data-val="D" data-page-node-id="2UYlE9L5WKCis9CNGC1pIC">D. 双向增长</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="7xLGJJqsEFIVSCzM2ReaoZ">查看解析</button>
+      <div class="answer-box" data-page-node-id="QqTy2cBZMyAnvqqSUvsJBS"><strong data-page-node-id="3n2aFdOWaKhGXt8zmKC5HS">答案：A</strong><div class="analysis" data-page-node-id="lLL4MdVw7UD5V172fWCnEc">用户栈（用户空间最高地址区域）从高地址向低地址动态增长；堆（malloc 区域）从低地址向高地址增长。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="aqEhhETcmlIR4X7vtpXDMf">
+      <div class="q-title" data-page-node-id="5SPJ2Ghzyyt9k4Ra4KvJcu"><span class="q-num" data-page-node-id="lrvIGwFAZXxy9Q430IAsd8">85.</span><span class="type-tag type-single" data-page-node-id="273bdjm8C3zYNBHWbd6kuw">单选</span>页故障处理中，若所访问的虚拟地址不在任何 vm_area_struct 描述的区域内，Linux 将产生？</div>
+      <ul class="options" data-answer="A" data-page-node-id="SBTDGFJ95Fsq80f6pLlMuK">
+        <li data-val="A" data-page-node-id="1LaGRcQvX8K7dzOVFvjftG">A. 段故障（Segmentation Fault）</li>
+        <li data-val="B" data-page-node-id="Rr6u4T9PEH8pePP6NDjQy6">B. 缺页异常</li>
+        <li data-val="C" data-page-node-id="1ES15eD5Yye92SEQ13vDDQ">C. 越权访问</li>
+        <li data-val="D" data-page-node-id="bGRG7VlSMZ4E0rgsV6XlvR">D. TLB 缺失</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Kfe2YBUAGdrN3leI0jLNs5">查看解析</button>
+      <div class="answer-box" data-page-node-id="PfVTrU87DnB3OEpLHAH0xJ"><strong data-page-node-id="42OMKGrjLUgePibwuqnrbD">答案：A</strong><div class="analysis" data-page-node-id="8Ad5tOhQJAnGzQR4QuXfSX">VA 落在「空洞」中（不在任何合法区域）→ 段故障；VA 落在合法区域但访问权限不符 → 越权/越级；VA 合法但页未调入 → 缺页异常。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="uASNOd8TsB3oZjp6p8EUNd">
+      <div class="q-title" data-page-node-id="QI4Rb695G1hDgmlFep5FIT"><span class="q-num" data-page-node-id="xpGKKxLJk5irW8AjEKiypg">86.</span><span class="type-tag type-fill" data-page-node-id="3jfubZFV1rhwZHt0TYzyGJ">填空</span>CPU 中的 MMU 把指令中的 ____ 地址（VA）转换为主存的物理地址（PA）。</div>
+      <button class="reveal-btn" data-page-node-id="Q2Uzazf42J6NwMbU2gOVER">查看答案</button>
+      <div class="answer-box" data-page-node-id="MW6TVgQAoF1vCuuvcww0dP"><strong data-page-node-id="FxFMTxVHJNQWW47FpB6Avw">答案：</strong>逻辑（虚拟/虚）</div>
+    </div>
+
+    <div class="question" data-page-node-id="hTqDx6nhmyjafWODtTlavB">
+      <div class="q-title" data-page-node-id="zdvctpZnbWGjqYP23rMEPz"><span class="q-num" data-page-node-id="IpXZHZHak86s707vboA7SO">87.</span><span class="type-tag type-fill" data-page-node-id="kO5By47afKf45QBFo7ccqy">填空</span>虚拟地址空间分为「内核空间」和 ____ 空间两部分。</div>
+      <button class="reveal-btn" data-page-node-id="LkMCrK3dEhiqKpbgMbBwOR">查看答案</button>
+      <div class="answer-box" data-page-node-id="LmsrbEjDQs5wygnSBuj3x7"><strong data-page-node-id="BBRnjFSsJ3aU9VFbVdYT1w">答案：</strong>用户</div>
+    </div>
+
+    <div class="question" data-page-node-id="FJCPrnlKNF5QwWOkG7YfHv">
+      <div class="q-title" data-page-node-id="52A5IJ5rVJPPgLe30FFMio"><span class="q-num" data-page-node-id="lHy43BNnJLUhKsQH8Gr22o">88.</span><span class="type-tag type-fill" data-page-node-id="U5GDtw4o9homxAsXWuVG2O">填空</span>页式虚拟存储中虚拟地址由「虚拟页号」和「____」两字段组成；主存物理地址由「物理页号」和同长度的该字段组成。</div>
+      <button class="reveal-btn" data-page-node-id="tfCcmFCGn8eohjB122qmvr">查看答案</button>
+      <div class="answer-box" data-page-node-id="Ujee4axEICEJAQrYVs8CZu"><strong data-page-node-id="apJTPCAhrhyLOf9olu5MwG">答案：</strong>页内偏移地址（页内地址）</div>
+    </div>
+
+    <div class="question" data-page-node-id="sDCTE3nWuIEmZytv3UVILM">
+      <div class="q-title" data-page-node-id="QUBJUl5POdYdeFi4Wo7T87"><span class="q-num" data-page-node-id="8WIn16fkRVF6Gr2YO24g2T">89.</span><span class="type-tag type-fill" data-page-node-id="pIt0rBRwRV2rhsLukfIZi5">填空</span>页表项中 ____ 位（脏位）用来说明对应页是否被修改过。</div>
+      <button class="reveal-btn" data-page-node-id="YjUlNG5qgrcHozadk6aAIz">查看答案</button>
+      <div class="answer-box" data-page-node-id="R14DcA0LonfgP5sGDQtxPE"><strong data-page-node-id="bqThuKJJTUTOvqEpHlgmPt">答案：</strong>修改</div>
+    </div>
+
+    <div class="question" data-page-node-id="iqJteBaZAQPoTYXNwivZAy">
+      <div class="q-title" data-page-node-id="F67AqLCffwUGJrZvjNw89y"><span class="q-num" data-page-node-id="HRTlfYek2ZHcRGSHi20mGw">90.</span><span class="type-tag type-fill" data-page-node-id="qiOOsgot89FQGY8lLcFV35">填空</span>快表 TLB 是页表项的 ____ 缓存；主存中的页表称为慢表。</div>
+      <button class="reveal-btn" data-page-node-id="8nTNMiGFSHbFfeLb2j9raf">查看答案</button>
+      <div class="answer-box" data-page-node-id="7tZAYiZlIbopHwygcAsdEA"><strong data-page-node-id="n0wEG8XzRjBKchMpHCcVS0">答案：</strong>高速（cache）</div>
+    </div>
+
+    <div class="question" data-page-node-id="8xAVAR93fYZYk95mjZoebf">
+      <div class="q-title" data-page-node-id="tlm1YrD8iIdEGIHfU6C4my"><span class="q-num" data-page-node-id="UtZCA6B99QIwXCpMpMBWhw">91.</span><span class="type-tag type-fill" data-page-node-id="z5fQvXnIDyPg2c0gVYAAhK">填空</span>CPU 访存过程中可能发生的三种缺失：TLB 缺失、cache 缺失、____。</div>
+      <button class="reveal-btn" data-page-node-id="jJR7C5Jhis4Smmv88pfUIv">查看答案</button>
+      <div class="answer-box" data-page-node-id="PSCNEy148BgxuPQ5kCr7iD"><strong data-page-node-id="0NXJLFXWhIzF4knUS4bTv6">答案：</strong>缺页（Page Miss）</div>
+    </div>
+
+    <div class="question" data-page-node-id="n7IcFSZqMLNb9OMjiYxSXv">
+      <div class="q-title" data-page-node-id="XysI5cBgOa7ADBuaj3FMdx"><span class="q-num" data-page-node-id="Hfpc1iyR6KG2Cb3FTa032q">92.</span><span class="type-tag type-fill" data-page-node-id="VdB1vOK1xkip1gNU2jqdQy">填空</span>缺页由 ____ 处理；cache 缺失由硬件处理。</div>
+      <button class="reveal-btn" data-page-node-id="R4U8iDg2EDo0OWZMDPztC6">查看答案</button>
+      <div class="answer-box" data-page-node-id="nuUxToHsiHl1FltFDzA0qh"><strong data-page-node-id="2Rit7NGjjAuQUNCUf4vPGI">答案：</strong>操作系统（软件）</div>
+    </div>
+
+    <div class="question" data-page-node-id="zW0aDeF9TlaxXJVOzfpWli">
+      <div class="q-title" data-page-node-id="tnnVsFWK2Br6HHRsTt4PLR"><span class="q-num" data-page-node-id="Q2vGg97CDKOpuyhiPkaLDG">93.</span><span class="type-tag type-fill" data-page-node-id="N2eg9BRkweBaRmZUptGaWD">填空</span>虚拟地址空间是主存和 ____ 存储器的抽象。</div>
+      <button class="reveal-btn" data-page-node-id="xaJ8lWFdKIMBzKZpctHaiA">查看答案</button>
+      <div class="answer-box" data-page-node-id="mRh7Lo9jtTGwIhhhNw7KRu"><strong data-page-node-id="AtUBczkelBGkO4r5XcVc31">答案：</strong>硬盘（外存）</div>
+    </div>
+
+    <div class="question" data-page-node-id="xULZ7R1Z1vdXSDZgM07H3a">
+      <div class="q-title" data-page-node-id="4hRwlxJ7SAlFGp7EMHA5CC"><span class="q-num" data-page-node-id="TuHLBrzhtMbAcBKzx3eTKs">94.</span><span class="type-tag type-term" data-page-node-id="qe5TUipYDwsyeIR0iks8lS">名词解释</span>虚拟存储器</div>
+      <button class="reveal-btn" data-page-node-id="44jEcffJJnEWiqBWouuQZp">查看答案</button>
+      <div class="answer-box" data-page-node-id="ZQlGYZ7agbl5rox5tFtvbF">由 MMU 与操作系统共同实现的存储管理技术，通过页/段表把逻辑地址映射为主存物理地址，使每个进程都拥有独立的、极大的虚拟地址空间；分页/分段/段页式三种实现方式。</div>
+    </div>
+
+    <div class="question" data-page-node-id="ccQ0gOlreZeOyuvYNmsZLW">
+      <div class="q-title" data-page-node-id="OrHB1OXvBwfpxhMzcTOg5a"><span class="q-num" data-page-node-id="QXevCmWb16SRIOnekqlwLp">95.</span><span class="type-tag type-term" data-page-node-id="E4vzprmSvBSHSozQZcMtgB">名词解释</span>页表（Page Table）</div>
+      <button class="reveal-btn" data-page-node-id="on2P5qDh7ZpHhLQ6RYtNhd">查看答案</button>
+      <div class="answer-box" data-page-node-id="rqQLppnyHDFSbKacaWRD8s">记录进程中各虚拟页与所存放的主存页框或硬盘存储位置之间映射关系的数据结构，每个虚拟页对应一个页表项（包含存放位置、装入位、修改位、使用位、访问权限、禁止缓存位等）。</div>
+    </div>
+
+    <div class="question" data-page-node-id="AO9OVlYhLLv6gcqZmcFVl9">
+      <div class="q-title" data-page-node-id="i4OQ5eRg1BWDDhq3akDMHk"><span class="q-num" data-page-node-id="6G3fux80WX60laEm9atG5D">96.</span><span class="type-tag type-term" data-page-node-id="GKyBLIXxXU5Oy2lUbyGjad">名词解释</span>TLB（快表）</div>
+      <button class="reveal-btn" data-page-node-id="d59hOEf0RRkm9TjYLwuMuh">查看答案</button>
+      <div class="answer-box" data-page-node-id="yp5pTM2XUiRIMW4Pwrp1Zd">Translation Lookaside Buffer，转换后备缓冲器，是页表项的专用高速缓存，存放最活跃的几个页表项，MMU 优先查询快表加速地址转换；快表缺失时才访问主存中的慢表。</div>
+    </div>
+
+    <div class="question" data-page-node-id="KoLShCfiD5gLqaWXQ9dWHf">
+      <div class="q-title" data-page-node-id="Ng3uJRVmoGWNT9CgyeHrYH"><span class="q-num" data-page-node-id="JmL0mG03GtELOXmRAgpX8m">97.</span><span class="type-tag type-term" data-page-node-id="TEwfXE07FGBIS7MYR41BP1">名词解释</span>缺页（Page Fault）</div>
+      <button class="reveal-btn" data-page-node-id="eUEgjHH81GSqyaj9jXlOkA">查看答案</button>
+      <div class="answer-box" data-page-node-id="5msxHzzSpUYfwmxcFRTImI">CPU 访问某虚拟页时，对应页表项装入位=0 且存放位置指向外存，即页未在主存中的情况；由 OS 调出缺页异常处理程序，从外存调入该页到主存后再继续执行。</div>
+    </div>
+
+    <div class="question" data-page-node-id="MbHkkNdsOXPbmJnXQrYfL4">
+      <div class="q-title" data-page-node-id="1SXhv8l83o0oikutcTT0PA"><span class="q-num" data-page-node-id="aYDd7d7q1sKUULrIGFxY6s">98.</span><span class="type-tag type-term" data-page-node-id="1jmNbjc3Q8Khu0e5Y8FqBG">名词解释</span>MMU</div>
+      <button class="reveal-btn" data-page-node-id="DI60XihLzHtRkWT8NnGa26">查看答案</button>
+      <div class="answer-box" data-page-node-id="h5ouJhjKEG03hADTiSwrOr">Memory Management Unit，存储管理部件，CPU 内部负责将虚拟地址 VA 转换为主存物理地址 PA 的硬件部件，通过查页表/TLB 完成地址转换，并检测缺页/越权等异常。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="HdTPJRJEm3GeKVVwb5CRnl">
+      <div class="q-title" data-page-node-id="DPHaINxnO24eEla8u4qa0O"><span class="q-num" data-page-node-id="YIYWmUdkcT2U9pA0BQ5xOo">99.</span><span class="type-tag type-comp" data-page-node-id="rZgUSnHDUUUFbOGEVRmJSL">综合题</span>页式虚拟存储中，MMU 进行一次「地址转换」的过程是什么？</div>
+      <button class="reveal-btn" data-page-node-id="WLLnvHaMJDkS0FTBWZi4qC">查看答案</button>
+      <div class="answer-box" data-page-node-id="2P8V4ZPpBWyjCPMAoinPDU"><strong data-page-node-id="4kvgT5mbR6P6Ohc3EYIeob">答案：</strong>
+        <div class="analysis" data-page-node-id="MGOnwGLjlD9wOH3pAy3fNk">
+          ① 根据页表基址寄存器得到页表起始地址；<br data-page-node-id="worCk3oX5unPLvt8CJH5Mw">
+          ② 以虚拟页号 VPN 作为索引查页表，得到对应页表项；<br data-page-node-id="tTKcvG4Wzj3JbHovd6t7wu">
+          ③ 检查页表项装入位 V：若 V=1，取出物理页号 PPN；<br data-page-node-id="d8VR1k46WX0MswZbofQwfo">
+          ④ 物理地址 PA = PPN × 页大小 + 页内偏移；<br data-page-node-id="dLVTFFzjq7U8xDgKMqDSAz">
+          ⑤ 若 V=0，触发缺页异常，由 OS 调入该页后再重新执行访问。<br data-page-node-id="4h1Il3mi6ZOhA7NhzaKasZ">
+          实际中先查 TLB（快表）：TLB 命中直接取 PPN；TLB 缺失再查慢表。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="udrpAOQqPfdQ1NWNPWWZ7Y">
+      <div class="q-title" data-page-node-id="lPqEBkgw7mSWpEPJDRoOuF"><span class="q-num" data-page-node-id="5pa5U4CGQrYsh8pFtd7wG9">100.</span><span class="type-tag type-comp" data-page-node-id="yE3ht22DOYEMCJsSpHB6RL">综合题</span>分析 TLB、cache、缺页三种缺失的 8 种组合在性能上的差异（从最优到最差排序）。</div>
+      <button class="reveal-btn" data-page-node-id="XK0W9LDFFz5UBLG324CWl0">查看答案</button>
+      <div class="answer-box" data-page-node-id="wSb2Mn1gdYGAybkHSZQkbk"><strong data-page-node-id="zkrCkHgDf0pm68wQboOweg">答案：</strong>
+        <div class="analysis" data-page-node-id="1BjlI0h2vMKvrB6ygRbRw7">
+          TLB 命中 + cache 命中 + 页在主存（不缺页）：最优，0 次主存访问；<br data-page-node-id="Mtl3zlvmhfGezyODrMGC3e">
+          TLB 命中 + cache 缺失 / TLB 缺失+cache 命中 + 页在主存：1 次主存访问；<br data-page-node-id="NBvInfEddk5EAWewcxc1SI">
+          TLB 命中 + cache 缺失 / TLB 缺失 + cache 命中 + 缺页：需 1 次主存 + 1 次外存；<br data-page-node-id="AMZBtyI1EfFvk3odY5dxcb">
+          TLB 缺失 + cache 缺失 + 缺页：最差，需 2 次主存 + 1 次外存，OS 调度开销巨大。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 第六节 ========== -->
+  <section class="section-block" id="sec6" data-page-node-id="bsnC5FhuaeAqsbG1O0cO19">
+    <div class="section-header" data-page-node-id="lIBtcYcfJKnWPjsNz1eMz9">
+      <div class="num" data-page-node-id="GwI525PdMD9Za3iSXRUtoQ">6</div>
+      <h2 data-page-node-id="xpV79ciwjmwFU5ptMCNMnj">第六节 实例：Intel Core i7+Linux 存储系统</h2>
+      <span class="count" data-page-node-id="lhj0Jd0vBOW8G4t0HaCikS">10 题</span>
+    </div>
+
+    <div class="question" data-page-node-id="JAZ4SShDGD8zu1iJBsMraf">
+      <div class="q-title" data-page-node-id="V6NC2bdxeylV7XjwZI8H4O"><span class="q-num" data-page-node-id="vLYfAMpJb6qLIN5g7Zvbwn">101.</span><span class="type-tag type-single" data-page-node-id="elGgMSQASzKnrKJzDcFO1Z">单选</span>Core i7 中 L1、L2、L3 三类 cache 的大小分别为？</div>
+      <ul class="options" data-answer="B" data-page-node-id="3DxNJB3m7Zf5OGgj79WZD7">
+        <li data-val="A" data-page-node-id="OeJMnQdyVr7cTZSkwH67KA">A. 8KB / 32KB / 256KB</li>
+        <li data-val="B" data-page-node-id="5gj6MZxxVUELyKE84jKi5n">B. 32KB / 256KB / 8MB</li>
+        <li data-val="C" data-page-node-id="gUTlGSDIXEECp5htoL2Q05">C. 256KB / 8MB / 32KB</li>
+        <li data-val="D" data-page-node-id="unuMAo2YJMIbPGDytq7ubU">D. 32KB / 8MB / 256KB</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="AjmSMUppz1APe1jwcZuewi">查看解析</button>
+      <div class="answer-box" data-page-node-id="nQ2xGZLmUKGsjuFs7tmJCQ"><strong data-page-node-id="qraEQdzSFi76YqDP1evWoK">答案：B</strong><div class="analysis" data-page-node-id="hFFKJ4Da76ThmPeaonkaDu">Core i7：L1=32KB（指令+数据各 32KB）、L2=256KB、L3=8MB。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="DRB2HU0KfrQMlJugmlGT7Y">
+      <div class="q-title" data-page-node-id="kz38pCgGCdh14stwvsRIGW"><span class="q-num" data-page-node-id="EyEbMrxcOFZ4Y5rVFx0jCH">102.</span><span class="type-tag type-single" data-page-node-id="izXi5pPswF2Z0pCwgcAD20">单选</span>Core i7 中 L1 和 L2 cache 的组相联路数、L3 高速缓存的组相联路数分别为？</div>
+      <ul class="options" data-answer="C" data-page-node-id="en97uSaJAgparyIVtaM2BL">
+        <li data-val="A" data-page-node-id="prQjAnvvfeWfqCDz9RHwzf">A. 4 / 8 / 16</li>
+        <li data-val="B" data-page-node-id="4ZiXCGB3RuPthyrTuZsDHv">B. 8 / 8 / 8</li>
+        <li data-val="C" data-page-node-id="zwgLj97kGDxPJsl6M0hGvj">C. 8 / 8 / 16</li>
+        <li data-val="D" data-page-node-id="81fCETPBIacEjBh8d3Srg7">D. 16 / 8 / 8</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="Ykc0UEFriHwd0pHfw7uXym">查看解析</button>
+      <div class="answer-box" data-page-node-id="5Gk8Da9RGsbUCUdn9YIjE7"><strong data-page-node-id="8HEe3Fuh6ESj85rHppOF45">答案：C</strong><div class="analysis" data-page-node-id="EKsH77Bt7i39E2OyOHIM6Z">Core i7 中 L1/L2 都是 8 路组相联；L3 为 16 路组相联。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="bsvFscSKtVOpR6V0SU4rIq">
+      <div class="q-title" data-page-node-id="ba4K3VYAZ69FfjfAIPFFMh"><span class="q-num" data-page-node-id="zGPFKiDIaRVK8q5r32Gk3f">103.</span><span class="type-tag type-single" data-page-node-id="HTQbLszF8ytwb9MwRfHw1u">单选</span>Core i7 中 L1 数据 TLB、L1 指令 TLB、L2 联合 TLB 的项数分别为？</div>
+      <ul class="options" data-answer="A" data-page-node-id="A6fSHOpChpORozwvZ6TBUM">
+        <li data-val="A" data-page-node-id="t3MQV12OfSmuAXkyjH0028">A. 64 / 64 / 512</li>
+        <li data-val="B" data-page-node-id="j8sAQ0I7yrGpav93hry3vw">B. 32 / 32 / 128</li>
+        <li data-val="C" data-page-node-id="DKrnGayP6VotuGlq5EjDzU">C. 64 / 128 / 512</li>
+        <li data-val="D" data-page-node-id="kOYj4l1poEIfovUaHRzDID">D. 128 / 128 / 256</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="b7eN9qD1ZU7DSM2RNaqrSe">查看解析</button>
+      <div class="answer-box" data-page-node-id="1wkKjKFuopdMnVpDuSDAyc"><strong data-page-node-id="zBQ1bHoFHspObQbOtuMFse">答案：A</strong><div class="analysis" data-page-node-id="dyY0Bj6pGOsHtC0EK8eaoA">L1 数据 TLB=64 项；L1 指令 TLB=64 项；L2 联合 TLB=512 项；都是 4 路组相联。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="Tye7CZHE2HmmxuPUt9kwcg">
+      <div class="q-title" data-page-node-id="a5PMmsVhCvkLQPBOcCDopP"><span class="q-num" data-page-node-id="qZZB9AJ02KBbJ1VN2MQMUn">104.</span><span class="type-tag type-single" data-page-node-id="WLPcMeuEKFynnQ6nUutlCz">单选</span>Core i7 中 Linux 系统的页大小通常为？</div>
+      <ul class="options" data-answer="D" data-page-node-id="8LrHWfp0C5VlnvufSOZc5Z">
+        <li data-val="A" data-page-node-id="HJbYwfuNyr8aunreAUkuov">A. 1KB</li>
+        <li data-val="B" data-page-node-id="semcRLTWmJmsAtU2hXNCvS">B. 2KB</li>
+        <li data-val="C" data-page-node-id="aj4stEBGs8Mg57YFmxDHth">C. 4KB（页内偏移 12 位）</li>
+        <li data-val="D" data-page-node-id="E20pDUzOkUz8zP3dn8OeFm">D. 4KB（但可配 4KB/2MB/1GB）</li>
+      </ul>
+      <button class="reveal-btn" data-page-node-id="vph6hZLGHuCI4kpEGiX8zd">查看解析</button>
+      <div class="answer-box" data-page-node-id="MvODvDKpC1qqCACePHiMwX"><strong data-page-node-id="HqWbouZG7b7lsCEcBBIf7P">答案：D</strong><div class="analysis" data-page-node-id="Tr2cduF87DfWzviDkIvD6o">Core i7 启动时页大小可配为 4KB / 2MB / 1GB，Linux 默认采用 4KB，页内偏移占 12 位。</div></div>
+    </div>
+
+    <div class="question" data-page-node-id="hZBmWIw89oYr9FaRaTdi19">
+      <div class="q-title" data-page-node-id="Mk6bIKPD29y0OGCDiMhY4W"><span class="q-num" data-page-node-id="apXQeEKNAi5GFb9DysJHEk">105.</span><span class="type-tag type-fill" data-page-node-id="A22tptcpaBZHkRULIs4bdN">填空</span>Core i7 中所有核共同一个 ____ 联合 cache 和同一个 DDR3 存储器控制器。</div>
+      <button class="reveal-btn" data-page-node-id="DVMBTKyUdDxzR6GFWbmmrM">查看答案</button>
+      <div class="answer-box" data-page-node-id="tyf3qfHixE4kkyw7KYUFdO"><strong data-page-node-id="Cg9oqGE6qgWhLNbuQWScRK">答案：</strong>L3</div>
+    </div>
+
+    <div class="question" data-page-node-id="PedyKKfn5EgkAgkWxo5R4e">
+      <div class="q-title" data-page-node-id="RJ26di8cmUfHRg0ymgWd8R"><span class="q-num" data-page-node-id="Cdq9uOXoiyVMWwHSrn7aR0">106.</span><span class="type-tag type-fill" data-page-node-id="vbQFYFRGhmKAxO1pl6PakK">填空</span>Core i7 中 L1 cache 为 ____ cache（数据与指令分开），L2/L3 为联合 cache。</div>
+      <button class="reveal-btn" data-page-node-id="LLjFPueLAJidQJqgdpzU49">查看答案</button>
+      <div class="answer-box" data-page-node-id="46SAyyJUdYtu6QNHzqWMXo"><strong data-page-node-id="0SDofNw8R8xMD16Vn1ikeA">答案：</strong>分离</div>
+    </div>
+
+    <div class="question" data-page-node-id="jzsVOlwCrfo8QISe472iVL">
+      <div class="q-title" data-page-node-id="2cimgm0Bc93HlFSf3KOFjx"><span class="q-num" data-page-node-id="zGwA2HWrHZxBKyM7PE2tu1">107.</span><span class="type-tag type-fill" data-page-node-id="68GniZ7ENaybjVGYgTIClH">填空</span>Core i7 中主存块（cache 行）大小为 ____ B。</div>
+      <button class="reveal-btn" data-page-node-id="LAlnETHtG0HCVKF8WaE0pc">查看答案</button>
+      <div class="answer-box" data-page-node-id="2hLMyRdBv9IElAUE0kpFSx"><strong data-page-node-id="h8zmJcEDYICBh0zJlb9wfW">答案：</strong>64</div>
+    </div>
+
+    <div class="question" data-page-node-id="0F1wUkII57PAH1YnxFwFCn">
+      <div class="q-title" data-page-node-id="fJssYs2fRCr48oMDYKt1hJ"><span class="q-num" data-page-node-id="lLXqmyJH7FJCbDu0PwFEa0">108.</span><span class="type-tag type-term" data-page-node-id="b4xGKtnJxxm2br36LouvHy">名词解释</span>L1 / L2 / L3 多级 cache</div>
+      <button class="reveal-btn" data-page-node-id="IVBL0APWmEHx4sRm2c2Hgp">查看答案</button>
+      <div class="answer-box" data-page-node-id="XbJD7UybWdoT9lsGq28iyy">现代 CPU 内的多级 cache 结构：L1 速度最快、容量最小、分离（指令/数据分开）；L2 容量居中、联合；L3 容量最大、联合、被所有核共享；CPU 访问顺序 L1→L2→L3→主存。</div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="1AxW89kv1FDV5JF8GkFAw6">
+      <div class="q-title" data-page-node-id="G1CLiO2RtMC9yBEk0fcz1c"><span class="q-num" data-page-node-id="Mz0Ozo6WgHugC12w0mOgzq">109.</span><span class="type-tag type-comp" data-page-node-id="Z8kX29FXBhbhpCYEEAIaIj">综合题</span>Core i7 的一次「存储访问」大致要经过哪两个步骤？</div>
+      <button class="reveal-btn" data-page-node-id="OrsB8YzhPUJvvbMuFjEmsD">查看答案</button>
+      <div class="answer-box" data-page-node-id="UkPFibax5QL4Oa6uSY1OQ4"><strong data-page-node-id="G3QpIDVEJVwCP6g6KqsOf5">答案：</strong>
+        <div class="analysis" data-page-node-id="tEoSVawdG3XAWBLq8v2CFu">
+          ① 通过 MMU（段式 + 页表）将虚拟地址 VA 转换为物理地址 PA；<br data-page-node-id="ucatkTxGxI5T8Xgjzgouzr">
+          ② 根据物理地址 PA 按 L1→L2→L3→主存顺序在 cache/主存中查找数据；<br data-page-node-id="uiWxC41Vfmm3dhEILHj1J9">
+          若 TLB 缺失则需先查慢表；若 cache 缺失则需从主存取块并装入 cache；若发生缺页则需从外存调入页。
+        </div>
+      </div>
+    </div>
+
+    <div class="question comp-q" data-page-node-id="qqCBTxoYPCC0exRyF98ha6">
+      <div class="q-title" data-page-node-id="KGXcjKZc1Fh530EZPEzdwb"><span class="q-num" data-page-node-id="YFwNMEJrUBGfVSEaGl3ly1">110.</span><span class="type-tag type-comp" data-page-node-id="5O52kQF9sFoC90wKjN76oz">综合题</span>Linux 中页故障处理的主要流程是什么？</div>
+      <button class="reveal-btn" data-page-node-id="rCyxTE0dQGgGREhqOYHcZq">查看答案</button>
+      <div class="answer-box" data-page-node-id="c1tqC0bfsLBDvlRXC2Cft7"><strong data-page-node-id="E1xA5fa05YGJK6hUu6SJzD">答案：</strong>
+        <div class="analysis" data-page-node-id="KuDTWnV6MxTVLd7d2f5oHx">
+          ① MMU 在地址转换时检测到页故障，转入 OS 内核处理；<br data-page-node-id="xgNpI6E6AYJogcAStVz7NB">
+          ② 内核把 VA 与 vm_area_struct 链表中各区域比较，判断是否落在「空洞」中；若是 → 段故障，终止进程；<br data-page-node-id="ibFBpJFFAkMhVId0ZX6NOp">
+          ③ 若 VA 落在合法区域但操作权限不符（写只读区、用户态访问内核区等） → 越权/越级，终止进程；<br data-page-node-id="ptYwQ7JhJt3rYUPFg5bU6p">
+          ④ 否则视为正常缺页异常：在主存找空闲页框，若无则按页替换算法淘汰一页；<br data-page-node-id="bAnQZ9jCVO1utvg79ZZnav">
+          ⑤ 从外存将缺失页装入选中的页框，更新页表与 TLB，恢复进程继续执行。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾统计 -->
+  <div class="footer-stats" data-page-node-id="BNLpCnq6s9BxVTDs0a11cb">
+    <h3 data-page-node-id="WfWHS7dFOihvfo8qvh2mny">📊 第五章题量统计</h3>
+    <table class="footer-table" data-page-node-id="11n59MXWB2Sfk3ojnH832o">
+      <thead data-page-node-id="qmen0ZIBDNNJ0C7tkF3kk1">
+        <tr data-page-node-id="UaIWD9Q3pUA67ferSqdwHG">
+          <th data-page-node-id="6LXL5ZY6PAoAG4VvSf2yQO">板块 / 节</th>
+          <th data-page-node-id="WFYvFiAUeKAQSkd99jk7lJ">单选</th>
+          <th data-page-node-id="y4zFoks5zLaMbX6uFwPHCH">填空</th>
+          <th data-page-node-id="EhYyOj9xmfORpsyg9HbruI">名词解释</th>
+          <th data-page-node-id="VbsDWQZi6pqNYiZMeDyxc9">综合题</th>
+          <th data-page-node-id="1oLD1DT1RgpaB8Ya6Xu2TP">小计</th>
+        </tr>
+      </thead>
+      <tbody data-page-node-id="Ji8ucpFz9A8dh1FPhM6cCq">
+        <tr data-page-node-id="0rNLwNKSqDXFZ53hmUnvwE"><td data-page-node-id="wgDNK960EE8DAKtKGmTWvD">第一节 存储器概述</td><td data-page-node-id="j9TOtMA1SQEpyOZVf1G0zY">7</td><td data-page-node-id="r5uNvgeWzpGDGoQjXZ855G">4</td><td data-page-node-id="HQa7QXmCkCTAZWuDbNpulT">4</td><td data-page-node-id="7Zzs36LarI1rkykx4YaWT3">2</td><td data-page-node-id="PmQGGLjiA2SwSICpD9wUZN">17</td></tr>
+        <tr data-page-node-id="G9ZAsSsBf5EWNCO7U5925x"><td data-page-node-id="p51rlyqEedhAH14aekWlDx">第二节 主存与 CPU</td><td data-page-node-id="m1DUViDu8adSPcOMGHIG2e">5</td><td data-page-node-id="blH4nQYfwLdy135MDvmBDH">4</td><td data-page-node-id="ecT25UjJY105wz88iFnqls">2</td><td data-page-node-id="xoQ1KQKUxnHA7SRCo3tcEU">1</td><td data-page-node-id="RDaT2iRHoXXHIPUd17VF2G">12</td></tr>
+        <tr data-page-node-id="9Cl7jdSQVV30alwrLmDNVJ"><td data-page-node-id="MLW9Ubv0HtecDteTfdPEu0">第三节 硬盘存储器</td><td data-page-node-id="BLKA11B1vklFvOCAhpdwek">7</td><td data-page-node-id="hjyXZ6xJsR0HB2h0TYc6K9">6</td><td data-page-node-id="otQHKSNMlpAOBP9olEVzr4">3</td><td data-page-node-id="GJS0BFnW2ELCXPslonBDHo">2</td><td data-page-node-id="GrltsIW1ePkAmr5s4KiUkj">18</td></tr>
+        <tr data-page-node-id="ettPJgIt0rKy89Qnw9iWbL"><td data-page-node-id="gPiTAKAy3ikeCc6uoelJso">第四节 高速缓存</td><td data-page-node-id="zKZEhvmCIGH9bWtLW3Kw5B">10</td><td data-page-node-id="FVexOlpb0nclyiCChaid3t">10</td><td data-page-node-id="GRpbY17d7CsQGY1qSLcjrX">5</td><td data-page-node-id="R1H31DOXNpPxXjs0ryB9NM">3</td><td data-page-node-id="HF9PiMkzLdtLhmHVrwruv0">28</td></tr>
+        <tr data-page-node-id="PbvMbfXTxvzMxz525nWAu0"><td data-page-node-id="dZrkcAGkZB1mcn0OtG3Z3F">第五节 虚拟存储器</td><td data-page-node-id="W3GZenVdJWcs07kxSFbXLV">10</td><td data-page-node-id="Jvbva3NqxvICdYuZrqxOtU">8</td><td data-page-node-id="YHAdiVZhrrsftFavzZyZP1">5</td><td data-page-node-id="mmaGsuoPzhspq5ilJhREAj">2</td><td data-page-node-id="lyT0jjMbVHaw4MRq6BnvM5">25</td></tr>
+        <tr data-page-node-id="BAYfQvM2ueMK8dVLqHFsH4"><td data-page-node-id="uiN5P4Q1CF8HwAqGkOsJka">第六节 Core i7+Linux</td><td data-page-node-id="V6PoX8E8fh1vj5flZEfg8o">4</td><td data-page-node-id="bq64YwGUVImBatUDzbEpTV">3</td><td data-page-node-id="wfMTdzhfgyAsBKpqSj9CIk">1</td><td data-page-node-id="YwPeuiiVvOw9pCxQOSi7mK">2</td><td data-page-node-id="miFao3UVDxJCGBingsCveR">10</td></tr>
+        <tr data-page-node-id="X10itzGk8fHvqI49dTiA07"><td data-page-node-id="NQXzch3TzCD2A2FUK6Etqg">合计</td><td data-page-node-id="9DOIDktq0fsC3dVcg5ePDi">43</td><td data-page-node-id="on1WE4KqioEIO5AJkNXkMX">35</td><td data-page-node-id="bBpzmoHabdIVBLrNG2mWu2">20</td><td data-page-node-id="23Kh4ZjfRjbUIgGm6ESq3t">12</td><td data-page-node-id="cwM1ugiQVZYVGEhmf8x69I"><span id="sumTotal" data-page-node-id="QRT8zCWmghnHk0BFEmNtXG">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a class="back-nav" href="index.html" data-page-node-id="IcWQBc6w1A6LNbIDqSd9Pb">← 返回「计算机组成原理」章节导航</a>
+  <a class="back-nav" href="../index.html" data-page-node-id="f3kA255sJcYoDGD0V2vFuN">↑ 返回考研复习总目录</a>
+
+</div>
+
+<script>
+  const counts = { single: 43, fill: 35, term: 20, comp: 12 };
+  document.getElementById('singleCount').textContent = counts.single;
+  document.getElementById('fillCount').textContent = counts.fill;
+  document.getElementById('termCount').textContent = counts.term;
+  document.getElementById('compCount').textContent = counts.comp;
+  const total = counts.single + counts.fill + counts.term + counts.comp;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('sumTotal').textContent = total;
+
+  document.querySelectorAll('.options').forEach(ul => {
+    const correct = ul.getAttribute('data-answer');
+    ul.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', () => {
+        if (ul.classList.contains('answered')) return;
+        ul.classList.add('answered');
+        ul.querySelectorAll('li').forEach(x => {
+          x.classList.add('disabled');
+          if (x.getAttribute('data-val') === correct) x.classList.add('correct');
+        });
+        if (li.getAttribute('data-val') !== correct) li.classList.add('wrong');
+      });
+    });
+  });
+
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const box = btn.nextElementSibling;
+      box.classList.toggle('show');
+      btn.textContent = box.classList.contains('show') ? '收起答案' : '查看答案';
+    });
+  });
+
+  const sections = document.querySelectorAll('.section-block');
+  const pills = document.querySelectorAll('.pill');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) {
+        const id = en.target.id;
+        pills.forEach(p => p.classList.toggle('active', p.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
